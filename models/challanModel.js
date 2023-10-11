@@ -4,7 +4,7 @@ const challanSchema = new mongoose.Schema({
   number: { type: String, required: true },
   serviceDate: { type: Date, required: true },
   serviceTime: { type: String, required: true },
-  typeOfBusiness: { type: Object, required: true },
+  business: { type: Object, required: true },
   area: { type: String, required: true },
   workLocation: { type: String, required: true },
   sales: { type: String, required: true },
@@ -16,11 +16,11 @@ const challanSchema = new mongoose.Schema({
   paymentType: { type: Object, required: true },
   shipToDetails: { type: Object, required: true },
   images: [String],
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "User",
-  },
+  // user: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   required: true,
+  //   ref: "User",
+  // },
 });
 
 const Challan = mongoose.model("Challan", challanSchema);
