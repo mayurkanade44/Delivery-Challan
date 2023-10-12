@@ -3,7 +3,6 @@ export const prefix = [
   { label: "Mrs", value: "Mrs" },
   { label: "Ms", value: "Ms" },
   { label: "M/s", value: "M/s" },
-  { label: "Dr", value: "Dr" },
 ];
 
 export const paymentType = [

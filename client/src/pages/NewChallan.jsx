@@ -1,6 +1,12 @@
 import { BsTruck } from "react-icons/bs";
 import { useForm, Controller } from "react-hook-form";
-import { Button, InputRow, InputSelect, Loading } from "../components";
+import {
+  AddInputSelect,
+  Button,
+  InputRow,
+  InputSelect,
+  Loading,
+} from "../components";
 import {
   business,
   paymentType,
@@ -54,6 +60,7 @@ const NewChallan = () => {
   };
 
   const submit = async (data) => {
+    console.log(data);
     try {
       const res = await create(data).unwrap();
       toast.success(res.msg);
@@ -213,7 +220,7 @@ const NewChallan = () => {
           </div>
           <hr className="h-px mt-4 mb-2 border-0 dark:bg-gray-700" />
           <h2 className="text-center text-xl text-blue-500 font-medium">
-            Service Details
+            Service & Payment Details
           </h2>
           <div className="md:grid md:grid-cols-2 lg:grid-cols-4 gap-x-4">
             <div>
@@ -273,8 +280,8 @@ const NewChallan = () => {
                 name="business"
                 control={control}
                 rules={{ required: "Select type of business" }}
-                render={({ field: { onChange, value, ref } }) => (
-                  <InputSelect
+                render={({ field: { onChange, value } }) => (
+                  <AddInputSelect
                     options={business}
                     onChange={onChange}
                     value={value}
@@ -287,14 +294,21 @@ const NewChallan = () => {
               </p>
             </div>
             <div>
-              <InputRow
-                label="Job Finalised By"
-                id="sales"
-                errors={errors}
-                register={register}
+              <Controller
+                name="sales"
+                control={control}
+                rules={{ required: "Select sales person" }}
+                render={({ field: { onChange, value } }) => (
+                  <AddInputSelect
+                    options={business}
+                    onChange={onChange}
+                    value={value}
+                    label="Job Finalized By"
+                  />
+                )}
               />
               <p className="text-xs text-red-500 -bottom-4 pl-1">
-                {errors.sales && "Sales person name is required"}
+                {errors.sales?.message}
               </p>
             </div>
             <div className="">
@@ -325,14 +339,7 @@ const NewChallan = () => {
                 required={false}
               />
             </div>
-            <div className="md:col-span-2 lg:col-span-4">
-              <hr className="h-px mt-4 mb-2 border-0 dark:bg-gray-700" />
-            </div>
-            <div className="md:col-span-2 lg:col-span-4">
-              <h2 className="text-center text-xl text-blue-500 font-medium">
-                Payment Details
-              </h2>
-            </div>
+
             <div>
               <InputRow
                 label="Total Amount"
@@ -360,7 +367,7 @@ const NewChallan = () => {
                 {errors.paymentType?.message}
               </p>
             </div>
-            <div className="md:md:col-span-2 flex justify-center items-end">
+            <div className="md:md:col-span-2 flex justify-center items-end mt-6">
               <Button
                 type="submit"
                 label={isLoading ? "Creating..." : "Create Challan"}

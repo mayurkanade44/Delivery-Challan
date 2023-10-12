@@ -24,34 +24,47 @@ const InputSelect = ({
         menuPlacement="auto"
         value={options?.find((c) => c.value === value?.value)}
         onChange={(val) => onChange(val)}
-        styles={{
-          control: (baseStyles, state) => ({
-            ...baseStyles,
-            minHeight: "31px",
-            height: "32px",
-            boxShadow: state.isFocused ? null : null,
-            marginTop: "2px",
-            borderColor: "#CCCCCC",
-            borderWidth: "2px",
-            paddingTop: "0px",
-          }),
+        styles={
+          !isMulti
+            ? {
+                control: (baseStyles, state) => ({
+                  ...baseStyles,
+                  minHeight: "31px",
+                  height: "32px",
+                  boxShadow: state.isFocused ? null : null,
+                  marginTop: "2px",
+                  borderColor: "#CCCCCC",
+                  borderWidth: "2px",
+                  paddingTop: "0px",
+                }),
 
-          valueContainer: (provided, state) => ({
-            ...provided,
-            height: "30px",
-            padding: "0 5px",
-          }),
+                valueContainer: (provided, state) => ({
+                  ...provided,
+                  height: "30px",
+                  padding: "0 5px",
+                }),
 
-          input: (provided, state) => ({
-            ...provided,
-            margin: "0px",
-          }),
+                input: (provided, state) => ({
+                  ...provided,
+                  margin: "0px",
+                }),
 
-          indicatorsContainer: (provided, state) => ({
-            ...provided,
-            height: "31px",
-          }),
-        }}
+                indicatorsContainer: (provided, state) => ({
+                  ...provided,
+                  height: "31px",
+                }),
+              }
+            : {
+                control: (baseStyles, state) => ({
+                  ...baseStyles,
+                  boxShadow: state.isFocused ? null : null,
+                  marginTop: "2px",
+                  borderColor: "#CCCCCC",
+                  borderWidth: "2px",
+                  paddingTop: "0px",
+                }),
+              }
+        }
       />
     </div>
   );
