@@ -3,7 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import { Button, InputRow, InputSelect } from "../components";
 import {
   business,
-  paymentMode,
+  paymentType,
   prefix,
   service,
   timeFrame,
@@ -22,17 +22,19 @@ const NewChallan = () => {
     control,
   } = useForm({
     defaultValues: {
-      prefix: "",
-      name: "",
-      address: "",
-      road: "",
-      location: "",
-      landmark: "",
-      city: "",
-      pincode: "",
-      contactName: "",
-      contactNo: "",
-      contactEmail: "",
+      shipToDetails: {
+        prefix: "",
+        name: "",
+        address: "",
+        road: "",
+        location: "",
+        landmark: "",
+        city: "",
+        pincode: "",
+        contactName: "",
+        contactNo: "",
+        contactEmail: "",
+      },
       serviceDate: new Date().toISOString().slice(0, 10),
       serviceTime: "",
       area: "",
@@ -40,7 +42,7 @@ const NewChallan = () => {
       business: "",
       sales: "",
       amount: "",
-      paymentMode: "",
+      paymentType: "",
       service: [],
       notes: "",
     },
@@ -71,7 +73,7 @@ const NewChallan = () => {
             <div className="flex">
               <div className="w-56">
                 <Controller
-                  name="prefix"
+                  name="shipToDetails.prefix"
                   control={control}
                   rules={{ required: "Select prefix" }}
                   render={({ field: { onChange, value, ref } }) => (
@@ -84,18 +86,18 @@ const NewChallan = () => {
                   )}
                 />
                 <p className="text-xs text-red-500 -bottom-4 pl-1">
-                  {errors.prefix?.message}
+                  {errors.shipToDetails?.prefix?.message}
                 </p>
               </div>
               <div className="w-full ml-2">
                 <InputRow
                   label="Client Name"
-                  id="name"
+                  id="shipToDetails.name"
                   errors={errors}
                   register={register}
                 />
                 <p className="text-xs text-red-500 -bottom-4 pl-1">
-                  {errors.name && "Client name is required"}
+                  {errors.shipToDetails?.name && "Client name is required"}
                 </p>
               </div>
             </div>
@@ -103,67 +105,68 @@ const NewChallan = () => {
           <div>
             <InputRow
               label="Premise Name & Flat/Office no"
-              id="address"
+              id="shipToDetails.address"
               errors={errors}
               register={register}
             />
             <p className="text-xs text-red-500 -bottom-4 pl-1">
-              {errors.address && "Flat/office no & premise name is required"}
+              {errors.shipToDetails?.address &&
+                "Flat/office no & premise name is required"}
             </p>
           </div>
           <div>
             <InputRow
               label="Road/Lane Name"
-              id="road"
+              id="shipToDetails.road"
               errors={errors}
               register={register}
             />
             <p className="text-xs text-red-500 -bottom-4 pl-1">
-              {errors.road && "Road/Lane name is required"}
+              {errors.shipToDetails?.road && "Road/Lane name is required"}
             </p>
           </div>
           <div>
             <InputRow
               label="Location"
-              id="location"
+              id="shipToDetails.location"
               errors={errors}
               register={register}
             />
             <p className="text-xs text-red-500 -bottom-4 pl-1">
-              {errors.location && "location name is required"}
+              {errors.shipToDetails?.location && "location name is required"}
             </p>
           </div>
           <div>
             <InputRow
               label="Landmark/Near By Place"
-              id="landmark"
+              id="shipToDetails.landmark"
               errors={errors}
               register={register}
             />
             <p className="text-xs text-red-500 -bottom-4 pl-1">
-              {errors.landmark && "Landmark name is required"}
+              {errors.shipToDetails?.landmark && "Landmark name is required"}
             </p>
           </div>
           <div>
             <InputRow
               label="City"
-              id="city"
+              id="shipToDetails.city"
               errors={errors}
               register={register}
             />
             <p className="text-xs text-red-500 -bottom-4 pl-1">
-              {errors.city && "City name is required"}
+              {errors.shipToDetails?.city && "City name is required"}
             </p>
           </div>
           <div>
             <InputRow
               label="Pincode"
-              id="pincode"
+              id="shipToDetails.pincode"
               errors={errors}
               register={register}
             />
             <p className="text-xs text-red-500 -bottom-4 pl-1">
-              {errors.pincode && "Pincode is required"}
+              {errors.shipToDetails?.pincode && "Pincode is required"}
             </p>
           </div>
         </div>
@@ -171,18 +174,19 @@ const NewChallan = () => {
           <div>
             <InputRow
               label="Contact Person Name"
-              id="contactName"
+              id="shipToDetails.contactName"
               errors={errors}
               register={register}
             />
             <p className="text-xs text-red-500 -bottom-4 pl-1">
-              {errors.contactName && "Contact person name is required"}
+              {errors.shipToDetails?.contactName &&
+                "Contact person name is required"}
             </p>
           </div>
           <div>
             <InputRow
               label="Contact Person Number"
-              id="contactNo"
+              id="shipToDetails.contactNo"
               errors={errors}
               register={register}
               required={false}
@@ -191,7 +195,7 @@ const NewChallan = () => {
           <div>
             <InputRow
               label="Contact Person Email"
-              id="contactEmail"
+              id="shipToDetails.contactEmail"
               errors={errors}
               register={register}
               type="email"
@@ -332,12 +336,12 @@ const NewChallan = () => {
           </div>
           <div>
             <Controller
-              name="paymentMode"
+              name="paymentType"
               control={control}
               rules={{ required: "Select payment instruction" }}
               render={({ field: { onChange, value, ref } }) => (
                 <InputSelect
-                  options={paymentMode}
+                  options={paymentType}
                   onChange={onChange}
                   value={value}
                   label="Payment Mode"
@@ -345,7 +349,7 @@ const NewChallan = () => {
               )}
             />
             <p className="text-xs text-red-500 -bottom-4 pl-1">
-              {errors.paymentMode?.message}
+              {errors.paymentType?.message}
             </p>
           </div>
           <div className="md:md:col-span-2 flex justify-center items-end">

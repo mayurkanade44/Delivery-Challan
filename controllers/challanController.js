@@ -1,6 +1,7 @@
 import moment from "moment";
 import { createReport } from "docx-templates";
 import fs from "fs";
+import Challan from "../models/challanModel.js";
 
 export const createChallan = async (req, res) => {
   try {
@@ -13,20 +14,21 @@ export const createChallan = async (req, res) => {
     const additionalJsContext = {
       number: challan.number,
       serviceDate: moment().format("DD/MM/YYYY"),
-      serviceTime: challan.serviceTime,
-      business: challan.business,
+      serviceTime: challan.serviceTime.label,
+      business: challan.business.label,
       area: challan.area,
       workLocation: challan.workLocation,
       userName: "Mayur",
       sales: challan.sales,
       amount: challan.amount,
-      paymentType: challan.paymentType,
-      name: challan.name,
-      address: challan.address,
-      road: challan.road,
-      city: challan.city,
-      nearBy: challan.nearBy,
-      location:challan.location
+      paymentType: challan.paymentType.label,
+      name: `${challan.shipToDetails.prefix.label} ${challan.shipToDetails.name}`,
+      shipToDetails: challan.shipToDetails,
+      services: challan.service,
+      contactName: challan.contactName,
+      contactNo: challan.contactNo,
+      contactEmail: challan.contactEmail,
+      notes: challan.notes,
     };
 
     const buffer = await createReport({
@@ -38,7 +40,9 @@ export const createChallan = async (req, res) => {
 
     const filePath = `./tmp/dc.docx`;
     fs.writeFileSync(filePath, buffer);
-    return res.json({ msg: "DC created" });
+
+    await Challan.create(challan)
+    return res.status(201).json({ msg: "DC created" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });
