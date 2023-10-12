@@ -16,9 +16,11 @@ import {
 } from "../utils/constData";
 import { useCreateChallanMutation } from "../redux/challanSlice";
 import { toast } from "react-toastify";
+import { useGetAdminValuesQuery } from "../redux/adminSlice";
 
 const NewChallan = () => {
   const [create, { isLoading }] = useCreateChallanMutation();
+  const { data, isLoading: valuesLoading } = useGetAdminValuesQuery();
 
   const {
     register,
@@ -73,7 +75,7 @@ const NewChallan = () => {
 
   return (
     <>
-      {isLoading && <Loading />}
+      {isLoading || (valuesLoading && <Loading />)}
       <div className="mx-10 my-5">
         <div className="flex justify-center items-center gap-x-4">
           <BsTruck className="w-9 h-9 text-green-600" />
@@ -282,7 +284,7 @@ const NewChallan = () => {
                 rules={{ required: "Select type of business" }}
                 render={({ field: { onChange, value } }) => (
                   <AddInputSelect
-                    options={business}
+                    options={data?.business}
                     onChange={onChange}
                     value={value}
                     label="Type Of Business"
@@ -300,7 +302,7 @@ const NewChallan = () => {
                 rules={{ required: "Select sales person" }}
                 render={({ field: { onChange, value } }) => (
                   <AddInputSelect
-                    options={business}
+                    options={data?.sales}
                     onChange={onChange}
                     value={value}
                     label="Job Finalized By"

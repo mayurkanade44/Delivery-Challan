@@ -14,15 +14,15 @@ export const getAllValues = async (req, res) => {
   try {
     const values = await Admin.find();
 
-    const salesPerson = [];
+    const sales = [];
     const business = [];
     values.map(
       (item) =>
-        (item.salePerson &&
-          salesPerson.push({
+        (item.sales &&
+          sales.push({
             id: item._id,
-            label: item.salePerson.label,
-            value: item.salePerson.value,
+            label: item.sales.label,
+            value: item.sales.value,
           })) ||
         (item.business &&
           business.push({
@@ -32,7 +32,10 @@ export const getAllValues = async (req, res) => {
           }))
     );
 
-    return res.json({ salesPerson, business });
+    return res.json({
+      sales,
+      business,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });
