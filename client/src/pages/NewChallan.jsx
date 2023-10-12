@@ -1,9 +1,19 @@
 import { BsTruck } from "react-icons/bs";
 import { useForm, Controller } from "react-hook-form";
 import { Button, InputRow, InputSelect } from "../components";
-import { paymentMode, prefix } from "../utils/constData";
+import {
+  business,
+  paymentMode,
+  prefix,
+  service,
+  timeFrame,
+} from "../utils/constData";
+import { useCreateChallanMutation } from "../redux/challanSlice";
+import { toast } from "react-toastify";
 
 const NewChallan = () => {
+  const [create, { isLoading: createLoading }] = useCreateChallanMutation();
+
   const {
     register,
     formState: { errors, isValid },
@@ -31,11 +41,19 @@ const NewChallan = () => {
       sales: "",
       amount: "",
       paymentMode: "",
+      service: [],
+      notes: "",
     },
   });
 
-  const submit = (data) => {
-    console.log(data);
+  const submit = async (data) => {
+    try {
+      const res = await create(data).unwrap();
+      toast.success(res.msg);
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.data?.msg || error.error);
+    }
   };
 
   return (
@@ -164,7 +182,7 @@ const NewChallan = () => {
           <div>
             <InputRow
               label="Contact Person Number"
-              id="contactNumber"
+              id="contactNo"
               errors={errors}
               register={register}
               required={false}
@@ -173,7 +191,7 @@ const NewChallan = () => {
           <div>
             <InputRow
               label="Contact Person Email"
-              id="contactName"
+              id="contactEmail"
               errors={errors}
               register={register}
               type="email"
@@ -205,7 +223,7 @@ const NewChallan = () => {
               rules={{ required: "Select job timing" }}
               render={({ field: { onChange, value, ref } }) => (
                 <InputSelect
-                  options={prefix}
+                  options={timeFrame}
                   onChange={onChange}
                   value={value}
                   label="Job Time Frame"
@@ -245,7 +263,7 @@ const NewChallan = () => {
               rules={{ required: "Select type of business" }}
               render={({ field: { onChange, value, ref } }) => (
                 <InputSelect
-                  options={prefix}
+                  options={business}
                   onChange={onChange}
                   value={value}
                   label="Type Of Business"
@@ -267,14 +285,14 @@ const NewChallan = () => {
               {errors.sales && "Sales person name is required"}
             </p>
           </div>
-          <div className="col-span-2">
+          <div className="">
             <Controller
-              name="business"
+              name="service"
               control={control}
-              rules={{ required: "Select type of business" }}
+              rules={{ required: "Select type of service" }}
               render={({ field: { onChange, value, ref } }) => (
                 <InputSelect
-                  options={prefix}
+                  options={service}
                   onChange={onChange}
                   value={value}
                   label="Type Of Service"
@@ -283,8 +301,17 @@ const NewChallan = () => {
               )}
             />
             <p className="text-xs text-red-500 -bottom-4 pl-1">
-              {errors.business?.message}
+              {errors.service?.message}
             </p>
+          </div>
+          <div>
+            <InputRow
+              label="Notes/Job Instructions"
+              id="notes"
+              errors={errors}
+              register={register}
+              required={false}
+            />
           </div>
           <div className="md:col-span-2 lg:col-span-4">
             <hr className="h-px mt-4 mb-2 border-0 dark:bg-gray-700" />
@@ -307,7 +334,7 @@ const NewChallan = () => {
             <Controller
               name="paymentMode"
               control={control}
-              rules={{ required: "Select type of business" }}
+              rules={{ required: "Select payment instruction" }}
               render={({ field: { onChange, value, ref } }) => (
                 <InputSelect
                   options={paymentMode}
@@ -318,7 +345,7 @@ const NewChallan = () => {
               )}
             />
             <p className="text-xs text-red-500 -bottom-4 pl-1">
-              {errors.business?.message}
+              {errors.paymentMode?.message}
             </p>
           </div>
           <div className="md:md:col-span-2 flex justify-center items-end">
