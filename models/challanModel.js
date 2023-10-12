@@ -11,7 +11,7 @@ const challanSchema = new mongoose.Schema(
     sales: { type: Object, required: true },
     service: [Object],
     notes: { type: String, required: true },
-    sales: { type: String, required: true },
+    sales: { type: Object, required: true },
     amount: { type: String },
     paymentType: { type: Object, required: true },
     shipToDetails: { type: Object, required: true },

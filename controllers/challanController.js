@@ -1,15 +1,33 @@
 import Challan from "../models/challanModel.js";
+import Admin from "../models/adminModel.js";
 import moment from "moment";
 import { createReport } from "docx-templates";
 import fs from "fs";
 import QRCode from "qrcode";
 
 export const createChallan = async (req, res) => {
+  const { business, sales } = req.body;
   try {
     const date = moment().format("DD#MM#YY");
     req.body.number = `#*0001*#${date}#`;
 
+    if (business.__isNew__) {
+      const newBusiness = { label: business.label, value: business.value };
+      await Admin.create({
+        business: newBusiness,
+      });
+      req.body.business = newBusiness;
+    }
+    if (sales.__isNew__) {
+      const newSales = { label: sales.label, value: sales.value };
+      await Admin.create({
+        sales: newSales,
+      });
+      req.body.sales = newSales;
+    }
+
     const challan = await Challan.create(req.body);
+
     var id = challan._id;
     const qrLink = `/update-challan/${id}`;
     const qrCode = await QRCode.toDataURL(qrLink);
@@ -23,7 +41,7 @@ export const createChallan = async (req, res) => {
       area: challan.area,
       workLocation: challan.workLocation,
       userName: "Mayur",
-      sales: challan.sales,
+      sales: challan.sales.label,
       amount: challan.amount,
       paymentType: challan.paymentType.label,
       name: `${challan.shipToDetails.prefix.label} ${challan.shipToDetails.name}`,
