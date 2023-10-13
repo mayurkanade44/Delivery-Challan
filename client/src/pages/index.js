@@ -1,3 +1,5 @@
 import NewChallan from "./NewChallan";
+import Admin from "./Admin";
+import Login from "./Login";
 
-export { NewChallan };
+export { NewChallan, Admin, Login };

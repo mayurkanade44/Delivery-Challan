@@ -25,6 +25,14 @@ export const timeFrame = [
   { label: "Anytime", value: "Anytime" },
 ];
 
+export const adminNavbar = [
+  "All Users",
+  "All Services",
+  "All Sales Person",
+  "All Business",
+  "All Service Comments",
+];
+
 export const service = [
   { label: "Green Shield", value: "Gel Applied", chemical: "AB" },
   { label: "Bugsfree", value: "Powder Applied", chemical: "Cd" },
