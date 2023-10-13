@@ -1,7 +1,7 @@
 import { BsTruck } from "react-icons/bs";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { Button, InputRow, InputSelect, Loading } from "../components";
-import { paymentType, prefix, service, timeFrame } from "../utils/constData";
+import { paymentType, prefix, timeFrame } from "../utils/constData";
 import { useCreateChallanMutation } from "../redux/challanSlice";
 import { toast } from "react-toastify";
 import { useGetAdminValuesQuery } from "../redux/adminSlice";
@@ -9,6 +9,7 @@ import { useGetAdminValuesQuery } from "../redux/adminSlice";
 const NewChallan = () => {
   const [create, { isLoading }] = useCreateChallanMutation();
   const { data, isLoading: valuesLoading } = useGetAdminValuesQuery();
+  
 
   const {
     register,

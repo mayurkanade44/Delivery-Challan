@@ -14,8 +14,7 @@ const challanSchema = new mongoose.Schema(
     paymentType: { type: Object, required: true },
     shipToDetails: { type: Object, required: true },
     serviceDetails: { type: Object, required: true },
-    status: { type: String },
-    images: [String],
+    update: [Object],
     // user: {
     //   type: mongoose.Schema.Types.ObjectId,
     //   required: true,

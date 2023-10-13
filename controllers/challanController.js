@@ -4,12 +4,14 @@ import moment from "moment";
 import { createReport } from "docx-templates";
 import fs from "fs";
 import QRCode from "qrcode";
+import { uploadFile } from "../utils/helperFunctions.js";
 
 export const createChallan = async (req, res) => {
   const { business, sales } = req.body;
   try {
     const date = moment().format("DD#MM#YY");
     req.body.number = `#*0001*#${date}#`;
+    req.body.update = [{ status: "Created", user: "Mayur" }];
 
     const challan = await Challan.create(req.body);
 
@@ -55,6 +57,54 @@ export const createChallan = async (req, res) => {
     return res.status(201).json({ msg: "DC created" });
   } catch (error) {
     if (id) await Challan.findByIdAndDelete(id);
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};
+
+export const getChallan = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const challan = await Challan.findById(id);
+    if (!challan) return res.status(404).json({ msg: "Challan not found" });
+
+    return res.json(challan);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};
+
+export const updateChallan = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const challan = await Challan.findById(id);
+    if (!challan) return res.status(404).json({ msg: "Challan not found" });
+
+    const imageLinks = [];
+    if (req.files) {
+      let images = [];
+      if (req.files.images.length > 0) images = req.files.images;
+      else images.push(req.files.images);
+
+      for (let i = 0; i < images.length; i++) {
+        const filePath = images[i].tempFilePath;
+        const link = await uploadFile({ filePath, folder: "challan" });
+        if (!link)
+          return res
+            .status(400)
+            .json({ msg: "Upload error, please try again later" });
+
+        imageLinks.push(link);
+      }
+    }
+
+    req.body.images = imageLinks;
+    challan.update.push(req.body);
+    await challan.save();
+
+    return res.json({ msg: "Challan updated successfully" });
+  } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });
   }

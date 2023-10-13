@@ -9,7 +9,23 @@ export const challanSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    updateChallan: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/api/challan/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+    }),
+    singleChallan: builder.query({
+      query: (id) => ({
+        url: `/api/challan/${id}`,
+      }),
+    }),
   }),
 });
 
-export const { useCreateChallanMutation } = challanSlice;
+export const {
+  useCreateChallanMutation,
+  useUpdateChallanMutation,
+  useSingleChallanQuery,
+} = challanSlice;

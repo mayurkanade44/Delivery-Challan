@@ -33,14 +33,8 @@ export const adminNavbar = [
   "All Service Comments",
 ];
 
-export const service = [
-  { label: "Green Shield", value: "Gel Applied", chemical: "AB" },
-  { label: "Bugsfree", value: "Powder Applied", chemical: "Cd" },
-  { label: "Antron", value: "White gel & spray", chemical: "KO Kp" },
-];
-
-export const business = [
-  { label: "Bungalow", value: "Bungalow" },
-  { label: "Gated Community", value: "Gated Community" },
-  { label: "Housing Society", value: "Housing Society" },
+export const jobStatus = [
+  { label: "Completed", value: "Completed" },
+  { label: "Postponed", value: "Postponed" },
+  { label: "Cancelled", value: "Cancelled" },
 ];

@@ -5,7 +5,7 @@ import {
   RouterProvider,
   Outlet,
 } from "react-router-dom";
-import { Admin, Login, NewChallan } from "./pages";
+import { Admin, Login, NewChallan, UpdateChallan } from "./pages";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -27,6 +27,7 @@ function App() {
         <Route index={true} path="/" element={<Login />} />
         <Route index={true} path="/create" element={<NewChallan />} />
         <Route index={true} path="/admin" element={<Admin />} />
+        <Route index={true} path="/update-challan/:id" element={<UpdateChallan />} />
       </Route>
     )
   );
