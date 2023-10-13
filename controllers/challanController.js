@@ -11,21 +11,6 @@ export const createChallan = async (req, res) => {
     const date = moment().format("DD#MM#YY");
     req.body.number = `#*0001*#${date}#`;
 
-    if (business.__isNew__) {
-      const newBusiness = { label: business.label, value: business.value };
-      await Admin.create({
-        business: newBusiness,
-      });
-      req.body.business = newBusiness;
-    }
-    if (sales.__isNew__) {
-      const newSales = { label: sales.label, value: sales.value };
-      await Admin.create({
-        sales: newSales,
-      });
-      req.body.sales = newSales;
-    }
-
     const challan = await Challan.create(req.body);
 
     var id = challan._id;
@@ -46,11 +31,10 @@ export const createChallan = async (req, res) => {
       paymentType: challan.paymentType.label,
       name: `${challan.shipToDetails.prefix.label} ${challan.shipToDetails.name}`,
       shipToDetails: challan.shipToDetails,
-      services: challan.service,
+      services: challan.serviceDetails,
       contactName: challan.contactName,
       contactNo: challan.contactNo,
       contactEmail: challan.contactEmail,
-      notes: challan.notes,
       url: "12",
       qrCode: async (url12) => {
         const data = await qrCode.slice("data:image/png;base64,".length);

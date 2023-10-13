@@ -9,12 +9,11 @@ const challanSchema = new mongoose.Schema(
     area: { type: String, required: true },
     workLocation: { type: String, required: true },
     sales: { type: Object, required: true },
-    service: [Object],
-    notes: { type: String, required: true },
     sales: { type: Object, required: true },
     amount: { type: String },
     paymentType: { type: Object, required: true },
     shipToDetails: { type: Object, required: true },
+    serviceDetails: { type: Object, required: true },
     status: { type: String },
     images: [String],
     // user: {
