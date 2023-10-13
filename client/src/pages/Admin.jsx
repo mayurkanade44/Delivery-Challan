@@ -2,6 +2,7 @@ import { useForm, Controller } from "react-hook-form";
 import { adminNavbar } from "../utils/constData";
 import {
   useAddAdminValueMutation,
+  useDeleteAdminValueMutation,
   useGetAdminValuesQuery,
 } from "../redux/adminSlice";
 import { useState } from "react";
@@ -12,13 +13,14 @@ const Admin = () => {
   const [showTable, setShowTable] = useState("All Sales Person");
   const { data, isLoading: valuesLoading } = useGetAdminValuesQuery();
   const [addValue, { isLoading }] = useAddAdminValueMutation();
+  const [deleteValue, { isLoading: deleteLoading }] =
+    useDeleteAdminValueMutation();
 
   const {
     register,
     formState: { errors },
     handleSubmit,
     reset,
-    control,
   } = useForm({
     defaultValues: {
       name: "",
@@ -35,6 +37,21 @@ const Admin = () => {
   const handleTable = (item) => {
     setShowTable(item);
     reset();
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      let res;
+      if (showTable === "All Users") {
+        // res = await deleteUser({id}).unwrap();
+      } else {
+        res = await deleteValue({ id }).unwrap();
+      }
+      toast.success(res.msg);
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.data?.msg || error.error);
+    }
   };
 
   const submit = async (data) => {
@@ -96,7 +113,11 @@ const Admin = () => {
                 type="submit"
               />
             </form>
-            <AdminTable title={["Sales"]} data={data?.sales} />
+            <AdminTable
+              title={["Sales"]}
+              data={data?.sales}
+              handleDelete={handleDelete}
+            />
           </div>
         ) : showTable === "All Business" ? (
           <div>
@@ -119,7 +140,11 @@ const Admin = () => {
                 type="submit"
               />
             </form>
-            <AdminTable title={["Business Name"]} data={data?.business} />
+            <AdminTable
+              title={["Business Name"]}
+              data={data?.business}
+              handleDelete={handleDelete}
+            />
           </div>
         ) : showTable === "All Services" ? (
           <>
@@ -152,7 +177,8 @@ const Admin = () => {
               </form>
               <AdminTable
                 title={["Name", "Description"]}
-                data={data?.business}
+                data={data?.services}
+                handleDelete={handleDelete}
                 double={true}
               />
             </div>

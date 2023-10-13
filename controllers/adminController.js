@@ -16,6 +16,7 @@ export const getAllValues = async (req, res) => {
 
     const sales = [];
     const business = [];
+    const services = [];
     values.map(
       (item) =>
         (item.sales &&
@@ -29,13 +30,30 @@ export const getAllValues = async (req, res) => {
             id: item._id,
             label: item.business.label,
             value: item.business.value,
+          })) ||
+        (item.services &&
+          services.push({
+            id: item._id,
+            label: item.services.label,
+            value: item.services.value,
           }))
     );
 
     return res.json({
       sales,
       business,
+      services,
     });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};
+
+export const deleteAdminValue = async (req, res) => {
+  try {
+    await Admin.findByIdAndDelete(req.params.id);
+    res.status(200).json({ msg: "Deleted successfully" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });

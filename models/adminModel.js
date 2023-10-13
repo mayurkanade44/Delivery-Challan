@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 
 const adminSchema = new mongoose.Schema(
   {
-    sales: { type: Object },
-    serviceName: { type: Object },
     challanCounter: { type: Number },
+    sales: { type: Object },
+    services: { type: Object },
     business: { type: Object },
   },
   { timestamps: true }

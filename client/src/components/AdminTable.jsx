@@ -34,7 +34,7 @@ const AdminTable = ({ title, data, handleDelete, double = false }) => {
                 label="Delete"
                 color="bg-red-600"
                 width="w-20"
-                // handleClick={() => handleDelete(item.id)}
+                onClick={() => handleDelete(item.id)}
               />
             </td>
           </tr>

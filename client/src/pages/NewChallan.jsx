@@ -12,10 +12,9 @@ const NewChallan = () => {
 
   const {
     register,
-    formState: { errors, isValid },
+    formState: { errors },
     handleSubmit,
     reset,
-    setValue,
     control,
   } = useForm({
     defaultValues: {
@@ -325,7 +324,7 @@ const NewChallan = () => {
                         rules={{ required: "Select type of service" }}
                         render={({ field: { onChange, value, ref } }) => (
                           <InputSelect
-                            options={service}
+                            options={data?.services}
                             onChange={onChange}
                             value={value}
                             label="Type Of Service"
