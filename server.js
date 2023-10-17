@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser";
 
 import challanRoute from "./routes/challanRoute.js";
 import adminRoute from "./routes/adminRoute.js";
+import userRoute from "./routes/userRoute.js";
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use(cookieParser());
 app.use(fileUpload({ useTempFiles: true }));
 if (process.env.NODE_ENV !== "production") app.use(morgan("dev"));
 
+app.use("/api/user", userRoute);
 app.use("/api/challan", challanRoute);
 app.use("/api/admin", adminRoute);
 
