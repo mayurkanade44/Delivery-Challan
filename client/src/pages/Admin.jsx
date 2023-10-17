@@ -1,32 +1,35 @@
 import { useForm, Controller } from "react-hook-form";
-import { adminNavbar } from "../utils/constData";
+import { adminNavbar, userRoles } from "../utils/constData";
 import {
   useAddAdminValueMutation,
+  useAddUserMutation,
   useDeleteAdminValueMutation,
   useGetAdminValuesQuery,
 } from "../redux/adminSlice";
 import { useState } from "react";
-import { AdminTable, Button, InputRow } from "../components";
+import { AdminTable, Button, InputRow, InputSelect } from "../components";
 import { toast } from "react-toastify";
 
 const Admin = () => {
-  const [showTable, setShowTable] = useState("All Sales Person");
+  const [showTable, setShowTable] = useState("All Users");
   const { data, isLoading: valuesLoading } = useGetAdminValuesQuery();
   const [addValue, { isLoading }] = useAddAdminValueMutation();
   const [deleteValue, { isLoading: deleteLoading }] =
     useDeleteAdminValueMutation();
+  const [addUser, { isLoading: addUserLoading }] = useAddUserMutation();
 
   const {
     register,
     formState: { errors },
     handleSubmit,
     reset,
+    control,
   } = useForm({
     defaultValues: {
       name: "",
       email: "",
       password: "",
-      role: "Back Office",
+      role: "",
       serviceName: "",
       description: "",
       sales: "",
@@ -57,7 +60,10 @@ const Admin = () => {
   const submit = async (data) => {
     let res;
     try {
-      if (showTable === "All Sales Person") {
+      if (showTable === "All Users") {
+        data.role = data.role.label;
+        res = await addUser(data).unwrap();
+      } else if (showTable === "All Sales Person") {
         res = await addValue({
           sales: { label: data.sales, value: data.sales },
         }).unwrap();
@@ -92,7 +98,75 @@ const Admin = () => {
         ))}
       </div>
       <div className="flex justify-center py-2 gap-5">
-        {showTable === "All Sales Person" ? (
+        {showTable === "All Users" ? (
+          <form
+            className="flex items-center gap-4 mb-4"
+            onSubmit={handleSubmit(submit)}
+          >
+            <div>
+              <InputRow
+                label="User Name"
+                placeholder="Enter full name"
+                id="name"
+                errors={errors}
+                register={register}
+              />
+              <p className="text-xs text-red-500 -bottom-4 pl-1">
+                {errors.name && "Name is required"}
+              </p>
+            </div>
+            <div>
+              <InputRow
+                label="Email"
+                placeholder="abc@pms.in"
+                id="email"
+                errors={errors}
+                register={register}
+              />
+              <p className="text-xs text-red-500 -bottom-4 pl-1">
+                {errors.email && "Email id is required"}
+              </p>
+            </div>
+            <div>
+              <InputRow
+                label="Password"
+                message="Password is required"
+                placeholder="Minium 5 letters"
+                id="password"
+                errors={errors}
+                register={register}
+              />
+              <p className="text-xs text-red-500 -bottom-4 pl-1">
+                {errors.password && "Password is required"}
+              </p>
+            </div>
+            <div className="w-52">
+              <Controller
+                name="role"
+                control={control}
+                rules={{ required: "Role is required" }}
+                render={({ field: { onChange, value, ref } }) => (
+                  <InputSelect
+                    options={userRoles}
+                    onChange={onChange}
+                    value={value}
+                    label="Role"
+                  />
+                )}
+              />
+              <p className="text-xs text-red-500 -bottom-4 pl-1">
+                {errors.role?.message}
+              </p>
+            </div>
+            <Button
+              label="Add User"
+              color="bg-green-600"
+              width="w-28"
+              height="h-9"
+              type="submit"
+            />
+          </form>
+        ) : showTable === "All Sales Person" ? (
           <div>
             <form
               className="flex items-center gap-8 mb-4"
