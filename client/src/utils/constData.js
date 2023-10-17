@@ -35,6 +35,12 @@ export const adminNavbar = [
 
 export const jobStatus = [
   { label: "Completed", value: "Completed" },
+  { label: "Partially Completed", value: "Partially Completed" },
   { label: "Postponed", value: "Postponed" },
   { label: "Cancelled", value: "Cancelled" },
+];
+
+export const cashStatus = [
+  { label: "Yes", value: "Yes" },
+  { label: "No", value: "No" },
 ];

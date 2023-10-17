@@ -9,7 +9,6 @@ import { useGetAdminValuesQuery } from "../redux/adminSlice";
 const NewChallan = () => {
   const [create, { isLoading }] = useCreateChallanMutation();
   const { data, isLoading: valuesLoading } = useGetAdminValuesQuery();
-  
 
   const {
     register,
@@ -17,6 +16,7 @@ const NewChallan = () => {
     handleSubmit,
     reset,
     control,
+    watch,
   } = useForm({
     defaultValues: {
       shipToDetails: {
@@ -48,6 +48,8 @@ const NewChallan = () => {
       ],
     },
   });
+
+  const watchPayment = watch("paymentType");
 
   const { fields, append, remove } = useFieldArray({
     name: "serviceDetails",
@@ -368,15 +370,6 @@ const NewChallan = () => {
                 Payment Details
               </h2>
               <div className="flex justify-center">
-                <InputRow
-                  label="Total Amount"
-                  id="amount"
-                  errors={errors}
-                  register={register}
-                  required={false}
-                />
-              </div>
-              <div className="flex justify-center">
                 <div className="w-52">
                   <Controller
                     name="paymentType"
@@ -396,9 +389,23 @@ const NewChallan = () => {
                   </p>
                 </div>
               </div>
+              {(watchPayment.label === "Cash To Collect" ||
+                watchPayment.label === "G-Pay Payment") && (
+                <div className="flex justify-center">
+                  <InputRow
+                    label="Total Amount"
+                    id="amount"
+                    errors={errors}
+                    register={register}
+                    type="number"
+                  />
+                  <p className="text-xs text-red-500 -bottom-4 pl-1">
+                    {errors.amount && "Amount is required"}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
-
           <div className="flex justify-center items-end gap-x-2 mt-6">
             <Button
               type="submit"

@@ -11,7 +11,7 @@ export const createChallan = async (req, res) => {
   try {
     const date = moment().format("DD#MM#YY");
     req.body.number = `#*0001*#${date}#`;
-    req.body.update = [{ status: "Created", user: "Mayur" }];
+    req.body.update = [{ status: "Open", user: "Mayur" }];
 
     const challan = await Challan.create(req.body);
 
@@ -101,6 +101,7 @@ export const updateChallan = async (req, res) => {
 
     req.body.images = imageLinks;
     challan.update.push(req.body);
+    if (req.body.amount) challan.collectedAmount += req.body.amount;
     await challan.save();
 
     return res.json({ msg: "Challan updated successfully" });
