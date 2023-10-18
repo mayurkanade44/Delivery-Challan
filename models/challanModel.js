@@ -13,7 +13,8 @@ const challanSchema = new mongoose.Schema(
     collectedAmount: { type: Number, default: 0 },
     paymentType: { type: Object, required: true },
     shipToDetails: { type: Object, required: true },
-    serviceDetails: { type: Object, required: true },
+    serviceDetails: [Object],
+    file: { type: String },
     update: [Object],
     // user: {
     //   type: mongoose.Schema.Types.ObjectId,

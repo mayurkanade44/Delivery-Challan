@@ -5,7 +5,14 @@ import {
   RouterProvider,
   Outlet,
 } from "react-router-dom";
-import { Admin, Home, Login, NewChallan, UpdateChallan } from "./pages";
+import {
+  Admin,
+  Home,
+  Login,
+  NewChallan,
+  SingleChallan,
+  UpdateChallan,
+} from "./pages";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Navbar } from "./components";
@@ -31,6 +38,7 @@ function App() {
         <Route path="/create" element={<NewChallan />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/update/:id" element={<UpdateChallan />} />
+        <Route path="/challan/:id" element={<SingleChallan />} />
       </Route>
     )
   );
