@@ -74,7 +74,7 @@ const NewChallan = () => {
   return (
     <>
       {isLoading || (valuesLoading && <Loading />)}
-      <div className="mx-10 my-5">
+      <div className="mx-10 my-20 lg:my-5">
         <div className="flex justify-center items-center gap-x-4">
           <BsTruck className="w-9 h-9 text-green-600" />
           <h1 className="text-3xl font-medium">New Delivery Challan</h1>

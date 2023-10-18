@@ -110,3 +110,24 @@ export const updateChallan = async (req, res) => {
     res.status(500).json({ msg: "Server error, try again later" });
   }
 };
+
+export const getAllChallan = async (req, res) => {
+  const { search, page } = req.query;
+  let query = {};
+  if (search) {
+    query = {
+      $or: [
+        { number: { $regex: search, $options: "i" } },
+        { "shipToDetails.name": { $regex: search, $options: "i" } },
+      ],
+    };
+  }
+  try {
+    const challans = await Challan.find(query).sort("-createdAt");
+
+    return res.json(challans);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};
