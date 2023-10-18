@@ -1,7 +1,3 @@
-import { AiOutlineHome } from "react-icons/ai";
-import { RxDashboard } from "react-icons/rx";
-import { RiAdminLine } from "react-icons/ri";
-
 export const prefix = [
   { label: "Mr", value: "Mr" },
   { label: "Mrs", value: "Mrs" },
@@ -47,27 +43,6 @@ export const jobStatus = [
 export const cashStatus = [
   { label: "Yes", value: "Yes" },
   { label: "No", value: "No" },
-];
-
-export const navData = [
-  {
-    name: "Home",
-    link: "/home",
-
-    role: ["Admin", "Technician", "Back Office"],
-  },
-  {
-    name: "Dashboard",
-    link: "/dashboard",
-
-    role: ["Admin", "Back Office"],
-  },
-  {
-    name: "Admin",
-    link: "/admin",
-
-    role: ["Admin"],
-  },
 ];
 
 export const userRoles = [
