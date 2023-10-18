@@ -5,9 +5,12 @@ import { paymentType, prefix, timeFrame } from "../utils/constData";
 import { useCreateChallanMutation } from "../redux/challanSlice";
 import { toast } from "react-toastify";
 import { useGetAdminValuesQuery } from "../redux/adminSlice";
+import { useNavigate } from "react-router-dom";
 
 const NewChallan = () => {
   const [create, { isLoading }] = useCreateChallanMutation();
+  const navigate = useNavigate();
+
   const { data, isLoading: valuesLoading } = useGetAdminValuesQuery();
 
   const {
@@ -65,6 +68,7 @@ const NewChallan = () => {
       const res = await create(data).unwrap();
       toast.success(res.msg);
       reset();
+      navigate("/home");
     } catch (error) {
       console.log(error);
       toast.error(error?.data?.msg || error.error);

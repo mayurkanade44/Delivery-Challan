@@ -7,16 +7,23 @@ import QRCode from "qrcode";
 import { uploadFile } from "../utils/helperFunctions.js";
 
 export const createChallan = async (req, res) => {
-  const { business, sales } = req.body;
   try {
     const date = moment().format("DD#MM#YY");
     req.body.number = `#*0001*#${date}#`;
-    req.body.update = [{ status: "Open", user: "Mayur" }];
+    req.body.update = [
+      { status: "Created", user: req.user.name, date: new Date() },
+    ];
+    if (
+      req.body.paymentType.label === "Cash To Collect" ||
+      req.body.paymentType.label === "G-Pay Payment"
+    ) {
+      req.body.verify = { status: false, user: req.user.name };
+    }
 
     const challan = await Challan.create(req.body);
 
     var id = challan._id;
-    const qrLink = `/update-challan/${id}`;
+    const qrLink = `/update/${id}`;
     const qrCode = await QRCode.toDataURL(qrLink);
 
     const template = fs.readFileSync("./tmp/template.docx");
@@ -29,7 +36,7 @@ export const createChallan = async (req, res) => {
       workLocation: challan.workLocation,
       userName: "Mayur",
       sales: challan.sales.label,
-      amount: challan.amount,
+      amount: challan.amount ? `Amount: Rs. ${challan.amount} /-` : " ",
       paymentType: challan.paymentType.label,
       name: `${challan.shipToDetails.prefix.label} ${challan.shipToDetails.name}`,
       shipToDetails: challan.shipToDetails,
@@ -53,6 +60,14 @@ export const createChallan = async (req, res) => {
 
     const filePath = `./tmp/dc.docx`;
     fs.writeFileSync(filePath, buffer);
+    const link = await uploadFile({ filePath, folder: "challan" });
+    if (!link) {
+      await Challan.findByIdAndDelete(id);
+      return res.status(400).json({ msg: "Upload error, trg again later" });
+    }
+
+    challan.file = link;
+    await challan.save();
 
     return res.status(201).json({ msg: "DC created" });
   } catch (error) {
