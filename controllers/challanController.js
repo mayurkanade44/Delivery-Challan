@@ -161,3 +161,50 @@ export const verifyAmount = async (req, res) => {
     res.status(500).json({ msg: "Server error, try again later" });
   }
 };
+
+export const chartData = async (req, res) => {
+  try {
+    const challans = await Challan.find();
+
+    let postponed = 0,
+      open = 0,
+      completed = 0,
+      partially = 0,
+      cancelled = 0,
+      total = 0,
+      collected = 0;
+    for (let challan of challans) {
+      if (challan.amount) {
+        total += challan.amount;
+        collected += challan.collectedAmount;
+      }
+      const len = challan.update.length - 1;
+
+      let status = challan.update[len].status;
+      if (status === "Completed") completed += 1;
+      else if (status === "Partially Completed") partially += 1;
+      else if (status === "Postponed") postponed += 1;
+      else if (status === "Cancelled") cancelled += 1;
+      else if (status === "Created") open += 1;
+    }
+
+    const barData = [
+      { label: "Total", value: challans.length },
+      { label: "Open", value: open },
+      { label: "Completed", value: completed },
+      { label: "Partially Completed", value: partially },
+      { label: "Postponed", value: postponed },
+      { label: "Cancelled", value: cancelled },
+    ];
+
+    const pieData = [
+      { label: "Total", value: total },
+      { label: "Pending", value: total - collected },
+    ];
+
+    return res.json({ barData, pieData });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};

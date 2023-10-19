@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import {
   Admin,
+  Dashboard,
   Home,
   Login,
   NewChallan,
@@ -36,6 +37,7 @@ function App() {
         <Route index={true} path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
         <Route path="/create" element={<NewChallan />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/update/:id" element={<UpdateChallan />} />
         <Route path="/challan/:id" element={<SingleChallan />} />

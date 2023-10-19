@@ -30,7 +30,6 @@ export const challanSlice = apiSlice.injectEndpoints({
         params: { search },
       }),
       providesTags: ["Challan"],
-      keepUnusedDataFor: 60,
     }),
     verifyAmount: builder.mutation({
       query: (id) => ({
@@ -38,6 +37,12 @@ export const challanSlice = apiSlice.injectEndpoints({
         method: "PUT",
       }),
       invalidatesTags: ["Challan"],
+    }),
+    chartData: builder.query({
+      query: () => ({
+        url: "/api/challan/chartData",
+      }),
+      providesTags: ["Challan"],
     }),
   }),
 });
@@ -48,4 +53,5 @@ export const {
   useSingleChallanQuery,
   useAllChallanQuery,
   useVerifyAmountMutation,
+  useChartDataQuery,
 } = challanSlice;
