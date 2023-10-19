@@ -8,6 +8,7 @@ import {
   AiOutlineLogout,
   AiOutlineMenuFold,
   AiOutlineMenuUnfold,
+  AiOutlineCheckCircle,
 } from "react-icons/ai";
 import { RiAdminLine } from "react-icons/ri";
 import { toast } from "react-toastify";
@@ -21,6 +22,12 @@ const navData = [
     link: "/home",
     icon: <AiOutlineHome className="mr-2 w-5 h-5" />,
     role: ["Admin", "Technician", "Back Office"],
+  },
+  {
+    name: "Verification",
+    link: "/verification",
+    icon: <AiOutlineCheckCircle className="mr-2 w-5 h-5" />,
+    role: ["Admin", "Back Office"],
   },
   {
     name: "Dashboard",
@@ -64,7 +71,7 @@ const Navbar = () => {
       {user && (
         <div className="bg-gray-200 h-full w-full">
           <nav className="bg-white shadow lg:block hidden">
-            <div className="mx-auto container lg:pl-10 xl:px-0 py-2 lg:py-0">
+            <div className="mx-auto container py-2 lg:py-0">
               <div
                 className={`flex items-center ${
                   user ? "justify-between" : "justify-center"
@@ -80,7 +87,7 @@ const Navbar = () => {
                 </div>
                 {user && (
                   <div className="flex mr-8">
-                    <div className="hidden lg:flex lg:mr-5 xl:mr-10">
+                    <div className="hidden lg:flex lg:mr-7">
                       {navData.map((nav) => (
                         <div key={nav.name}>
                           {nav.role.includes(user?.role) && (
@@ -98,11 +105,11 @@ const Navbar = () => {
                     <div className="hidden lg:flex items-center">
                       <div className="relative">
                         <div
-                          className="flex items-center relative"
+                          className="flex items-center justify-center relative"
                           onClick={() => setProfile(!profile)}
                         >
                           {profile && (
-                            <ul className="p-2 w-24 border-r bg-white absolute rounded right-0 shadow top-0 mt-8 border-2 border-black ">
+                            <ul className="p-2 w-24 bg-white absolute rounded shadow top-0 mt-8 border-2 border-black ">
                               <li className="cursor-pointer  text-gray-600 text-sm leading-3 tracking-normal hover:font-semibold">
                                 <button
                                   onClick={handleLogout}
@@ -115,7 +122,7 @@ const Navbar = () => {
                               </li>
                             </ul>
                           )}
-                          <div className="cursor-pointer mr-5 text-blue-500 font-semibold flex text-lg border-2 border-transparent rounded-full transition duration-150 ease-in-out">
+                          <div className="cursor-pointer  text-blue-500 font-semibold flex text-lg border-2 border-transparent rounded-full transition duration-150 ease-in-out">
                             {user.name?.split(" ")[0] || "Mayur"}
                           </div>
                         </div>
@@ -128,10 +135,13 @@ const Navbar = () => {
           </nav>
           <nav>
             {user ? (
-              <div className="py-2 px-6 w-full border flex lg:hidden justify-between items-center bg-white fixed top-0 z-40">
-                <BsTruck className="w-10 h-10" />
+              <div className="py-2 px-10 w-full border flex lg:hidden justify-between items-center bg-white fixed top-0 z-40">
+                <div className="flex items-center gap-x-3">
+                  <BsTruck className="w-10 h-10" />
+                  <span className=" text-lg font-medium">Delivery Challan</span>
+                </div>
                 <div className="flex items-center">
-                  <div className="relative mr-4 text-blue-500 font-semibold">
+                  <div className="relative mr-2 text-blue-500 font-semibold">
                     {user.name?.split(" ")[0] || "Mayur"}
                   </div>
                   <div

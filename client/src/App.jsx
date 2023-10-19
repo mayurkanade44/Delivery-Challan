@@ -13,6 +13,7 @@ import {
   NewChallan,
   SingleChallan,
   UpdateChallan,
+  Verification,
 } from "./pages";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -39,6 +40,7 @@ function App() {
         <Route path="/create" element={<NewChallan />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/verification" element={<Verification />} />
         <Route path="/update/:id" element={<UpdateChallan />} />
         <Route path="/challan/:id" element={<SingleChallan />} />
       </Route>

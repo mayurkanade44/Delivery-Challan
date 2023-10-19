@@ -5,6 +5,7 @@ import UpdateChallan from "./UpdateChallan";
 import Home from "./Home";
 import SingleChallan from "./SingleChallan";
 import Dashboard from "./Dashboard";
+import Verification from "./Verification";
 
 export {
   NewChallan,
@@ -14,4 +15,5 @@ export {
   Home,
   SingleChallan,
   Dashboard,
+  Verification,
 };

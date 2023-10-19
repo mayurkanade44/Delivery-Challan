@@ -147,6 +147,17 @@ export const getAllChallan = async (req, res) => {
   }
 };
 
+export const unverifiedChallans = async (req, res) => {
+  try {
+    const challans = await Challan.find({ "verify.status": false });
+
+    return res.json(challans);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};
+
 export const verifyAmount = async (req, res) => {
   try {
     const challan = await Challan.findById(req.params.id);

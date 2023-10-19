@@ -44,6 +44,12 @@ export const challanSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ["Challan"],
     }),
+    unverifiedChallan: builder.query({
+      query: () => ({
+        url: "/api/challan/unverified",
+      }),
+      providesTags: ["Challan"],
+    }),
   }),
 });
 
@@ -54,4 +60,5 @@ export const {
   useAllChallanQuery,
   useVerifyAmountMutation,
   useChartDataQuery,
+  useUnverifiedChallanQuery,
 } = challanSlice;
