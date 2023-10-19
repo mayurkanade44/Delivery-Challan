@@ -1,10 +1,18 @@
 import { useParams } from "react-router-dom";
-import { useSingleChallanQuery } from "../redux/challanSlice";
-import { AlertMessage, Button, Loading } from "../components";
+import {
+  useSingleChallanQuery,
+  useVerifyAmountMutation,
+} from "../redux/challanSlice";
+import { AlertMessage, Button, Loading, Modal } from "../components";
 import { dateFormat, dateTimeFormat } from "../utils/functionHelper";
+import { toast } from "react-toastify";
+import { useState } from "react";
 
 const SingleChallan = () => {
   const { id } = useParams();
+  const [open, setOpen] = useState(false);
+
+  const [verify, { isLoading: verifyLoading }] = useVerifyAmountMutation();
   const { data, isLoading: challanLoading, error } = useSingleChallanQuery(id);
 
   const progress = (status) => {
@@ -16,9 +24,20 @@ const SingleChallan = () => {
     return <p className={`${text} font-semibold`}>{status}</p>;
   };
 
+  const handleVerify = async () => {
+    try {
+      const res = await verify(id).unwrap();
+      toast.success(res.msg);
+      setOpen(false);
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.data?.msg || error.error);
+    }
+  };
+
   return (
     <div className="mx-10 my-20 lg:my-5">
-      {challanLoading ? (
+      {challanLoading || verifyLoading ? (
         <Loading />
       ) : (
         error && <AlertMessage>{error?.data?.msg || error.error}</AlertMessage>
@@ -162,7 +181,18 @@ const SingleChallan = () => {
                     Total Received Amount - {data.collectedAmount} Rs
                   </h1>
                 </div>
-                <Button label="Verify" />
+                <Button
+                  label="Verify"
+                  color="bg-green-600"
+                  onClick={() => setOpen(true)}
+                />
+                {open && (
+                  <Modal
+                    open={open}
+                    onClick={handleVerify}
+                    close={() => setOpen(false)}
+                  />
+                )}
               </>
             )}
           </div>

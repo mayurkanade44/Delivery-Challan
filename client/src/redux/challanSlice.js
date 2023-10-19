@@ -8,6 +8,7 @@ export const challanSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Challan"],
     }),
     updateChallan: builder.mutation({
       query: ({ id, data }) => ({
@@ -15,11 +16,13 @@ export const challanSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: data,
       }),
+      invalidatesTags: ["Challan"],
     }),
     singleChallan: builder.query({
       query: (id) => ({
         url: `/api/challan/${id}`,
       }),
+      providesTags: ["Challan"],
     }),
     allChallan: builder.query({
       query: ({ search }) => ({
@@ -27,7 +30,14 @@ export const challanSlice = apiSlice.injectEndpoints({
         params: { search },
       }),
       providesTags: ["Challan"],
-      keepUnusedDataFor: 10,
+      keepUnusedDataFor: 60,
+    }),
+    verifyAmount: builder.mutation({
+      query: (id) => ({
+        url: `/api/challan/verify/${id}`,
+        method: "PUT",
+      }),
+      invalidatesTags: ["Challan"],
     }),
   }),
 });
@@ -37,4 +47,5 @@ export const {
   useUpdateChallanMutation,
   useSingleChallanQuery,
   useAllChallanQuery,
+  useVerifyAmountMutation,
 } = challanSlice;

@@ -13,6 +13,6 @@ const authBaseQuery = async (args, api, extraOptions) => {
 
 export const apiSlice = createApi({
   baseQuery: authBaseQuery,
-  tagTypes: ["User", "Challan"],
+  tagTypes: ["User", "Challan", "Admin"],
   endpoints: (builder) => ({}),
 });

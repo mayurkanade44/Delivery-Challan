@@ -24,10 +24,6 @@ const Home = () => {
     setSearch("");
   };
 
-  const redirectNewQuotation = () => {
-    navigate("/create");
-  };
-
   const navigateToChallan = (id) => {
     navigate(`/challan/${id}`);
   };
@@ -78,12 +74,13 @@ const Home = () => {
               />
             </form>
             <div className="flex items-end justify-around mt-4 md:mt-0 md:ml-3 lg:ml-0">
-              <Button
-                label="Create New Challan"
-                height="h-9"
-                color="bg-green-600"
-                onClick={redirectNewQuotation}
-              />
+              <Link to="/create">
+                <Button
+                  label="Create New Challan"
+                  height="h-9"
+                  color="bg-green-600"
+                />
+              </Link>
             </div>
           </div>
         </div>

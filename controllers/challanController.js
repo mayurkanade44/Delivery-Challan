@@ -146,3 +146,18 @@ export const getAllChallan = async (req, res) => {
     res.status(500).json({ msg: "Server error, try again later" });
   }
 };
+
+export const verifyAmount = async (req, res) => {
+  try {
+    const challan = await Challan.findById(req.params.id);
+    if (!challan) return res.status(404).json({ msg: "Challan not found" });
+
+    challan.verify = { status: true, user: req.user.name, date: new Date() };
+    await challan.save();
+
+    return res.json({ msg: "Challan amount verified" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};
