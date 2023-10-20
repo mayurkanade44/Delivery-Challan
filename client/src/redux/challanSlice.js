@@ -57,6 +57,12 @@ export const challanSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Challan"],
     }),
+    operatorComments: builder.query({
+      query: () => ({
+        url: "/api/challan/operatorComments",
+      }),
+      providesTags: ["Admin"],
+    }),
   }),
 });
 
@@ -69,4 +75,5 @@ export const {
   useChartDataQuery,
   useUnverifiedChallanQuery,
   useMakeInvoiceMutation,
+  useOperatorCommentsQuery,
 } = challanSlice;

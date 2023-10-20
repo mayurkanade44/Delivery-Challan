@@ -86,7 +86,7 @@ const Home = () => {
         </div>
         {data?.length === 0 && (
           <h6 className="text-red-500 text-xl font-semibold text-center mb-2">
-            No Quotation Found
+            No Challan Found
           </h6>
         )}
         <div className="overflow-y-auto my-4">

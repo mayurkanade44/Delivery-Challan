@@ -9,6 +9,6 @@ const router = express.Router();
 
 router.route("/value").post(addAdminValue).get(getAllValues);
 router.delete("/value/:id", deleteAdminValue);
-router.post("/user", registerUser)
+router.post("/user", registerUser);
 
 export default router;

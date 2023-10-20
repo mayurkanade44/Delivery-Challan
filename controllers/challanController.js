@@ -305,3 +305,25 @@ export const makeInvoice = async (req, res) => {
     res.status(500).json({ msg: "Server error, try again later" });
   }
 };
+
+export const getOperatorComments = async (req, res) => {
+  try {
+    const values = await Admin.find();
+    const comment = [];
+
+    values.map(
+      (item) =>
+        item.comment &&
+        comment.push({
+          id: item._id,
+          label: item.comment.label,
+          value: item.comment.value,
+        })
+    );
+
+    return res.json(comment);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};

@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";
 import {
+  useOperatorCommentsQuery,
   useSingleChallanQuery,
   useUpdateChallanMutation,
 } from "../redux/challanSlice";
@@ -20,6 +21,8 @@ const UpdateChallan = () => {
   const [images, setImages] = useState([]);
   const [message, setMessage] = useState(false);
 
+  const { data: comments, isLoading: commentLoading } =
+    useOperatorCommentsQuery();
   const { data, isLoading, error } = useSingleChallanQuery(id);
   const [update, { isLoading: updateLoading }] = useUpdateChallanMutation();
 
@@ -78,7 +81,7 @@ const UpdateChallan = () => {
 
   return (
     <div className="mx-10 mt-16 lg:mt-5 ">
-      {isLoading || updateLoading ? (
+      {(isLoading || updateLoading || commentLoading) ? (
         <Loading />
       ) : (
         error && <AlertMessage>{error?.data?.msg || error.error}</AlertMessage>
@@ -131,7 +134,7 @@ const UpdateChallan = () => {
                   rules={{ required: "Select prefix" }}
                   render={({ field: { onChange, value, ref } }) => (
                     <InputSelect
-                      options={jobStatus}
+                      options={comments}
                       onChange={onChange}
                       value={value}
                       label="Job Comment"

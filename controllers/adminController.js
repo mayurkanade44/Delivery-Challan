@@ -17,6 +17,7 @@ export const getAllValues = async (req, res) => {
     const sales = [];
     const business = [];
     const services = [];
+    const comment = [];
     values.map(
       (item) =>
         (item.sales &&
@@ -36,6 +37,12 @@ export const getAllValues = async (req, res) => {
             id: item._id,
             label: item.services.label,
             value: item.services.value,
+          })) ||
+        (item.comment &&
+          comment.push({
+            id: item._id,
+            label: item.comment.label,
+            value: item.comment.value,
           }))
     );
 
@@ -43,6 +50,7 @@ export const getAllValues = async (req, res) => {
       sales,
       business,
       services,
+      comment,
     });
   } catch (error) {
     console.log(error);

@@ -7,12 +7,19 @@ import {
   useGetAdminValuesQuery,
 } from "../redux/adminSlice";
 import { useState } from "react";
-import { AdminTable, Button, InputRow, InputSelect } from "../components";
+import {
+  AdminTable,
+  AlertMessage,
+  Button,
+  InputRow,
+  InputSelect,
+  Loading,
+} from "../components";
 import { toast } from "react-toastify";
 
 const Admin = () => {
   const [showTable, setShowTable] = useState("All Users");
-  const { data, isLoading: valuesLoading } = useGetAdminValuesQuery();
+  const { data, isLoading: valuesLoading, error } = useGetAdminValuesQuery();
   const [addValue, { isLoading }] = useAddAdminValueMutation();
   const [deleteValue, { isLoading: deleteLoading }] =
     useDeleteAdminValueMutation();
@@ -34,6 +41,7 @@ const Admin = () => {
       description: "",
       sales: "",
       business: "",
+      comment: "",
     },
   });
 
@@ -75,6 +83,10 @@ const Admin = () => {
         res = await addValue({
           services: { label: data.serviceName, value: data.description },
         }).unwrap();
+      } else if (showTable === "All Service Comments") {
+        res = await addValue({
+          comment: { label: data.comment, value: data.comment },
+        }).unwrap();
       }
       toast.success(res.msg);
       reset();
@@ -86,6 +98,11 @@ const Admin = () => {
 
   return (
     <div>
+      {isLoading || valuesLoading || deleteLoading || addUserLoading ? (
+        <Loading />
+      ) : (
+        error && <AlertMessage>{error?.data?.msg || error.error}</AlertMessage>
+      )}
       <div className="flex items-center justify-center py-2 bg-gray-100 border">
         {adminNavbar.map((item, index) => (
           <button
@@ -258,7 +275,32 @@ const Admin = () => {
             </div>
           </>
         ) : (
-          <>None</>
+          <div>
+            <form
+              className="flex items-center gap-8 mb-4"
+              onSubmit={handleSubmit(submit)}
+            >
+              <InputRow
+                label="Operator Comment"
+                message="comment is required"
+                id="comment"
+                errors={errors}
+                register={register}
+              />
+              <Button
+                label="Add Comment"
+                color="bg-green-600"
+                width="w-28"
+                height="h-9"
+                type="submit"
+              />
+            </form>
+            <AdminTable
+              title={["Operator Comment"]}
+              data={data?.comment}
+              handleDelete={handleDelete}
+            />
+          </div>
         )}
       </div>
     </div>
