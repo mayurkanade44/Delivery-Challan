@@ -16,7 +16,12 @@ const challanSchema = new mongoose.Schema(
     serviceDetails: [Object],
     file: { type: String },
     update: [Object],
-    verify: { status: Boolean, user: String },
+    verify: {
+      status: Boolean,
+      invoice: Boolean,
+      user: String,
+      date: Date,
+    },
     // user: {
     //   type: mongoose.Schema.Types.ObjectId,
     //   required: true,

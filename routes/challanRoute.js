@@ -4,6 +4,7 @@ import {
   createChallan,
   getAllChallan,
   getChallan,
+  makeInvoice,
   unverifiedChallans,
   updateChallan,
   verifyAmount,
@@ -15,6 +16,7 @@ router.route("/").get(getAllChallan).post(createChallan);
 router.get("/chartData", chartData);
 router.get("/unverified", unverifiedChallans);
 router.put("/verify/:id", verifyAmount);
+router.put("/makeInvoice/:id", makeInvoice);
 router.route("/:id").put(updateChallan).get(getChallan);
 
 export default router;

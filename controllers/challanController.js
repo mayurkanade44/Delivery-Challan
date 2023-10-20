@@ -4,7 +4,7 @@ import moment from "moment";
 import { createReport } from "docx-templates";
 import fs from "fs";
 import QRCode from "qrcode";
-import { uploadFile } from "../utils/helperFunctions.js";
+import { sendEmail, uploadFile } from "../utils/helperFunctions.js";
 
 export const createChallan = async (req, res) => {
   try {
@@ -17,7 +17,12 @@ export const createChallan = async (req, res) => {
       req.body.paymentType.label === "Cash To Collect" ||
       req.body.paymentType.label === "G-Pay Payment"
     ) {
-      req.body.verify = { status: false, user: req.user.name };
+      req.body.verify = {
+        status: false,
+        invoice: false,
+        user: req.user.name,
+        date: new Date(),
+      };
     }
 
     const challan = await Challan.create(req.body);
@@ -163,7 +168,12 @@ export const verifyAmount = async (req, res) => {
     const challan = await Challan.findById(req.params.id);
     if (!challan) return res.status(404).json({ msg: "Challan not found" });
 
-    challan.verify = { status: true, user: req.user.name, date: new Date() };
+    challan.verify = {
+      status: true,
+      invoice: false,
+      user: req.user.name,
+      date: new Date(),
+    };
     await challan.save();
 
     return res.json({ msg: "Challan amount verified" });
@@ -214,6 +224,76 @@ export const chartData = async (req, res) => {
     ];
 
     return res.json({ barData, pieData });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};
+
+export const makeInvoice = async (req, res) => {
+  try {
+    const challan = await Challan.findById(req.params.id);
+    if (!challan) return res.status(404).json({ msg: "Challan not found" });
+
+    challan.amount = 0;
+    challan.collectedAmount = 0;
+    challan.verify = {
+      status: false,
+      invoice: true,
+      user: req.user.name,
+      date: new Date(),
+    };
+
+    const attachment = [];
+
+    const {
+      prefix,
+      name,
+      address,
+      road,
+      location,
+      landmark,
+      city,
+      pincode,
+      contactName,
+      contactNo,
+      contactEmail,
+    } = challan.shipToDetails;
+
+    const services = challan.serviceDetails.map(
+      (item) => item.serviceName.label
+    );
+
+    const update = challan.update[challan.update.length - 1];
+
+    const dynamicData = {
+      contractNo: `${prefix.label}. ${name}`,
+      address: `${address}, ${road}, ${location}, ${landmark}, ${city}, ${pincode}`,
+      serviceName: services.join(", "),
+      serviceStatus: update.status,
+      serviceDate: update.jobDate || "Contact service team",
+      area: challan.area,
+      workLocation: challan.workLocation,
+      serviceComment: challan.amount,
+      serviceType: challan.sales.label,
+      userName: req.user.name,
+    };
+
+    update.images?.map((link, index) =>
+      attachment.push({ url: link, name: `attachment-${index + 1}.jpg` })
+    );
+
+    const mail = await sendEmail({
+      emailList: [{ email: "noreply.epcorn@gmail.com" }],
+      attachment,
+      templateId: 5,
+      dynamicData,
+    });
+    if (!mail)
+      return res.status(400).json({ msg: "Email error, try again later" });
+
+    await challan.save();
+    return res.json({ msg: "Invoice details sent to billing team" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });

@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import {
+  useMakeInvoiceMutation,
   useSingleChallanQuery,
   useVerifyAmountMutation,
 } from "../redux/challanSlice";
@@ -13,6 +14,7 @@ const SingleChallan = () => {
   const [open, setOpen] = useState(false);
 
   const [verify, { isLoading: verifyLoading }] = useVerifyAmountMutation();
+  const [makeInvoice, { isLoading: invoiceLoading }] = useMakeInvoiceMutation();
   const { data, isLoading: challanLoading, error } = useSingleChallanQuery(id);
 
   const progress = (status) => {
@@ -35,9 +37,19 @@ const SingleChallan = () => {
     }
   };
 
+  const handleInvoice = async () => {
+    try {
+      const res = await makeInvoice(id).unwrap();
+      toast.success(res.msg);
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.data?.msg || error.error);
+    }
+  };
+
   return (
     <div className="mx-10 my-20 lg:my-5">
-      {challanLoading || verifyLoading ? (
+      {challanLoading || verifyLoading || invoiceLoading ? (
         <Loading />
       ) : (
         error && <AlertMessage>{error?.data?.msg || error.error}</AlertMessage>
@@ -193,6 +205,7 @@ const SingleChallan = () => {
                     close={() => setOpen(false)}
                   />
                 )}
+                <Button label="Make Invoice" onClick={handleInvoice} />
               </>
             )}
           </div>

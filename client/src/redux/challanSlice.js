@@ -50,6 +50,13 @@ export const challanSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ["Challan"],
     }),
+    makeInvoice: builder.mutation({
+      query: (id) => ({
+        url: `/api/challan/makeInvoice/${id}`,
+        method: "PUT",
+      }),
+      invalidatesTags: ["Challan"],
+    }),
   }),
 });
 
@@ -61,4 +68,5 @@ export const {
   useVerifyAmountMutation,
   useChartDataQuery,
   useUnverifiedChallanQuery,
+  useMakeInvoiceMutation,
 } = challanSlice;
