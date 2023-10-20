@@ -8,6 +8,7 @@ import { AlertMessage, Button, Loading, Modal } from "../components";
 import { dateFormat, dateTimeFormat } from "../utils/functionHelper";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import { saveAs } from "file-saver";
 
 const SingleChallan = () => {
   const { id } = useParams();
@@ -24,6 +25,10 @@ const SingleChallan = () => {
     else if (status === "Cancelled") text = "text-red-600";
 
     return <p className={`${text} font-semibold`}>{status}</p>;
+  };
+
+  const handleDownload = (images) => {
+    images.map((image, index) => saveAs(image, `image-${index + 1}`));
   };
 
   const handleVerify = async () => {
@@ -159,19 +164,25 @@ const SingleChallan = () => {
                         key={index}
                         className="h-8 text-sm leading-none text-gray-700 border-b dark:border-neutral-500 bg-white hover:bg-gray-100 hover:cursor-pointer"
                       >
-                        <td className="px-3 border-r font-normal dark:border-neutral-500">
+                        <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
                           {dateTimeFormat(challan.date)}
                         </td>
-                        <td className="px-3 border-r font-normal dark:border-neutral-500">
+                        <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
                           {progress(challan.status)}
                         </td>
-                        <td className="px-3 border-r font-normal dark:border-neutral-500">
+                        <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
                           {challan.amount}
                         </td>
-                        <td className="px-3 border-r font-normal dark:border-neutral-500">
-                          <Button label="Download" small />
+                        <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
+                          {challan.images && (
+                            <Button
+                              label="Download"
+                              small
+                              onClick={() => handleDownload(challan.images)}
+                            />
+                          )}
                         </td>
-                        <td className="px-3 border-r font-normal dark:border-neutral-500">
+                        <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
                           {challan.user}
                         </td>
                       </tr>

@@ -9,7 +9,8 @@ import { sendEmail, uploadFile } from "../utils/helperFunctions.js";
 export const createChallan = async (req, res) => {
   try {
     const date = moment().format("DD#MM#YY");
-    req.body.number = `#*0001*#${date}#`;
+    const admin = await Admin.findById("653256866b502b375e370966");
+    req.body.number = `#*${admin.challanCounter}*#${date}#`;
     req.body.update = [
       { status: "Created", user: req.user.name, date: new Date() },
     ];
@@ -71,6 +72,8 @@ export const createChallan = async (req, res) => {
       return res.status(400).json({ msg: "Upload error, trg again later" });
     }
 
+    admin.challanCounter += 1;
+    await admin.save();
     challan.file = link;
     await challan.save();
 
@@ -120,8 +123,9 @@ export const updateChallan = async (req, res) => {
     }
 
     req.body.images = imageLinks;
+    req.body.user = req.user.name;
     challan.update.push(req.body);
-    if (req.body.amount) challan.collectedAmount += req.body.amount;
+    if (req.body.amount) challan.collectedAmount += Number(req.body.amount);
     await challan.save();
 
     return res.json({ msg: "Challan updated successfully" });
@@ -267,16 +271,18 @@ export const makeInvoice = async (req, res) => {
     const update = challan.update[challan.update.length - 1];
 
     const dynamicData = {
-      contractNo: `${prefix.label}. ${name}`,
+      number: challan.number,
+      name: `${prefix.label}. ${name}`,
       address: `${address}, ${road}, ${location}, ${landmark}, ${city}, ${pincode}`,
       serviceName: services.join(", "),
       serviceStatus: update.status,
       serviceDate: update.jobDate || "Contact service team",
       area: challan.area,
       workLocation: challan.workLocation,
-      serviceComment: challan.amount,
-      serviceType: challan.sales.label,
-      userName: req.user.name,
+      amount: challan.amount,
+      gst: "123",
+      sales: challan.sales.label,
+      user: req.user.name,
     };
 
     update.images?.map((link, index) =>
