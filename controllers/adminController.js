@@ -1,4 +1,5 @@
 import Admin from "../models/adminModel.js";
+import User from "../models/userModel.js";
 
 export const addAdminValue = async (req, res) => {
   try {

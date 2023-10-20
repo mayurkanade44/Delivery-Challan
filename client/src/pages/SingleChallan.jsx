@@ -142,7 +142,7 @@ const SingleChallan = () => {
                   <thead>
                     <tr className="h-8 w-full text-md leading-none text-gray-600">
                       <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-2">
-                        Date & Time
+                        Date
                       </th>
                       <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-2">
                         Status
@@ -165,7 +165,7 @@ const SingleChallan = () => {
                         className="h-8 text-sm leading-none text-gray-700 border-b dark:border-neutral-500 bg-white hover:bg-gray-100 hover:cursor-pointer"
                       >
                         <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
-                          {dateTimeFormat(challan.date)}
+                          {dateFormat(challan.date)}
                         </td>
                         <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
                           {progress(challan.status)}

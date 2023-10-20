@@ -4,11 +4,17 @@ import {
   deleteAdminValue,
   getAllValues,
 } from "../controllers/adminController.js";
-import { registerUser } from "../controllers/userContoller.js";
+import {
+  deleteUser,
+  getAllUsers,
+  registerUser,
+} from "../controllers/userContoller.js";
 const router = express.Router();
 
 router.route("/value").post(addAdminValue).get(getAllValues);
-router.delete("/value/:id", deleteAdminValue);
 router.post("/user", registerUser);
+router.get("/allUser", getAllUsers);
+router.delete("/value/:id", deleteAdminValue);
+router.delete("/user/:id", deleteUser);
 
 export default router;

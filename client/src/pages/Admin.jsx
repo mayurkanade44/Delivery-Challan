@@ -4,7 +4,9 @@ import {
   useAddAdminValueMutation,
   useAddUserMutation,
   useDeleteAdminValueMutation,
+  useDeleteUserMutation,
   useGetAdminValuesQuery,
+  useGetAllUserQuery,
 } from "../redux/adminSlice";
 import { useState } from "react";
 import {
@@ -24,6 +26,9 @@ const Admin = () => {
   const [deleteValue, { isLoading: deleteLoading }] =
     useDeleteAdminValueMutation();
   const [addUser, { isLoading: addUserLoading }] = useAddUserMutation();
+  const [deleteUser, { isLoading: deleteUserLoading }] =
+    useDeleteUserMutation();
+  const { data: allUser, isLoading: userLoading } = useGetAllUserQuery();
 
   const {
     register,
@@ -51,10 +56,11 @@ const Admin = () => {
   };
 
   const handleDelete = async (id) => {
+    console.log("ok");
     try {
       let res;
       if (showTable === "All Users") {
-        // res = await deleteUser({id}).unwrap();
+        res = await deleteUser({ id }).unwrap();
       } else {
         res = await deleteValue({ id }).unwrap();
       }
@@ -98,12 +104,16 @@ const Admin = () => {
 
   return (
     <div>
-      {isLoading || valuesLoading || deleteLoading || addUserLoading ? (
+      {isLoading ||
+      valuesLoading ||
+      deleteLoading ||
+      addUserLoading ||
+      userLoading ? (
         <Loading />
       ) : (
         error && <AlertMessage>{error?.data?.msg || error.error}</AlertMessage>
       )}
-      <div className="flex items-center justify-center py-2 bg-gray-100 border">
+      <div className="flex items-center justify-center py-2 mt-14 lg:my-0 bg-gray-100 border">
         {adminNavbar.map((item, index) => (
           <button
             className="mx-4 font-medium hover:text-blue-500"
@@ -114,75 +124,122 @@ const Admin = () => {
           </button>
         ))}
       </div>
-      <div className="flex justify-center py-2 gap-5">
+      <div className="flex justify-center py-2 gap-5 mx-4 lg:mx-0">
         {showTable === "All Users" ? (
-          <form
-            className="flex items-center gap-4 mb-4"
-            onSubmit={handleSubmit(submit)}
-          >
-            <div>
-              <InputRow
-                label="User Name"
-                placeholder="Enter full name"
-                id="name"
-                errors={errors}
-                register={register}
+          <div>
+            <form
+              className="flex items-center gap-4 mb-4"
+              onSubmit={handleSubmit(submit)}
+            >
+              <div>
+                <InputRow
+                  label="User Name"
+                  placeholder="Enter full name"
+                  id="name"
+                  errors={errors}
+                  register={register}
+                />
+                <p className="text-xs text-red-500 -bottom-4 pl-1">
+                  {errors.name && "Name is required"}
+                </p>
+              </div>
+              <div>
+                <InputRow
+                  label="Email"
+                  placeholder="abc@pms.in"
+                  id="email"
+                  errors={errors}
+                  register={register}
+                />
+                <p className="text-xs text-red-500 -bottom-4 pl-1">
+                  {errors.email && "Email id is required"}
+                </p>
+              </div>
+              <div>
+                <InputRow
+                  label="Password"
+                  message="Password is required"
+                  placeholder="Minium 5 letters"
+                  id="password"
+                  errors={errors}
+                  register={register}
+                />
+                <p className="text-xs text-red-500 -bottom-4 pl-1">
+                  {errors.password && "Password is required"}
+                </p>
+              </div>
+              <div className="w-52">
+                <Controller
+                  name="role"
+                  control={control}
+                  rules={{ required: "Role is required" }}
+                  render={({ field: { onChange, value, ref } }) => (
+                    <InputSelect
+                      options={userRoles}
+                      onChange={onChange}
+                      value={value}
+                      label="Role"
+                    />
+                  )}
+                />
+                <p className="text-xs text-red-500 -bottom-4 pl-1">
+                  {errors.role?.message}
+                </p>
+              </div>
+              <Button
+                label="Add User"
+                color="bg-green-600"
+                width="w-28"
+                height="h-9"
+                type="submit"
               />
-              <p className="text-xs text-red-500 -bottom-4 pl-1">
-                {errors.name && "Name is required"}
-              </p>
+            </form>
+            <div className="flex justify-center">
+              <table className="border text-sm font-light dark:border-neutral-500">
+                <thead className="border-b font-medium dark:border-neutral-800 border-2">
+                  <tr>
+                    <th className="border-r px-2 py-1 dark:border-neutral-800 border-2">
+                      Name
+                    </th>
+                    <th className="border-r px-2 py-1 dark:border-neutral-800 border-2">
+                      Email
+                    </th>
+                    <th className="border-r px-2 py-1 dark:border-neutral-800 border-2">
+                      Role
+                    </th>
+                    <th className="border-r px-2 py-1 dark:border-neutral-800 border-2">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {allUser?.map((item) => (
+                    <tr
+                      className="border-b  dark:border-neutral-500"
+                      key={item._id}
+                    >
+                      <td className="border-r px-2 py-1 font-normal dark:border-neutral-500">
+                        {item.name}
+                      </td>
+                      <td className="border-r px-2 py-1 font-normal dark:border-neutral-500">
+                        {item.email}
+                      </td>
+                      <td className="border-r px-2 py-1 font-normal dark:border-neutral-500">
+                        {item.role}
+                      </td>
+                      <td className="border-r flex justify-center w-32 px-2 py-1 font-normal dark:border-neutral-500">
+                        <Button
+                          label="Delete"
+                          color="bg-red-600"
+                          onClick={() => handleDelete(item._id)}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-            <div>
-              <InputRow
-                label="Email"
-                placeholder="abc@pms.in"
-                id="email"
-                errors={errors}
-                register={register}
-              />
-              <p className="text-xs text-red-500 -bottom-4 pl-1">
-                {errors.email && "Email id is required"}
-              </p>
-            </div>
-            <div>
-              <InputRow
-                label="Password"
-                message="Password is required"
-                placeholder="Minium 5 letters"
-                id="password"
-                errors={errors}
-                register={register}
-              />
-              <p className="text-xs text-red-500 -bottom-4 pl-1">
-                {errors.password && "Password is required"}
-              </p>
-            </div>
-            <div className="w-52">
-              <Controller
-                name="role"
-                control={control}
-                rules={{ required: "Role is required" }}
-                render={({ field: { onChange, value, ref } }) => (
-                  <InputSelect
-                    options={userRoles}
-                    onChange={onChange}
-                    value={value}
-                    label="Role"
-                  />
-                )}
-              />
-              <p className="text-xs text-red-500 -bottom-4 pl-1">
-                {errors.role?.message}
-              </p>
-            </div>
-            <Button
-              label="Add User"
-              color="bg-green-600"
-              width="w-28"
-              height="h-9"
-              type="submit"
-            />
-          </form>
+          </div>
         ) : showTable === "All Sales Person" ? (
           <div>
             <form
