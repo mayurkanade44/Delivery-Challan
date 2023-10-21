@@ -41,8 +41,9 @@ const NewChallan = () => {
       workLocation: "",
       business: "",
       sales: "",
-      amount: "",
       paymentType: "",
+      amount: "",
+      gst: "",
       serviceDetails: [
         {
           serviceName: "",
@@ -78,12 +79,12 @@ const NewChallan = () => {
   return (
     <>
       {(isLoading || valuesLoading) && <Loading />}
-      <div className="mx-10 my-20 lg:my-5">
+      <div className="mx-10 my-20 lg:my-3">
         <div className="flex justify-center items-center gap-x-4">
           <BsTruck className="w-9 h-9 text-green-600" />
           <h1 className="text-3xl font-medium">New Delivery Challan</h1>
         </div>
-        <form onSubmit={handleSubmit(submit)} className="mt-6">
+        <form onSubmit={handleSubmit(submit)} className="mt-5">
           <h2 className="text-center my-2 text-xl text-blue-500 font-medium">
             Ship To Details
           </h2>

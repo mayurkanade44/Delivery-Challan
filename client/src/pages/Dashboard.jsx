@@ -42,7 +42,7 @@ const Dashboard = () => {
                         label: "Challans",
                         data: data.barData?.map((data) => data.value),
                         backgroundColor: [
-                          "rgba(60, 60, 60, 1)",
+                          "rgba(60, 60, 60, 0.7)",
                           "rgba(43, 63, 229, 1)",
                           "rgba(60, 179, 113, 1)",
                           "rgba(255, 165, 0, 1)",
@@ -68,8 +68,8 @@ const Dashboard = () => {
                         label: "Amount",
                         data: data.pieData?.map((data) => data.value),
                         backgroundColor: [
-                          "rgba(60, 179, 113, 1)",
                           "rgba(255, 0, 0, 1)",
+                          "rgba(60, 179, 113, 1)",
                         ],
                       },
                     ],

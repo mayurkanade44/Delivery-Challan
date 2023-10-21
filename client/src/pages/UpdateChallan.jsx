@@ -54,7 +54,6 @@ const UpdateChallan = () => {
       form.set("postponedDate", data.jobDate);
     else form.set("jobDate", data.jobDate);
     form.set("comment", data.comment.label);
-    form.set("date", new Date(data.jobDate));
     images.forEach((file) => {
       form.append("images", file);
     });

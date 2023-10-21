@@ -106,7 +106,7 @@ const SingleChallan = () => {
               <div className="overflow-y-auto my-2">
                 <table className="w-full border whitespace-nowrap  dark:border-neutral-500">
                   <thead>
-                    <tr className="h-12 w-full text-md leading-none text-gray-600">
+                    <tr className="h-10 w-full text-md leading-none text-gray-600">
                       <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-3">
                         Service Name
                       </th>
@@ -119,7 +119,7 @@ const SingleChallan = () => {
                     {data.serviceDetails?.map((service, index) => (
                       <tr
                         key={index}
-                        className="h-12 text-sm leading-none text-gray-700 border-b dark:border-neutral-500 bg-white hover:bg-gray-100 hover:cursor-pointer"
+                        className="h-10 text-sm leading-none text-gray-700 border-b dark:border-neutral-500 bg-white hover:bg-gray-100 hover:cursor-pointer"
                       >
                         <td className="px-3 border-r font-normal dark:border-neutral-500">
                           {service.serviceName.label}
@@ -142,10 +142,10 @@ const SingleChallan = () => {
                   <thead>
                     <tr className="h-8 w-full text-md leading-none text-gray-600">
                       <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-2">
-                        Date
+                        Status
                       </th>
                       <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-2">
-                        Status
+                        Job Done / Postponed Date
                       </th>
                       <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-2">
                         Amount Collected
@@ -165,10 +165,10 @@ const SingleChallan = () => {
                         className="h-8 text-sm leading-none text-gray-700 border-b dark:border-neutral-500 bg-white hover:bg-gray-100 hover:cursor-pointer"
                       >
                         <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
-                          {dateFormat(challan.date)}
+                          {progress(challan.status)}
                         </td>
                         <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
-                          {progress(challan.status)}
+                          {challan.jobDate || challan.postponedDate}
                         </td>
                         <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
                           {challan.amount}
@@ -183,7 +183,7 @@ const SingleChallan = () => {
                           )}
                         </td>
                         <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
-                          {challan.user}
+                          {challan.user} | {dateFormat(challan.date)}
                         </td>
                       </tr>
                     ))}

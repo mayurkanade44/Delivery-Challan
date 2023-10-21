@@ -124,6 +124,7 @@ export const updateChallan = async (req, res) => {
 
     req.body.images = imageLinks;
     req.body.user = req.user.name;
+    req.body.date = new Date();
     challan.update.push(req.body);
     if (req.body.amount) challan.collectedAmount += Number(req.body.amount);
     await challan.save();
@@ -225,8 +226,8 @@ export const chartData = async (req, res) => {
     ];
 
     const pieData = [
-      { label: "Total", value: total },
       { label: "Pending", value: total - collected },
+      { label: "Total", value: total },
     ];
 
     return res.json({ barData, pieData });

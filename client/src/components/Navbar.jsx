@@ -134,7 +134,7 @@ const Navbar = () => {
             </div>
           </nav>
           <nav>
-            {user ? (
+            {user && (
               <div className="py-2 px-10 w-full border flex lg:hidden justify-between items-center bg-white fixed top-0 z-40">
                 <div className="flex items-center gap-x-3">
                   <BsTruck className="w-10 h-10" />
@@ -153,10 +153,6 @@ const Navbar = () => {
                   </div>
                 </div>
               </div>
-            ) : (
-              <span className="py-2 font-medium text-lg px-6 w-full border flex lg:hidden justify-center items-center bg-white fixed top-0 z-40">
-                Delivery Challan
-              </span>
             )}
             {/*Mobile responsive sidebar*/}
             <div
@@ -170,30 +166,23 @@ const Navbar = () => {
                 className="bg-gray-800 opacity-50 w-full h-full"
                 onClick={() => setShow(!show)}
               />
-              <div className="w-64 z-40 fixed overflow-y-auto top-0 bg-white shadow h-full flex-col justify-between xl:hidden pb-4 transition duration-150 ease-in-out">
+              <div className="w-64 z-40 fixed overflow-y-auto top-0 bg-white shadow h-full flex-col justify-between xl:hidden  transition duration-150 ease-in-out">
                 <div className="px-6 h-full">
                   <div className="flex flex-col justify-between h-full w-full">
                     <div>
-                      <div className="my-6 flex w-full items-center justify-between">
-                        <div className="flex items-center justify-between w-full">
-                          <div className="flex items-center">
-                            <p className="text-base md:text-2xl text-gray-800 ml-3">
-                              Delivery Challan
-                            </p>
-                          </div>
-                          <div
-                            className="text-gray-800"
-                            onClick={() => setShow(!show)}
-                          >
-                            <AiOutlineMenuFold className="w-6 h-6" />
-                          </div>
+                      <div className="flex items-center justify-end w-full">
+                        <div
+                          className="text-gray-800"
+                          onClick={() => setShow(!show)}
+                        >
+                          <AiOutlineMenuFold className="w-6 h-6" />
                         </div>
                       </div>
                       <ul>
                         {navData.map((nav) => (
                           <div key={nav.name}>
                             {nav.role.includes(user?.role) && (
-                              <li className="text-gray-800 pt-5">
+                              <li className="text-gray-800 pt-2 pb-4">
                                 <Link
                                   to={nav.link}
                                   onClick={() => setShow(!show)}
@@ -206,10 +195,11 @@ const Navbar = () => {
                             )}
                           </div>
                         ))}
-                        <li className="text-gray-800 pt-4">
+                        <li className="text-gray-800 pt-2">
                           <button
                             type="button"
                             className="flex items-center text-red-500"
+                            onClick={handleLogout}
                           >
                             <AiOutlineLogout className="mr-4 h-5 w-5" />
                             Logout
