@@ -394,7 +394,7 @@ const NewChallan = () => {
                 </div>
               </div>
               {(watchPayment.label === "Cash To Collect" ||
-                watchPayment.label === "G-Pay Payment") && (
+                watchPayment.label === "UPI Payment") && (
                 <div className="flex justify-center">
                   <InputRow
                     label="Total Amount"

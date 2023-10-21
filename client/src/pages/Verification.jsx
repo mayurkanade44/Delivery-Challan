@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { AlertMessage, Button, Loading } from "../components";
 import { useUnverifiedChallanQuery } from "../redux/challanSlice";
 import { dateFormat } from "../utils/functionHelper";
@@ -21,7 +22,9 @@ const Verification = () => {
       )}
       {data && (
         <div className="overflow-y-auto my-4">
-          <h1 className="mb-4 text-red-600 text-2xl font-semibold text-center">{data.length} Verification Pending</h1>
+          <h1 className="mb-4 text-red-600 text-2xl font-semibold text-center">
+            {data.length} Verification Pending
+          </h1>
           <table className="w-full border whitespace-nowrap  dark:border-neutral-500">
             <thead>
               <tr className="h-12 w-full text-md leading-none text-gray-600">
@@ -36,6 +39,9 @@ const Verification = () => {
                 </th>
                 <th className="font-bold text-left  dark:border-neutral-800 border-2 px-3">
                   Sales Representative
+                </th>
+                <th className="font-bold text-left  dark:border-neutral-800 border-2 px-3">
+                  Total Amount
                 </th>
                 <th className="font-bold text-left  dark:border-neutral-800 border-2 px-3">
                   Amount Pending
@@ -64,10 +70,15 @@ const Verification = () => {
                     {challan.sales.label}
                   </td>
                   <td className="px-3 border-r font-normal dark:border-neutral-500">
+                    {challan.amount}
+                  </td>
+                  <td className="px-3 border-r font-normal dark:border-neutral-500">
                     {challan.amount - challan.collectedAmount}
                   </td>
                   <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
-                    <Button label="Details" height='h-8' />
+                    <Link to={`/challan/${challan._id}`}>
+                      <Button label="Details" height="h-8" />
+                    </Link>
                   </td>
                 </tr>
               ))}

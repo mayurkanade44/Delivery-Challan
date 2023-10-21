@@ -192,7 +192,7 @@ const SingleChallan = () => {
               </div>
             </div>
             {(data.paymentType.label === "Cash To Collect" ||
-              data.paymentType.label === "G-Pay Payment") && (
+              data.paymentType.label === "UPI Payment") && (
               <>
                 <div className="col-span-2">
                   <h1 className="text-lg font-medium text-red-600">

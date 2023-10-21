@@ -146,7 +146,7 @@ const UpdateChallan = () => {
                 </p>
               </div>
               {(data?.paymentType.label === "Cash To Collect" ||
-                data?.paymentType.label === "G-Pay Payment") &&
+                data?.paymentType.label === "UPI Payment") &&
                 watchStatus.label !== "Cancelled" && (
                   <>
                     <div>
@@ -159,7 +159,7 @@ const UpdateChallan = () => {
                             options={cashStatus}
                             onChange={onChange}
                             value={value}
-                            label="Cash Collected/G-Pay"
+                            label="Cash Collected/UPI Payment"
                           />
                         )}
                       />
@@ -173,7 +173,7 @@ const UpdateChallan = () => {
                           To collect {data.amount - data.collectedAmount}
                         </p>
                         <InputRow
-                          label="Collected/G-Pay Amount"
+                          label="Collected/UPI Amount"
                           id="amount"
                           errors={errors}
                           register={register}

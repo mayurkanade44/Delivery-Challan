@@ -16,7 +16,7 @@ export const createChallan = async (req, res) => {
     ];
     if (
       req.body.paymentType.label === "Cash To Collect" ||
-      req.body.paymentType.label === "G-Pay Payment"
+      req.body.paymentType.label === "UPI Payment"
     ) {
       req.body.verify = {
         status: false,
@@ -158,7 +158,9 @@ export const getAllChallan = async (req, res) => {
 
 export const unverifiedChallans = async (req, res) => {
   try {
-    const challans = await Challan.find({ "verify.status": false });
+    const challans = await Challan.find({ "verify.status": false }).sort(
+      "serviceDate"
+    );
 
     return res.json(challans);
   } catch (error) {

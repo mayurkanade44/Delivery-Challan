@@ -7,7 +7,7 @@ export const prefix = [
 
 export const paymentType = [
   { label: "Cash To Collect", value: "Cash To Collect" },
-  { label: "G-Pay Payment", value: "G-Pay Payment" },
+  { label: "UPI Payment", value: "UPI Payment" },
   { label: "Bill After Job", value: "Bill After Job" },
   { label: "NTB", value: "NTB" },
 ];
