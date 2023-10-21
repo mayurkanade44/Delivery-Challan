@@ -10,6 +10,7 @@ import cookieParser from "cookie-parser";
 import challanRoute from "./routes/challanRoute.js";
 import adminRoute from "./routes/adminRoute.js";
 import userRoute from "./routes/userRoute.js";
+import reportRoute from "./routes/reportRoute.js";
 import { authenticateUser } from "./middleware/authMiddleware.js";
 
 dotenv.config();
@@ -30,6 +31,7 @@ if (process.env.NODE_ENV !== "production") app.use(morgan("dev"));
 app.use("/api/user", userRoute);
 app.use("/api/challan", authenticateUser, challanRoute);
 app.use("/api/admin", adminRoute);
+app.use("/api/report", reportRoute);
 
 if (process.env.NODE_ENV === "production") {
   const __dirname = path.resolve();
