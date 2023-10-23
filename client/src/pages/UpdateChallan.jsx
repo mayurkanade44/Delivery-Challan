@@ -57,8 +57,7 @@ const UpdateChallan = () => {
     images.forEach((file) => {
       form.append("images", file);
     });
-    if (data.cashStatus) form.set("cashStatus", data.cashStatus.label);
-    if (data.amount) form.set("amount", data.amount);
+    if (data.cashStatus) form.set("amount", data.amount);
 
     try {
       const res = await update({ id, data: form }).unwrap();
@@ -80,7 +79,7 @@ const UpdateChallan = () => {
 
   return (
     <div className="mx-10 mt-16 lg:mt-5 ">
-      {(isLoading || updateLoading || commentLoading) ? (
+      {isLoading || updateLoading || commentLoading ? (
         <Loading />
       ) : (
         error && <AlertMessage>{error?.data?.msg || error.error}</AlertMessage>

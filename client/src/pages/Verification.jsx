@@ -47,6 +47,9 @@ const Verification = () => {
                   Amount Pending
                 </th>
                 <th className="font-bold text-left  dark:border-neutral-800 border-2 px-3">
+                  Payment Type
+                </th>
+                <th className="font-bold text-left  dark:border-neutral-800 border-2 px-3">
                   Action
                 </th>
               </tr>
@@ -55,7 +58,7 @@ const Verification = () => {
               {data.map((challan) => (
                 <tr
                   key={challan._id}
-                  className="h-12 text-sm leading-none text-gray-700 border-b dark:border-neutral-500 bg-white hover:bg-gray-100 hover:cursor-pointer"
+                  className="h-12 text-sm leading-none text-gray-700 border-b dark:border-neutral-500 bg-white hover:bg-gray-100"
                 >
                   <td className="px-3 border-r font-normal dark:border-neutral-500">
                     {challan.number}
@@ -74,6 +77,9 @@ const Verification = () => {
                   </td>
                   <td className="px-3 border-r font-normal dark:border-neutral-500">
                     {challan.amount - challan.collectedAmount}
+                  </td>
+                  <td className="px-3 border-r font-normal dark:border-neutral-500">
+                    {challan.paymentType.label}
                   </td>
                   <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
                     <Link to={`/challan/${challan._id}`}>

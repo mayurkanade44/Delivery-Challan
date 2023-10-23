@@ -14,7 +14,6 @@ import VerifyModal from "../components/VerifyModal";
 const SingleChallan = () => {
   const { id } = useParams();
 
-  const [verify, { isLoading: verifyLoading }] = useVerifyAmountMutation();
   const [makeInvoice, { isLoading: invoiceLoading }] = useMakeInvoiceMutation();
   const { data, isLoading: challanLoading, error } = useSingleChallanQuery(id);
 
@@ -31,17 +30,6 @@ const SingleChallan = () => {
     images.map((image, index) => saveAs(image, `image-${index + 1}`));
   };
 
-  const handleVerify = async () => {
-    try {
-      const res = await verify(id).unwrap();
-      toast.success(res.msg);
-      setOpen(false);
-    } catch (error) {
-      console.log(error);
-      toast.error(error?.data?.msg || error.error);
-    }
-  };
-
   const handleInvoice = async () => {
     try {
       const res = await makeInvoice(id).unwrap();
@@ -54,7 +42,7 @@ const SingleChallan = () => {
 
   return (
     <div className="mx-10 my-20 lg:my-5">
-      {challanLoading || verifyLoading || invoiceLoading ? (
+      {challanLoading || invoiceLoading ? (
         <Loading />
       ) : (
         error && <AlertMessage>{error?.data?.msg || error.error}</AlertMessage>
@@ -194,31 +182,45 @@ const SingleChallan = () => {
                 </table>
               </div>
             </div>
-            <div className="col-span-8">
-              {data.paymentType.label !== "NTB" && (
-                <div className="flex items-center flex-col lg:flex-row lg:gap-x-5 gap-y-2 ">
-                  <p className="text-lg font-medium text-red-600">
-                    Total Amount - {data.amount} Rs
-                  </p>
-                  <p className="text-lg font-medium text-red-600">
-                    Total Received Amount - {data.collectedAmount} Rs
-                  </p>
-                  {data.update.length > 1 && !data.verify.status ? (
-                    <VerifyModal
-                      id={id}
-                      amount={data.amount}
-                      received={data.collectedAmount}
-                    />
-                  ) : (
-                    <p className="text-red-600 font-medium">
-                      Verification Done By {data.verify.user} on{" "}
-                      {dateFormat(data.verify.date)} | {data.verify.note}
+            {data.paymentType.label !== "NTB" && (
+              <>
+                <div className="col-span-8">
+                  <div className="flex items-center flex-col lg:flex-row lg:gap-x-5">
+                    <p className="text-lg font-medium text-red-600">
+                      Total Amount - {data.amount} Rs
                     </p>
-                  )}
-                  <Button label="Make Invoice" onClick={handleInvoice} />
+                    <p className="text-lg font-medium text-red-600">
+                      Total Received Amount - {data.collectedAmount} Rs
+                    </p>
+                  </div>
                 </div>
-              )}
-            </div>
+                <div className="col-span-8">
+                  <div className="flex items-center flex-col lg:flex-row lg:gap-x-5">
+                    {data.update.length > 1 ? (
+                      !data.verify.status ? (
+                        <>
+                          <VerifyModal
+                            id={id}
+                            amount={data.amount}
+                            received={data.collectedAmount}
+                            type={data.paymentType.label}
+                          />
+                          <Button
+                            label="Make Invoice"
+                            onClick={handleInvoice}
+                          />
+                        </>
+                      ) : (
+                        <p className="text-green-600 font-medium text-lg">
+                          Verification Done By {data.verify.user} on{" "}
+                          {dateFormat(data.verify.date)} || {data.verify.note}
+                        </p>
+                      )
+                    ) : null}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

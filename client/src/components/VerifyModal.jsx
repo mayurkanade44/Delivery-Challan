@@ -27,7 +27,7 @@ const VerifyModal = ({ type, amount, received, id }) => {
     const pendingAmount = amount - received;
 
     if (pendingAmount > 0) return `Forfeited amount: ${pendingAmount}`;
-    else return `Excessive Amount: ${Math.abs(pendingAmount)}`;
+    else return `Excessive amount: ${Math.abs(pendingAmount)}`;
   };
 
   return (
@@ -49,29 +49,32 @@ const VerifyModal = ({ type, amount, received, id }) => {
               open ? "scale-100 opacity-100" : "scale-125 opacity-0"
             }`}
           >
-            <div className="text-center w-68">
+            <div className="text-center">
               <MdVerifiedUser className="text-green-500 mx-auto w-10 h-10" />
               <div className="mx-auto my-1">
                 <h3 className="text-lg font-black text-gray-800 mb-1">
-                  Confirm Amount Verification
+                  Confirm Verification
                 </h3>
-                <p className="text-sm text-left text-gray-500">
-                  Ary you sure you want to verify this challan?
-                  <br />
-                  Total amount - {amount}
-                  <br />
-                  Received amount - {received}
-                  <br />
-                  <span className="text-red-600">{pendingAmount()}</span>
+                <p className="text-left text-black">
+                  Ary you sure you want to verify this service slip?
                 </p>
+                {type !== "Bill After Job" && (
+                  <p className="mt-1">
+                    Total amount - {amount}
+                    <br />
+                    Received amount - {received}
+                    <br />
+                    <span className="text-red-600">{pendingAmount()}</span>
+                  </p>
+                )}
               </div>
-              <form onSubmit={submit}>
+              <form onSubmit={submit} className="mt-2">
                 <div className="flex">
                   <label
-                    htmlFor="notes"
+                    htmlFor="note"
                     className="block text-md font-medium text-gray-900 mr-1"
                   >
-                    Notes:
+                    {type !== "Bill After Job" ? "Note:" : "BillNo:"}
                     <span className="text-red-500 required-dot ml-0.5">*</span>
                   </label>
                   <input

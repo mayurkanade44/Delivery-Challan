@@ -186,6 +186,10 @@ export const verifyAmount = async (req, res) => {
       user: req.user.name,
       date: new Date(),
     };
+
+    if (challan.paymentType.label === "Bill After Job")
+      challan.collectedAmount = Number(challan.amount);
+
     await challan.save();
 
     return res.json({ msg: "Service slip verification done" });
