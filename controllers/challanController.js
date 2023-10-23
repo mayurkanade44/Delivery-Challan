@@ -10,14 +10,11 @@ export const createChallan = async (req, res) => {
   try {
     const date = moment().format("DD#MM#YY");
     const admin = await Admin.findById("653256866b502b375e370966");
-    req.body.number = `#*${admin.challanCounter}*#${date}#`;
+    req.body.number = `SSS- ${admin.challanCounter}`;
     req.body.update = [
       { status: "Created", user: req.user.name, date: new Date() },
     ];
-    if (
-      req.body.paymentType.label === "Cash To Collect" ||
-      req.body.paymentType.label === "UPI Payment"
-    ) {
+    if (req.body.paymentType.label !== "NTB") {
       req.body.verify = {
         status: false,
         invoice: false,
@@ -25,6 +22,7 @@ export const createChallan = async (req, res) => {
         date: new Date(),
       };
     }
+    req.body.user = req.user._id;
 
     const challan = await Challan.create(req.body);
 
@@ -35,13 +33,14 @@ export const createChallan = async (req, res) => {
     const template = fs.readFileSync("./tmp/template.docx");
     const additionalJsContext = {
       number: challan.number,
-      serviceDate: moment().format("DD/MM/YYYY"),
+      date: moment().format("DD/MM/YYYY"),
+      serviceDate: moment(challan.serviceDate).format("DD/MM/YYYY"),
       serviceTime: challan.serviceTime.label,
       business: challan.business.label,
       area: challan.area,
       workLocation: challan.workLocation,
-      userName: "Mayur",
       sales: challan.sales.label,
+      userName: req.user.name,
       amount: challan.amount ? `Amount: Rs. ${challan.amount} /-` : " ",
       paymentType: challan.paymentType.label,
       name: `${challan.shipToDetails.prefix.label} ${challan.shipToDetails.name}`,

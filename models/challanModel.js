@@ -11,6 +11,8 @@ const challanSchema = new mongoose.Schema(
     sales: { type: Object, required: true },
     amount: { type: Number },
     collectedAmount: { type: Number, default: 0 },
+    gst: { type: String },
+    billNo: { type: String },
     paymentType: { type: Object, required: true },
     shipToDetails: { type: Object, required: true },
     serviceDetails: [Object],
@@ -22,11 +24,11 @@ const challanSchema = new mongoose.Schema(
       user: String,
       date: Date,
     },
-    // user: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   required: true,
-    //   ref: "User",
-    // },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
   },
   { timestamps: true }
 );

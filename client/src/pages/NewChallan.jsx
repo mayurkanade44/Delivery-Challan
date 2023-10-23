@@ -6,6 +6,7 @@ import { useCreateChallanMutation } from "../redux/challanSlice";
 import { toast } from "react-toastify";
 import { useGetAdminValuesQuery } from "../redux/adminSlice";
 import { useNavigate } from "react-router-dom";
+import { AiOutlinePlus } from "react-icons/ai";
 
 const NewChallan = () => {
   const [create, { isLoading }] = useCreateChallanMutation();
@@ -261,6 +262,24 @@ const NewChallan = () => {
                   </p>
                 </div>
                 <div>
+                  <Controller
+                    name="sales"
+                    control={control}
+                    rules={{ required: "Select sales person" }}
+                    render={({ field: { onChange, value } }) => (
+                      <InputSelect
+                        options={data?.sales}
+                        onChange={onChange}
+                        value={value}
+                        label="Job Finalized By"
+                      />
+                    )}
+                  />
+                  <p className="text-xs text-red-500 -bottom-4 pl-1">
+                    {errors.sales?.message}
+                  </p>
+                </div>
+                <div>
                   <InputRow
                     label="Work Location"
                     id="workLocation"
@@ -300,24 +319,6 @@ const NewChallan = () => {
                     {errors.business?.message}
                   </p>
                 </div>
-                <div>
-                  <Controller
-                    name="sales"
-                    control={control}
-                    rules={{ required: "Select sales person" }}
-                    render={({ field: { onChange, value } }) => (
-                      <InputSelect
-                        options={data?.sales}
-                        onChange={onChange}
-                        value={value}
-                        label="Job Finalized By"
-                      />
-                    )}
-                  />
-                  <p className="text-xs text-red-500 -bottom-4 pl-1">
-                    {errors.sales?.message}
-                  </p>
-                </div>
               </div>
               {fields.map((field, index) => {
                 return (
@@ -355,7 +356,14 @@ const NewChallan = () => {
 
                     <div className="flex items-end justify-center gap-x-2">
                       <Button
-                        label="Add"
+                        label={
+                          <div className="flex items-center">
+                            <AiOutlinePlus className="w-5 h-5 mr-0.5" />
+                            Service
+                          </div>
+                        }
+                        small
+                        height="h-8"
                         onClick={() => append({ serviceName: "", notes: "" })}
                       />
                       {index > 0 && (
@@ -394,8 +402,7 @@ const NewChallan = () => {
                   </p>
                 </div>
               </div>
-              {(watchPayment.label === "Cash To Collect" ||
-                watchPayment.label === "UPI Payment") && (
+              {watchPayment.label !== "NTB" && (
                 <div className="flex justify-center">
                   <InputRow
                     label="Total Amount"
@@ -407,6 +414,17 @@ const NewChallan = () => {
                   <p className="text-xs text-red-500 -bottom-4 pl-1">
                     {errors.amount && "Amount is required"}
                   </p>
+                </div>
+              )}
+              {watchPayment.label === "Bill After Job" && (
+                <div className="flex justify-center">
+                  <InputRow
+                    label="GST"
+                    id="gst"
+                    errors={errors}
+                    register={register}
+                    required={false}
+                  />
                 </div>
               )}
             </div>

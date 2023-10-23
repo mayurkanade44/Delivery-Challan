@@ -1,7 +1,7 @@
 import { useState } from "react";
+import logo from "../assets/logo.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { BsTruck } from "react-icons/bs";
 import { RxDashboard } from "react-icons/rx";
 import {
   AiOutlineHome,
@@ -79,9 +79,9 @@ const Navbar = () => {
               >
                 <div className="flex w-full sm:w-auto items-center sm:items-stretch justify-end sm:justify-center">
                   <div className="flex items-center">
-                    <BsTruck className="w-10 h-10" />
+                    <img src={logo} className="w-12" />
                     <h2 className="hidden sm:block text-xl text-gray-700 font-bold leading-normal pl-3">
-                      Delivery Challan
+                      Single Service Slip
                     </h2>
                   </div>
                 </div>
@@ -137,8 +137,10 @@ const Navbar = () => {
             {user && (
               <div className="py-2 px-10 w-full border flex lg:hidden justify-between items-center bg-white fixed top-0 z-40">
                 <div className="flex items-center gap-x-3">
-                  <BsTruck className="w-10 h-10" />
-                  <span className=" text-lg font-medium">Delivery Challan</span>
+                  <img src={logo} className="w-10" />
+                  <span className=" text-lg font-medium">
+                    Single Service Slip
+                  </span>
                 </div>
                 <div className="flex items-center">
                   <div className="relative mr-2 text-blue-500 font-semibold">
