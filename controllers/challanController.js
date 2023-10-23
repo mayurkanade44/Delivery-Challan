@@ -187,6 +187,10 @@ export const verifyAmount = async (req, res) => {
       date: new Date(),
     };
 
+    const forfeitedAmount = challan.amount - challan.collectedAmount;
+
+    if (forfeitedAmount > 0) challan.forfeitedAmount = forfeitedAmount;
+
     if (challan.paymentType.label === "Bill After Job")
       challan.collectedAmount = Number(challan.amount);
 
@@ -209,11 +213,13 @@ export const chartData = async (req, res) => {
       partially = 0,
       cancelled = 0,
       total = 0,
-      collected = 0;
+      collected = 0,
+      forfeited = 0;
     for (let challan of challans) {
       if (challan.amount) {
         total += challan.amount;
         collected += challan.collectedAmount;
+        forfeited += challan.forfeitedAmount || 0;
       }
       const len = challan.update.length - 1;
 
@@ -225,21 +231,23 @@ export const chartData = async (req, res) => {
       else if (status === "Created") open += 1;
     }
 
-    const barData = [
+    const barData1 = [
       { label: "Total", value: challans.length },
       { label: "Open", value: open },
       { label: "Completed", value: completed },
-      { label: "Partially Completed", value: partially },
+      { label: "Half Completed", value: partially },
       { label: "Postponed", value: postponed },
       { label: "Cancelled", value: cancelled },
     ];
 
-    const pieData = [
-      { label: "Pending", value: total - collected },
+    const barData2 = [
       { label: "Total", value: total },
+      { label: "Collected", value: collected },
+      { label: "Pending", value: total - collected - forfeited },
+      { label: "Forfeited", value: forfeited },
     ];
 
-    return res.json({ barData, pieData });
+    return res.json({ barData1, barData2 });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });

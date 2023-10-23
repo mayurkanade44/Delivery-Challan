@@ -133,6 +133,9 @@ const SingleChallan = () => {
                         Status
                       </th>
                       <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-2">
+                        Job Type
+                      </th>
+                      <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-2">
                         Job Done / Postponed Date
                       </th>
                       <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-2">
@@ -154,6 +157,9 @@ const SingleChallan = () => {
                       >
                         <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
                           {progress(challan.status)}
+                        </td>
+                        <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
+                          {challan.type}
                         </td>
                         <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
                           {(challan.jobDate || challan.postponedDate) &&

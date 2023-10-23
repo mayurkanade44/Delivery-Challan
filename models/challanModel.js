@@ -11,6 +11,7 @@ const challanSchema = new mongoose.Schema(
     sales: { type: Object, required: true },
     amount: { type: Number },
     collectedAmount: { type: Number, default: 0 },
+    forfeitedAmount: { type: Number },
     gst: { type: String },
     billNo: { type: String },
     paymentType: { type: Object, required: true },

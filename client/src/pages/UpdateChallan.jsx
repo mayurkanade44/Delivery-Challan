@@ -199,7 +199,7 @@ const UpdateChallan = () => {
                   accept="image/*"
                 />
               </div>
-              <div className="flex justify-center mt-5">
+              <div className="flex justify-center my-5 ">
                 <Button
                   type="submit"
                   label="Save"
