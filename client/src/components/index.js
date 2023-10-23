@@ -5,7 +5,7 @@ import InputRow from "./InputRow";
 import InputSelect from "./InputSelect";
 import Loading from "./Loading";
 import Navbar from "./Navbar";
-import Modal from "./Modal";
+import Modal from "./VerifyModal";
 
 export {
   InputRow,

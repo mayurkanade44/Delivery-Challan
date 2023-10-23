@@ -22,6 +22,7 @@ const challanSchema = new mongoose.Schema(
       status: Boolean,
       invoice: Boolean,
       user: String,
+      note: String,
       date: Date,
     },
     user: {

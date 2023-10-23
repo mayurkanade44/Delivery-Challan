@@ -4,15 +4,15 @@ import {
   useSingleChallanQuery,
   useVerifyAmountMutation,
 } from "../redux/challanSlice";
-import { AlertMessage, Button, Loading, Modal } from "../components";
+import { AlertMessage, Button, Loading } from "../components";
 import { dateFormat, dateTimeFormat } from "../utils/functionHelper";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import { saveAs } from "file-saver";
+import VerifyModal from "../components/VerifyModal";
 
 const SingleChallan = () => {
   const { id } = useParams();
-  const [open, setOpen] = useState(false);
 
   const [verify, { isLoading: verifyLoading }] = useVerifyAmountMutation();
   const [makeInvoice, { isLoading: invoiceLoading }] = useMakeInvoiceMutation();
@@ -64,7 +64,7 @@ const SingleChallan = () => {
           <div className="grid grid-cols-8 gap-3">
             <div className="col-span-2">
               <h1 className="text-lg font-medium text-center">
-                Challan Number - {data.number}
+                Slip Number: {data.number}
               </h1>
             </div>
             <div className="col-span-4">
@@ -136,7 +136,7 @@ const SingleChallan = () => {
             <div className="col-span-8">
               <hr className="h-px border-0 dark:bg-gray-700" />
             </div>
-            <div className="col-span-8">
+            <div className="col-span-8 mb-2">
               <div className="overflow-y-auto my-1">
                 <table className="w-full border whitespace-nowrap  dark:border-neutral-500">
                   <thead>
@@ -168,7 +168,10 @@ const SingleChallan = () => {
                           {progress(challan.status)}
                         </td>
                         <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
-                          {challan.jobDate || challan.postponedDate}
+                          {(challan.jobDate || challan.postponedDate) &&
+                            dateFormat(
+                              challan.jobDate || challan.postponedDate
+                            )}
                         </td>
                         <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
                           {challan.amount}
@@ -191,34 +194,31 @@ const SingleChallan = () => {
                 </table>
               </div>
             </div>
-            {(data.paymentType.label === "Cash To Collect" ||
-              data.paymentType.label === "UPI Payment") && (
-              <>
-                <div className="col-span-2">
-                  <h1 className="text-lg font-medium text-red-600">
+            <div className="col-span-8">
+              {data.paymentType.label !== "NTB" && (
+                <div className="flex items-center flex-col lg:flex-row lg:gap-x-5 gap-y-2 ">
+                  <p className="text-lg font-medium text-red-600">
                     Total Amount - {data.amount} Rs
-                  </h1>
-                </div>
-                <div className="col-span-2">
-                  <h1 className="text-lg font-medium text-red-600">
+                  </p>
+                  <p className="text-lg font-medium text-red-600">
                     Total Received Amount - {data.collectedAmount} Rs
-                  </h1>
+                  </p>
+                  {data.update.length > 1 && !data.verify.status ? (
+                    <VerifyModal
+                      id={id}
+                      amount={data.amount}
+                      received={data.collectedAmount}
+                    />
+                  ) : (
+                    <p className="text-red-600 font-medium">
+                      Verification Done By {data.verify.user} on{" "}
+                      {dateFormat(data.verify.date)} | {data.verify.note}
+                    </p>
+                  )}
+                  <Button label="Make Invoice" onClick={handleInvoice} />
                 </div>
-                <Button
-                  label="Verify"
-                  color="bg-green-600"
-                  onClick={() => setOpen(true)}
-                />
-                {open && (
-                  <Modal
-                    open={open}
-                    onClick={handleVerify}
-                    close={() => setOpen(false)}
-                  />
-                )}
-                <Button label="Make Invoice" onClick={handleInvoice} />
-              </>
-            )}
+              )}
+            </div>
           </div>
         </div>
       )}

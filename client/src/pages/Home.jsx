@@ -48,7 +48,7 @@ const Home = () => {
         <div className="px-2 mb-5">
           <div className="md:flex items-center justify-between">
             <p className=" text-center  lg:text-2xl font-bold leading-normal text-gray-800">
-              All Delivery Challans
+              All Service Slips
             </p>
             <form onSubmit={handleSearch} className="flex items-center">
               <div className="flex items-center px-1 bg-white border md:w-52 lg:w-80 rounded border-gray-300 mr-3">
@@ -86,7 +86,7 @@ const Home = () => {
         </div>
         {data?.length === 0 && (
           <h6 className="text-red-500 text-xl font-semibold text-center mb-2">
-            No Challan Found
+            No Service Slip Found
           </h6>
         )}
         <div className="overflow-y-auto my-4">
@@ -94,7 +94,7 @@ const Home = () => {
             <thead>
               <tr className="h-12 w-full text-md leading-none text-gray-600">
                 <th className="font-bold text-left  dark:border-neutral-800 border-2 w-20 px-3">
-                  Challan Number
+                  Slip Number
                 </th>
                 <th className="font-bold text-center  dark:border-neutral-800 border-2 w-28 px-3">
                   Date

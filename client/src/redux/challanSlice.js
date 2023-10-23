@@ -32,9 +32,10 @@ export const challanSlice = apiSlice.injectEndpoints({
       providesTags: ["Challan"],
     }),
     verifyAmount: builder.mutation({
-      query: (id) => ({
+      query: ({ id, data }) => ({
         url: `/api/challan/verify/${id}`,
         method: "PUT",
+        body: data,
       }),
       invalidatesTags: ["Challan"],
     }),

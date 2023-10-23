@@ -10,7 +10,7 @@ export const createChallan = async (req, res) => {
   try {
     const date = moment().format("DD#MM#YY");
     const admin = await Admin.findById("653256866b502b375e370966");
-    req.body.number = `SSS- ${admin.challanCounter}`;
+    req.body.number = `SSS - #${admin.challanCounter}#`;
     req.body.update = [
       { status: "Created", user: req.user.name, date: new Date() },
     ];
@@ -121,9 +121,14 @@ export const updateChallan = async (req, res) => {
       }
     }
 
+    let type = "Regular";
+    if (challan.update[challan.update.length - 1].status === "Completed")
+      type = "Complaint";
+
     req.body.images = imageLinks;
     req.body.user = req.user.name;
     req.body.date = new Date();
+    req.body.type = type;
     challan.update.push(req.body);
     if (req.body.amount) challan.collectedAmount += Number(req.body.amount);
     await challan.save();
@@ -177,12 +182,13 @@ export const verifyAmount = async (req, res) => {
     challan.verify = {
       status: true,
       invoice: false,
+      note: req.body.note,
       user: req.user.name,
       date: new Date(),
     };
     await challan.save();
 
-    return res.json({ msg: "Challan amount verified" });
+    return res.json({ msg: "Service slip verification done" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });
