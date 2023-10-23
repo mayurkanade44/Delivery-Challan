@@ -4,7 +4,7 @@ import {
   useSingleChallanQuery,
   useVerifyAmountMutation,
 } from "../redux/challanSlice";
-import { AlertMessage, Button, Loading } from "../components";
+import { AlertMessage, Button, Loading, MakeInvoiceModal } from "../components";
 import { dateFormat, dateTimeFormat } from "../utils/functionHelper";
 import { toast } from "react-toastify";
 import { useState } from "react";
@@ -211,10 +211,7 @@ const SingleChallan = () => {
                             received={data.collectedAmount}
                             type={data.paymentType.label}
                           />
-                          <Button
-                            label="Make Invoice"
-                            onClick={handleInvoice}
-                          />
+                          {!data.verify.invoice && <MakeInvoiceModal id={id} />}
                         </>
                       ) : (
                         <p className="text-green-600 font-medium text-lg">

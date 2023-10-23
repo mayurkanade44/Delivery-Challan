@@ -63,7 +63,7 @@ export const createChallan = async (req, res) => {
       additionalJsContext,
     });
 
-    const filePath = `./tmp/dc.docx`;
+    const filePath = `./tmp/${challan.number}.docx`;
     fs.writeFileSync(filePath, buffer);
     const link = await uploadFile({ filePath, folder: "challan" });
     if (!link) {
@@ -76,7 +76,9 @@ export const createChallan = async (req, res) => {
     challan.file = link;
     await challan.save();
 
-    return res.status(201).json({ msg: "DC created" });
+    return res
+      .status(201)
+      .json({ msg: "Single service clip created", link, name: challan.number });
   } catch (error) {
     if (id) await Challan.findByIdAndDelete(id);
     console.log(error);
@@ -259,11 +261,10 @@ export const makeInvoice = async (req, res) => {
     const challan = await Challan.findById(req.params.id);
     if (!challan) return res.status(404).json({ msg: "Challan not found" });
 
-    challan.amount = 0;
-    challan.collectedAmount = 0;
     challan.verify = {
-      status: false,
+      status: true,
       invoice: true,
+      note: "Invoice Details Sent",
       user: req.user.name,
       date: new Date(),
     };
@@ -300,7 +301,7 @@ export const makeInvoice = async (req, res) => {
       area: challan.area,
       workLocation: challan.workLocation,
       amount: challan.amount,
-      gst: "123",
+      gst: req.body.gst || "",
       sales: challan.sales.label,
       user: req.user.name,
     };
@@ -317,6 +318,10 @@ export const makeInvoice = async (req, res) => {
     });
     if (!mail)
       return res.status(400).json({ msg: "Email error, try again later" });
+
+    if (req.body.gst) challan.gst = req.body.gst;
+    challan.amount = 0;
+    challan.collectedAmount = 0;
 
     await challan.save();
     return res.json({ msg: "Invoice details sent to billing team" });

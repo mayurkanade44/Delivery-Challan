@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { useGetAdminValuesQuery } from "../redux/adminSlice";
 import { useNavigate } from "react-router-dom";
 import { AiOutlinePlus } from "react-icons/ai";
+import { saveAs } from "file-saver";
 
 const NewChallan = () => {
   const [create, { isLoading }] = useCreateChallanMutation();
@@ -70,6 +71,7 @@ const NewChallan = () => {
       const res = await create(data).unwrap();
       toast.success(res.msg);
       reset();
+      saveAs(res.link, res.name)
       navigate("/home");
     } catch (error) {
       console.log(error);

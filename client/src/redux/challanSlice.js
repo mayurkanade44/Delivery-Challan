@@ -52,9 +52,10 @@ export const challanSlice = apiSlice.injectEndpoints({
       providesTags: ["Challan"],
     }),
     makeInvoice: builder.mutation({
-      query: (id) => ({
+      query: ({ id, data }) => ({
         url: `/api/challan/makeInvoice/${id}`,
         method: "PUT",
+        body: data,
       }),
       invalidatesTags: ["Challan"],
     }),

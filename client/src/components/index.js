@@ -4,6 +4,7 @@ import Button from "./Button";
 import InputRow from "./InputRow";
 import InputSelect from "./InputSelect";
 import Loading from "./Loading";
+import MakeInvoiceModal from "./MakeInvoiceModal";
 import Navbar from "./Navbar";
 import Modal from "./VerifyModal";
 
@@ -16,4 +17,5 @@ export {
   Navbar,
   AlertMessage,
   Modal,
+  MakeInvoiceModal,
 };
