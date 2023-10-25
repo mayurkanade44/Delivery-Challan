@@ -2,7 +2,7 @@ import { useState } from "react";
 import { AiOutlineClose, AiOutlineSearch } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { AlertMessage, Button, Loading } from "../components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useAllChallanQuery } from "../redux/challanSlice";
 import { dateFormat } from "../utils/functionHelper";
 
@@ -11,6 +11,7 @@ const Home = () => {
   const [tempSearch, setTempSearch] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { user } = useSelector((store) => store.helper);
 
   const { data, isLoading, isFetching, error } = useAllChallanQuery({ search });
 
@@ -73,14 +74,17 @@ const Home = () => {
                 height="h-8"
               />
             </form>
+
             <div className="flex items-end justify-around mt-4 md:mt-0 md:ml-3 lg:ml-0">
-              <Link to="/create">
-                <Button
-                  label="Create New Challan"
-                  height="h-9"
-                  color="bg-green-600"
-                />
-              </Link>
+              {(user.role === "Admin" || user.role === "Sales") && (
+                <Link to="/create">
+                  <Button
+                    label="Create New Challan"
+                    height="h-9"
+                    color="bg-green-600"
+                  />
+                </Link>
+              )}
             </div>
           </div>
         </div>

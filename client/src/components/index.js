@@ -6,6 +6,7 @@ import InputSelect from "./InputSelect";
 import Loading from "./Loading";
 import MakeInvoiceModal from "./MakeInvoiceModal";
 import Navbar from "./Navbar";
+import ProtectedRoute from "./ProtectedRoute";
 import Modal from "./VerifyModal";
 
 export {
@@ -18,4 +19,5 @@ export {
   AlertMessage,
   Modal,
   MakeInvoiceModal,
+  ProtectedRoute,
 };

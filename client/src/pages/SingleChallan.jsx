@@ -10,9 +10,11 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 import { saveAs } from "file-saver";
 import VerifyModal from "../components/VerifyModal";
+import { useSelector } from "react-redux";
 
 const SingleChallan = () => {
   const { id } = useParams();
+  const { user } = useSelector((store) => store.helper);
 
   const [makeInvoice, { isLoading: invoiceLoading }] = useMakeInvoiceMutation();
   const { data, isLoading: challanLoading, error } = useSingleChallanQuery(id);
@@ -159,16 +161,17 @@ const SingleChallan = () => {
                           {progress(challan.status)}
                         </td>
                         <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
-                          {challan.type}
+                          {challan.type || "NA"}
                         </td>
                         <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
-                          {(challan.jobDate || challan.postponedDate) &&
+                          {((challan.jobDate || challan.postponedDate) &&
                             dateFormat(
                               challan.jobDate || challan.postponedDate
-                            )}
+                            )) ||
+                            "NA"}
                         </td>
                         <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
-                          {challan.amount}
+                          {challan.amount || "NA"}
                         </td>
                         <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
                           {challan.images && (
@@ -200,28 +203,32 @@ const SingleChallan = () => {
                     </p>
                   </div>
                 </div>
-                <div className="col-span-8">
-                  <div className="flex items-center flex-col lg:flex-row lg:gap-x-5">
-                    {data.update.length > 1 ? (
-                      !data.verify.status ? (
-                        <>
-                          <VerifyModal
-                            id={id}
-                            amount={data.amount}
-                            received={data.collectedAmount}
-                            type={data.paymentType.label}
-                          />
-                          {!data.verify.invoice && <MakeInvoiceModal id={id} />}
-                        </>
-                      ) : (
-                        <p className="text-green-600 font-medium text-lg">
-                          Verification Done By {data.verify.user} on{" "}
-                          {dateFormat(data.verify.date)} || {data.verify.note}
-                        </p>
-                      )
-                    ) : null}
+                {user.role !== "Sales" && (
+                  <div className="col-span-8">
+                    <div className="flex items-center flex-col lg:flex-row lg:gap-x-5">
+                      {data.update.length > 1 ? (
+                        !data.verify.status ? (
+                          <>
+                            <VerifyModal
+                              id={id}
+                              amount={data.amount}
+                              received={data.collectedAmount}
+                              type={data.paymentType.label}
+                            />
+                            {!data.verify.invoice && (
+                              <MakeInvoiceModal id={id} />
+                            )}
+                          </>
+                        ) : (
+                          <p className="text-green-600 font-medium text-lg">
+                            Verification Done By {data.verify.user} on{" "}
+                            {dateFormat(data.verify.date)} || {data.verify.note}
+                          </p>
+                        )
+                      ) : null}
+                    </div>
                   </div>
-                </div>
+                )}
               </>
             )}
           </div>

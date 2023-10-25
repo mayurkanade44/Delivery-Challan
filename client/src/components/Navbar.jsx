@@ -21,7 +21,7 @@ const navData = [
     name: "Home",
     link: "/home",
     icon: <AiOutlineHome className="mr-2 w-5 h-5" />,
-    role: ["Admin", "Technician", "Back Office"],
+    role: ["Admin", "Back Office", "Sales"],
   },
   {
     name: "Verification",
@@ -33,7 +33,7 @@ const navData = [
     name: "Dashboard",
     link: "/dashboard",
     icon: <RxDashboard className="mr-2 w-4 h-4" />,
-    role: ["Admin", "Back Office"],
+    role: ["Admin"],
   },
   {
     name: "Admin",

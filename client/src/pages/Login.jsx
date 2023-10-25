@@ -27,7 +27,7 @@ const Login = () => {
       const res = await login(data).unwrap();
       dispatch(setCredentials({ ...res }));
       toast.success(`Welcome ${res.name}`);
-      navigate("/admin");
+      navigate("/home");
       setData({ email: "", password: "" });
     } catch (error) {
       console.log(error);
