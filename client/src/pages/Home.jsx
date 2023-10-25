@@ -115,17 +115,18 @@ const Home = () => {
                 <th className="font-bold text-center  dark:border-neutral-800 border-2 w-40 px-3">
                   Progress
                 </th>
-                <th className="font-bold text-center  dark:border-neutral-800 border-2 w-24 px-2">
-                  Download
-                </th>
+                {user.role !== "Service Operator" && (
+                  <th className="font-bold text-center  dark:border-neutral-800 border-2 w-24 px-2">
+                    Action
+                  </th>
+                )}
               </tr>
             </thead>
             <tbody className="w-full">
               {data?.map((challan) => (
                 <tr
                   key={challan._id}
-                  onClick={() => navigateToChallan(challan._id)}
-                  className="h-12 text-sm leading-none text-gray-700 border-b dark:border-neutral-500 bg-white hover:bg-gray-100 hover:cursor-pointer"
+                  className="h-12 text-sm leading-none text-gray-700 border-b dark:border-neutral-500 bg-white hover:bg-gray-100"
                 >
                   <td className="px-3 border-r font-normal dark:border-neutral-500">
                     {challan.number}
@@ -147,11 +148,21 @@ const Home = () => {
                       challan.update[challan.update.length - 1]?.status
                     )}
                   </td>
-                  <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
-                    <a href={challan.file}>
-                      <Button label="Download" height="h-7" small />
-                    </a>
-                  </td>
+                  {user.role !== "Service Operator" && (
+                    <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
+                      <Link to={`/challan/${challan._id}`}>
+                        <Button label="Details" height="h-7" small />
+                      </Link>
+                      <a href={challan.file}>
+                        <Button
+                          label="Download"
+                          color="bg-emerald-500"
+                          height="h-7"
+                          small
+                        />
+                      </a>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

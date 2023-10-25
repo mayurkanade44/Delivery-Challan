@@ -206,26 +206,29 @@ const SingleChallan = () => {
                 {user.role !== "Sales" && (
                   <div className="col-span-8">
                     <div className="flex items-center flex-col lg:flex-row lg:gap-x-5">
-                      {data.update.length > 1 ? (
-                        !data.verify.status ? (
-                          <>
-                            <VerifyModal
-                              id={id}
-                              amount={data.amount}
-                              received={data.collectedAmount}
-                              type={data.paymentType.label}
-                            />
-                            {!data.verify.invoice && (
-                              <MakeInvoiceModal id={id} />
-                            )}
-                          </>
-                        ) : (
-                          <p className="text-green-600 font-medium text-lg">
-                            Verification Done By {data.verify.user} on{" "}
-                            {dateFormat(data.verify.date)} || {data.verify.note}
-                          </p>
-                        )
-                      ) : null}
+                      {data.update.length > 1 && (
+                        <>
+                          <VerifyModal
+                            id={id}
+                            amount={data.amount}
+                            received={data.collectedAmount}
+                            type={data.paymentType.label}
+                            status={data.verify.status}
+                          />
+                          <MakeInvoiceModal
+                            id={id}
+                            type={data.paymentType.label}
+                            status={data.verify.status}
+                            invoiceStatus={data.verify.invoice}
+                          />
+                        </>
+                      )}
+                      {data.verify.status && (
+                        <p className="text-green-600 font-medium text-lg">
+                          Verification Done By {data.verify.user} on{" "}
+                          {dateFormat(data.verify.date)} || {data.verify.note}
+                        </p>
+                      )}
                     </div>
                   </div>
                 )}

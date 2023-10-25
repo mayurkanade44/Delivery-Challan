@@ -5,7 +5,7 @@ import { useVerifyAmountMutation } from "../redux/challanSlice";
 import { toast } from "react-toastify";
 import Loading from "./Loading";
 
-const VerifyModal = ({ type, amount, received, id }) => {
+const VerifyModal = ({ type, amount, received, id, status }) => {
   const [open, setOpen] = useState(false);
   const [note, setNote] = useState("");
 
@@ -34,11 +34,13 @@ const VerifyModal = ({ type, amount, received, id }) => {
     <>
       {isLoading && <Loading />}
       <div>
-        <Button
-          label="Verify"
-          color="bg-green-600"
-          onClick={() => setOpen(true)}
-        />
+        {!status && (
+          <Button
+            label="Verify"
+            color="bg-green-600"
+            onClick={() => setOpen(true)}
+          />
+        )}
         <div
           className={`fixed inset-0 flex justify-center items-center  transition-colors ${
             open ? "visible bg-black/20" : "invisible"

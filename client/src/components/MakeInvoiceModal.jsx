@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import Loading from "./Loading";
 import { useMakeInvoiceMutation } from "../redux/challanSlice";
 
-const MakeInvoiceModal = ({ id }) => {
+const MakeInvoiceModal = ({ id, type, status, invoiceStatus }) => {
   const [open, setOpen] = useState(false);
   const [gst, setGST] = useState("");
 
@@ -26,11 +26,14 @@ const MakeInvoiceModal = ({ id }) => {
     <>
       {isLoading && <Loading />}
       <div>
-        <Button
-          label="Make Invoice"
-          color="bg-orange-600"
-          onClick={() => setOpen(true)}
-        />
+        {(type === "Cash To Collect" || type === "UPI Payment") &&
+          (!status || !invoiceStatus) && (
+            <Button
+              label="Make Invoice"
+              color="bg-orange-600"
+              onClick={() => setOpen(true)}
+            />
+          )}
         {open && (
           <div
             className={`fixed inset-0 flex justify-center items-center transition-colors ${
