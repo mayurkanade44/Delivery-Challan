@@ -157,7 +157,7 @@ const UpdateChallan = () => {
                             options={cashStatus}
                             onChange={onChange}
                             value={value}
-                            label="Cash Collected/UPI Payment"
+                            label="Cash Received/UPI Payment"
                           />
                         )}
                       />
@@ -168,10 +168,10 @@ const UpdateChallan = () => {
                     {watchCashStatus.label === "Yes" && (
                       <div>
                         <p className="text-center mt-2 text-red-500">
-                          To collect {data.amount - data.collectedAmount}
+                          To collect {data.amount.total - data.amount.received}
                         </p>
                         <InputRow
-                          label="Collected/UPI Amount"
+                          label="Received/UPI Amount"
                           id="amount"
                           errors={errors}
                           register={register}

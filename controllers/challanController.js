@@ -41,7 +41,9 @@ export const createChallan = async (req, res) => {
       workLocation: challan.workLocation,
       sales: challan.sales.label,
       userName: req.user.name,
-      amount: challan.amount ? `Amount: Rs. ${challan.amount} /-` : " ",
+      amount: challan.amount.total
+        ? `Amount: Rs. ${challan.amount.total} /-`
+        : " ",
       paymentType: challan.paymentType.label,
       name: `${challan.shipToDetails.prefix.label} ${challan.shipToDetails.name}`,
       shipToDetails: challan.shipToDetails,
@@ -132,7 +134,7 @@ export const updateChallan = async (req, res) => {
     req.body.date = new Date();
     req.body.type = type;
     challan.update.push(req.body);
-    if (req.body.amount) challan.collectedAmount += Number(req.body.amount);
+    if (req.body.amount) challan.amount.received += Number(req.body.amount);
     await challan.save();
 
     return res.json({ msg: "Challan updated successfully" });
@@ -189,12 +191,16 @@ export const verifyAmount = async (req, res) => {
       date: new Date(),
     };
 
-    const forfeitedAmount = challan.amount - challan.collectedAmount;
-
-    if (forfeitedAmount > 0) challan.forfeitedAmount = forfeitedAmount;
-
-    if (challan.paymentType.label === "Bill After Job")
-      challan.collectedAmount = Number(challan.amount);
+    let forfeitedAmount = 0;
+    if (challan.paymentType.label === "Bill After Job") {
+      challan.billNo = req.body.billNo;
+      challan.amount.received = Number(req.body.billAmount);
+      forfeitedAmount = challan.amount.total - Number(req.body.billAmount);
+    } else {
+      forfeitedAmount = challan.amount.total - challan.amount.received;
+    }
+    if (forfeitedAmount > 0) challan.amount.forfeited = forfeitedAmount;
+    else challan.amount.extra = forfeitedAmount * -1;
 
     await challan.save();
 
@@ -214,15 +220,30 @@ export const chartData = async (req, res) => {
       completed = 0,
       partially = 0,
       cancelled = 0,
-      total = 0,
-      collected = 0,
-      forfeited = 0;
+      cashTotal = 0,
+      cashReceived = 0,
+      cashForfeited = 0,
+      cashExtra = 0,
+      billTotal = 0,
+      billReceived = 0,
+      billForfeited = 0,
+      billExtra = 0;
     for (let challan of challans) {
-      if (challan.amount) {
-        total += challan.amount;
-        collected += challan.collectedAmount;
-        forfeited += challan.forfeitedAmount || 0;
+      if (
+        challan.paymentType.label === "Cash To Collect" ||
+        challan.paymentType.label === "UPI Payment"
+      ) {
+        cashTotal += challan.amount.total;
+        cashReceived += challan.amount.received;
+        cashForfeited += challan.amount.forfeited;
+        cashExtra += challan.amount.extra;
+      } else if (challan.paymentType.label === "Bill After Job") {
+        billTotal += challan.amount.total;
+        billReceived += challan.amount.received;
+        billForfeited += challan.amount.forfeited;
+        billExtra += challan.amount.extra;
       }
+
       const len = challan.update.length - 1;
 
       let status = challan.update[len].status;
@@ -233,23 +254,38 @@ export const chartData = async (req, res) => {
       else if (status === "Created") open += 1;
     }
 
-    const barData1 = [
+    const slipData = [
       { label: "Total", value: challans.length },
       { label: "Open", value: open },
       { label: "Completed", value: completed },
-      { label: "Half Completed", value: partially },
+      { label: "Partially Completed", value: partially },
       { label: "Postponed", value: postponed },
       { label: "Cancelled", value: cancelled },
     ];
 
-    const barData2 = [
-      { label: "Total", value: total },
-      { label: "Collected", value: collected },
-      { label: "Pending", value: total - collected - forfeited },
-      { label: "Forfeited", value: forfeited },
+    const cashData = [
+      { label: "Total", value: cashTotal },
+      { label: "Received", value: cashReceived },
+      {
+        label: "Pending",
+        value: cashTotal - cashReceived - cashForfeited + cashExtra,
+      },
+      { label: "Forfeited", value: cashForfeited },
+      { label: "Extra", value: cashExtra },
     ];
 
-    return res.json({ barData1, barData2 });
+    const billData = [
+      { label: "Total", value: billTotal },
+      { label: "Received", value: billReceived },
+      {
+        label: "Pending",
+        value: billTotal - billReceived - billForfeited + billExtra,
+      },
+      { label: "Forfeited", value: billForfeited },
+      { label: "Extra", value: billExtra },
+    ];
+
+    return res.json({ slipData, cashData, billData });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });
@@ -257,17 +293,20 @@ export const chartData = async (req, res) => {
 };
 
 export const makeInvoice = async (req, res) => {
+  const { gst, billAmount } = req.body;
   try {
     const challan = await Challan.findById(req.params.id);
     if (!challan) return res.status(404).json({ msg: "Challan not found" });
 
     challan.verify = {
-      status: true,
+      status: false,
       invoice: true,
       note: "Invoice Details Sent",
       user: req.user.name,
       date: new Date(),
     };
+
+    challan.paymentType = { label: "Bill After Job", value: "Bill After Job" };
 
     const attachment = [];
 
@@ -300,7 +339,7 @@ export const makeInvoice = async (req, res) => {
       serviceDate: update.jobDate || "Contact service team",
       area: challan.area,
       workLocation: challan.workLocation,
-      amount: challan.amount,
+      amount: req.body.billAmount,
       gst: req.body.gst || "",
       sales: challan.sales.label,
       user: req.user.name,
@@ -319,9 +358,12 @@ export const makeInvoice = async (req, res) => {
     if (!mail)
       return res.status(400).json({ msg: "Email error, try again later" });
 
-    if (req.body.gst) challan.gst = req.body.gst;
-    challan.amount = 0;
-    challan.collectedAmount = 0;
+    if (gst) challan.gst = req.body.gst;
+    challan.amount.received = billAmount;
+    challan.amount.received = Number(req.body.billAmount);
+    const forfeitedAmount = challan.amount.total - Number(req.body.billAmount);
+    if (forfeitedAmount > 0) challan.amount.forfeited = forfeitedAmount;
+    else challan.amount.extra = forfeitedAmount * -1;
 
     await challan.save();
     return res.json({ msg: "Invoice details sent to billing team" });

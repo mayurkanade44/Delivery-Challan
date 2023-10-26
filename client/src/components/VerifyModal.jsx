@@ -8,15 +8,18 @@ import Loading from "./Loading";
 const VerifyModal = ({ type, amount, received, id, status }) => {
   const [open, setOpen] = useState(false);
   const [note, setNote] = useState("");
+  const [billAmount, setBillAmount] = useState(null);
 
   const [verify, { isLoading }] = useVerifyAmountMutation();
 
   const submit = async (e) => {
     e.preventDefault();
     try {
-      const res = await verify({ id, data: { note } }).unwrap();
+      const res = await verify({ id, data: { note, billAmount } }).unwrap();
       toast.success(res.msg);
       setOpen(false);
+      setNote("");
+      setBillAmount(null);
     } catch (error) {
       console.log(error);
       toast.error(error?.data?.msg || error.error);
@@ -87,6 +90,26 @@ const VerifyModal = ({ type, amount, received, id, status }) => {
                     className="w-full px-1 h-6 border-2 rounded-md outline-none transition border-neutral-300 focus:border-black"
                   />
                 </div>
+                {type === "Bill After Job" && (
+                  <div className="flex mt-2">
+                    <label
+                      htmlFor="note"
+                      className="block w-36 text-md font-medium text-gray-900 mr-1"
+                    >
+                      Bill Amount
+                      <span className="text-red-500 required-dot ml-0.5">
+                        *
+                      </span>
+                    </label>
+                    <input
+                      type="number"
+                      value={billAmount}
+                      onChange={(e) => setBillAmount(e.target.value)}
+                      required
+                      className="w-full px-1 h-6 border-2 rounded-md outline-none transition border-neutral-300 focus:border-black"
+                    />
+                  </div>
+                )}
                 <div className="flex gap-4 mt-2">
                   <button
                     type="submit"

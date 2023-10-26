@@ -8,13 +8,15 @@ import { useMakeInvoiceMutation } from "../redux/challanSlice";
 const MakeInvoiceModal = ({ id, type, status, invoiceStatus }) => {
   const [open, setOpen] = useState(false);
   const [gst, setGST] = useState("");
+  const [billAmount, setBillAmount] = useState(null);
 
   const [invoice, { isLoading }] = useMakeInvoiceMutation();
 
   const submit = async (e) => {
     e.preventDefault();
+
     try {
-      const res = await invoice({ id, data: { gst } }).unwrap();
+      const res = await invoice({ id, data: { gst, billAmount } }).unwrap();
       toast.success(res.msg);
       setOpen(false);
     } catch (error) {
@@ -70,6 +72,24 @@ const MakeInvoiceModal = ({ id, type, status, invoiceStatus }) => {
                       type="text"
                       value={gst}
                       onChange={(e) => setGST(e.target.value)}
+                      required
+                      className="w-full px-1 h-6 border-2 rounded-md outline-none transition border-neutral-300 focus:border-black"
+                    />
+                  </div>
+                  <div className="flex mt-2">
+                    <label
+                      htmlFor="note"
+                      className="block w-36 text-md font-medium text-gray-900 mr-1"
+                    >
+                      Bill Amount
+                      <span className="text-red-500 required-dot ml-0.5">
+                        *
+                      </span>
+                    </label>
+                    <input
+                      type="number"
+                      value={billAmount}
+                      onChange={(e) => setBillAmount(e.target.value)}
                       required
                       className="w-full px-1 h-6 border-2 rounded-md outline-none transition border-neutral-300 focus:border-black"
                     />

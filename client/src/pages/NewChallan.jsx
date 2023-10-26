@@ -44,7 +44,7 @@ const NewChallan = () => {
       business: "",
       sales: "",
       paymentType: "",
-      amount: "",
+      amount: { total: "" },
       gst: "",
       serviceDetails: [
         {
@@ -71,7 +71,7 @@ const NewChallan = () => {
       const res = await create(data).unwrap();
       toast.success(res.msg);
       reset();
-      saveAs(res.link, res.name)
+      saveAs(res.link, res.name);
       navigate("/home");
     } catch (error) {
       console.log(error);
@@ -408,7 +408,7 @@ const NewChallan = () => {
                 <div className="flex justify-center">
                   <InputRow
                     label="Total Amount"
-                    id="amount"
+                    id="amount.total"
                     errors={errors}
                     register={register}
                     type="number"

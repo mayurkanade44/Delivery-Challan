@@ -73,10 +73,10 @@ const Verification = () => {
                     {challan.sales.label}
                   </td>
                   <td className="px-3 border-r font-normal dark:border-neutral-500">
-                    {challan.amount}
+                    {challan.amount.total}
                   </td>
                   <td className="px-3 border-r font-normal dark:border-neutral-500">
-                    {challan.amount - challan.collectedAmount}
+                    {challan.amount.total - challan.amount.received}
                   </td>
                   <td className="px-3 border-r font-normal dark:border-neutral-500">
                     {challan.paymentType.label}

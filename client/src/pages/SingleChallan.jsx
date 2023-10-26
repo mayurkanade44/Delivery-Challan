@@ -141,7 +141,7 @@ const SingleChallan = () => {
                         Job Done / Postponed Date
                       </th>
                       <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-2">
-                        Amount Collected
+                        Amount Received
                       </th>
                       <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-2">
                         Images
@@ -196,10 +196,10 @@ const SingleChallan = () => {
                 <div className="col-span-8">
                   <div className="flex items-center flex-col lg:flex-row lg:gap-x-5">
                     <p className="text-lg font-medium text-red-600">
-                      Total Amount - {data.amount} Rs
+                      Total Amount - {data.amount.total} Rs
                     </p>
                     <p className="text-lg font-medium text-red-600">
-                      Total Received Amount - {data.collectedAmount} Rs
+                      Total Received Amount - {data.amount.received} Rs
                     </p>
                   </div>
                 </div>
@@ -210,8 +210,8 @@ const SingleChallan = () => {
                         <>
                           <VerifyModal
                             id={id}
-                            amount={data.amount}
-                            received={data.collectedAmount}
+                            amount={data.amount.total}
+                            received={data.amount.received}
                             type={data.paymentType.label}
                             status={data.verify.status}
                           />

@@ -1,4 +1,4 @@
-import { Chart as ChartJS, Title, defaults } from "chart.js/auto";
+import { Chart as ChartJS, Title, defaults, scales } from "chart.js/auto";
 import { Bar, Pie } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { useChartDataQuery } from "../redux/challanSlice";
@@ -27,56 +27,54 @@ const Dashboard = () => {
       )}
       {data && (
         <div className="mx-10 lg:py-2">
-          <div className="grid md:grid-cols-2 gap-5">
-            <div className=" bg-white border border-black">
-              <div className="p-1">
-                <h2 className="text-center text-lg my-1 font-medium">
-                  Delivery Challans
-                </h2>
-                <Bar
-                  data={{
-                    labels: data.barData1?.map((data) => data.label),
-                    datasets: [
-                      {
-                        label: "Challans",
-                        data: data.barData1?.map((data) => data.value),
-                        backgroundColor: [
-                          "rgba(60, 60, 60, 0.7)",
-                          "rgba(43, 63, 229, 1)",
-                          "rgba(60, 179, 113, 1)",
-                          "rgba(255, 165, 0, 1)",
-                          "rgba(43, 63, 229, 1)",
-                          "rgba(255, 99, 71, 1)",
-                        ],
-                      },
-                    ],
-                  }}
-                />
-              </div>
+          <div className="bg-white border border-black">
+            <div className="p-1">
+              <h2 className="text-center text-lg my-1 font-medium">
+                Amount Collection
+              </h2>
+              <Bar
+                data={{
+                  labels: data.cashData?.map((data) => data.label),
+                  datasets: [
+                    {
+                      label: "Cash Amount",
+                      data: data.cashData?.map((data) => data.value),
+                      backgroundColor: "rgba(60, 60, 60, 0.9)",
+                    },
+                    {
+                      label: "Bill Amount",
+                      data: data.billData?.map((data) => data.value),
+                      backgroundColor: "rgba(43, 63, 229, 1)",
+                    },
+                  ],
+                }}
+              />
             </div>
-            <div className="bg-white  border border-black">
-              <div className="p-1">
-                <h2 className="text-center text-lg my-1 font-medium">
-                  Amount Collection
-                </h2>
-                <Bar
-                  data={{
-                    labels: data.barData2?.map((data) => data.label),
-                    datasets: [
-                      {
-                        label: "Amount",
-                        data: data.barData2?.map((data) => data.value),
-                        backgroundColor: [
-                          "rgba(60, 60, 60, 0.7)",
-                          "rgba(60, 179, 113, 1)",
-                          "rgba(43, 63, 229, 1)",
-                          "rgba(255, 99, 71, 1)",
-                        ],
-                      },
-                    ],
-                  }}
-                />
-              </div>
+          </div>
+          <div className=" bg-white border border-black mt-5">
+            <div className="p-1">
+              <h2 className="text-center text-lg my-1 font-medium">
+                Delivery Challans
+              </h2>
+              <Bar
+                data={{
+                  labels: data.slipData?.map((data) => data.label),
+                  datasets: [
+                    {
+                      label: "Challans",
+                      data: data.slipData?.map((data) => data.value),
+                      backgroundColor: [
+                        "rgba(60, 60, 60, 0.7)",
+                        "rgba(43, 63, 229, 1)",
+                        "rgba(60, 179, 113, 1)",
+                        "rgba(255, 165, 0, 1)",
+                        "rgba(43, 63, 229, 1)",
+                        "rgba(255, 99, 71, 1)",
+                      ],
+                    },
+                  ],
+                }}
+              />
             </div>
           </div>
         </div>
