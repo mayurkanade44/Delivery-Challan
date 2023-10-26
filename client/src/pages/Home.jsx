@@ -9,11 +9,15 @@ import { dateFormat } from "../utils/functionHelper";
 const Home = () => {
   const [search, setSearch] = useState("");
   const [tempSearch, setTempSearch] = useState("");
+  const [page, setPage] = useState(1);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.helper);
 
-  const { data, isLoading, isFetching, error } = useAllChallanQuery({ search });
+  const { data, isLoading, isFetching, error } = useAllChallanQuery({
+    search,
+    page,
+  });
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -25,10 +29,6 @@ const Home = () => {
     setSearch("");
   };
 
-  const navigateToChallan = (id) => {
-    navigate(`/challan/${id}`);
-  };
-
   const progress = (status) => {
     let text = "text-blue-600";
     if (status === "Completed") text = "text-green-600";
@@ -37,6 +37,8 @@ const Home = () => {
 
     return <p className={`${text} font-semibold`}>{status}</p>;
   };
+
+  const pages = Array.from({ length: data?.pages }, (_, index) => index + 1);
 
   return (
     <>
@@ -88,7 +90,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-        {data?.length === 0 && (
+        {data?.challans.length === 0 && (
           <h6 className="text-red-500 text-xl font-semibold text-center mb-2">
             No Service Slip Found
           </h6>
@@ -123,7 +125,7 @@ const Home = () => {
               </tr>
             </thead>
             <tbody className="w-full">
-              {data?.map((challan) => (
+              {data?.challans.map((challan) => (
                 <tr
                   key={challan._id}
                   className="h-12 text-sm leading-none text-gray-700 border-b dark:border-neutral-500 bg-white hover:bg-gray-100"
@@ -168,6 +170,24 @@ const Home = () => {
             </tbody>
           </table>
         </div>
+        {pages.length > 1 && (
+          <nav className="mb-4">
+            <ul className="list-style-none flex justify-center mt-2">
+              {pages.map((item) => (
+                <li className="pr-1" key={item}>
+                  <button
+                    className={`relative block rounded px-3 py-1.5 text-sm transition-all duration-30  ${
+                      page === item ? "bg-blue-400" : "bg-neutral-700"
+                    } text-white hover:bg-blue-400`}
+                    onClick={() => setPage(item)}
+                  >
+                    {item}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
       </div>
     </>
   );

@@ -156,9 +156,16 @@ export const getAllChallan = async (req, res) => {
     };
   }
   try {
-    const challans = await Challan.find(query).sort("-createdAt");
+    let pageNumber = page || 1;
 
-    return res.json(challans);
+    const count = await Challan.countDocuments({ ...query });
+
+    const challans = await Challan.find(query)
+      .sort("-createdAt")
+      .skip(10 * (pageNumber - 1))
+      .limit(10);
+
+    return res.json({ challans, pages: Math.min(10, Math.ceil(count / 10)) });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });
