@@ -70,8 +70,8 @@ const NewChallan = () => {
     try {
       const res = await create(data).unwrap();
       toast.success(res.msg);
-      reset();
       saveAs(res.link, res.name);
+      reset();
       navigate("/home");
     } catch (error) {
       console.log(error);

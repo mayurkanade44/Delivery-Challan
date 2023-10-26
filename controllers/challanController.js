@@ -54,7 +54,7 @@ export const createChallan = async (req, res) => {
       url: "12",
       qrCode: async (url12) => {
         const data = await qrCode.slice("data:image/png;base64,".length);
-        return { width: 3, height: 3, data, extension: ".png" };
+        return { width: 2.5, height: 2.5, data, extension: ".png" };
       },
     };
 

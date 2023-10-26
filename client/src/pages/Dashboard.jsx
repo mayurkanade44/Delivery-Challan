@@ -33,6 +33,7 @@ const Dashboard = () => {
                 Amount Collection
               </h2>
               <Bar
+                height={"100px"}
                 data={{
                   labels: data.cashData?.map((data) => data.label),
                   datasets: [
@@ -57,6 +58,7 @@ const Dashboard = () => {
                 Delivery Challans
               </h2>
               <Bar
+                height={"100px"}
                 data={{
                   labels: data.slipData?.map((data) => data.label),
                   datasets: [
