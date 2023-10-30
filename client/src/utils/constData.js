@@ -37,7 +37,7 @@ export const jobStatus = [
   { label: "Completed", value: "Completed" },
   { label: "Partially Completed", value: "Partially Completed" },
   { label: "Postponed", value: "Postponed" },
-  { label: "Cancelled", value: "Cancelled" },
+  { label: "Not Completed", value: "Not Completed" },
 ];
 
 export const cashStatus = [

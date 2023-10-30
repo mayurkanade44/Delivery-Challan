@@ -15,11 +15,6 @@ const Verification = () => {
       ) : (
         error && <AlertMessage>{error?.data?.msg || error.error}</AlertMessage>
       )}
-      {data?.length === 0 && (
-        <h2 className="text-center text-2xl text-red-600 font-semibold">
-          0 Verification Pending
-        </h2>
-      )}
       {data && (
         <div className="overflow-y-auto my-4">
           <h1 className="mb-4 text-red-600 text-2xl font-semibold text-center">
@@ -29,7 +24,7 @@ const Verification = () => {
             <thead>
               <tr className="h-12 w-full text-md leading-none text-gray-600">
                 <th className="font-bold text-left  dark:border-neutral-800 border-2 w-20 px-3">
-                  Challan Number
+                  Slip Number
                 </th>
                 <th className="font-bold text-center  dark:border-neutral-800 border-2 w-28 px-3">
                   Service Date

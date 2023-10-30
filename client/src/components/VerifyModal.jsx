@@ -8,6 +8,7 @@ import Loading from "./Loading";
 const VerifyModal = ({ type, amount, received, id, status }) => {
   const [open, setOpen] = useState(false);
   const [note, setNote] = useState("");
+  const [billCompany, setBillCompany] = useState("EPPL/PC");
   const [billAmount, setBillAmount] = useState(null);
 
   const [verify, { isLoading }] = useVerifyAmountMutation();
@@ -15,10 +16,14 @@ const VerifyModal = ({ type, amount, received, id, status }) => {
   const submit = async (e) => {
     e.preventDefault();
     try {
-      const res = await verify({ id, data: { note, billAmount } }).unwrap();
+      const res = await verify({
+        id,
+        data: { note, billAmount, billCompany },
+      }).unwrap();
       toast.success(res.msg);
       setOpen(false);
       setNote("");
+      setBillCompany("EPPL/PC");
       setBillAmount(null);
     } catch (error) {
       console.log(error);
@@ -60,7 +65,7 @@ const VerifyModal = ({ type, amount, received, id, status }) => {
                 <h3 className="text-lg font-black text-gray-800 mb-1">
                   Confirm Verification
                 </h3>
-                <p className="text-left text-black">
+                <p className=" text-black text-center">
                   Ary you sure you want to verify this service slip?
                 </p>
                 {type !== "Bill After Job" && (
@@ -82,21 +87,37 @@ const VerifyModal = ({ type, amount, received, id, status }) => {
                     {type !== "Bill After Job" ? "Note:" : "BillNo:"}
                     <span className="text-red-500 required-dot ml-0.5">*</span>
                   </label>
+                  {type === "Bill After Job" && (
+                    <select
+                      value={billCompany}
+                      onChange={(e) => setBillCompany(e.target.value)}
+                      className="border-2 rounded-md mr-1"
+                    >
+                      <option value="EPPL/PC">EPPL/PC</option>
+                      <option value="EPPL/LC">EPPL/LC</option>
+                      <option value="EXPC/PC">EXPC/PC</option>
+                      <option value="EXPC/LC">EXPC/LC</option>
+                      <option value="PMO">PMO</option>
+                      <option value="NTB">NTB</option>
+                    </select>
+                  )}
                   <input
                     type="text"
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
                     required
-                    className="w-full px-1 h-6 border-2 rounded-md outline-none transition border-neutral-300 focus:border-black"
+                    className="w-full px-1 h-7 border-2 rounded-md outline-none transition border-neutral-300 focus:border-black"
                   />
                 </div>
-                {type === "Bill After Job" && (
+                {(type === "Bill After Job" || amount > received) && (
                   <div className="flex mt-2">
                     <label
                       htmlFor="note"
-                      className="block w-36 text-md font-medium text-gray-900 mr-1"
+                      className="block w-72 text-md font-medium text-gray-900 mr-1"
                     >
-                      Bill Amount
+                      {type === "Bill After Job"
+                        ? "Bill Amount"
+                        : "Balance Amt Collected"}
                       <span className="text-red-500 required-dot ml-0.5">
                         *
                       </span>
@@ -106,7 +127,7 @@ const VerifyModal = ({ type, amount, received, id, status }) => {
                       value={billAmount}
                       onChange={(e) => setBillAmount(e.target.value)}
                       required
-                      className="w-full px-1 h-6 border-2 rounded-md outline-none transition border-neutral-300 focus:border-black"
+                      className="w-full px-1 h-7 border-2 rounded-md outline-none transition border-neutral-300 focus:border-black"
                     />
                   </div>
                 )}

@@ -69,6 +69,14 @@ export const challanSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ["Admin"],
     }),
+    cancelChallan: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/api/challan/cancel/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Challan"],
+    }),
   }),
 });
 
@@ -82,4 +90,5 @@ export const {
   useUnverifiedChallanQuery,
   useMakeInvoiceMutation,
   useOperatorCommentsQuery,
+  useCancelChallanMutation,
 } = challanSlice;

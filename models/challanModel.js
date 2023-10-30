@@ -17,6 +17,7 @@ const challanSchema = new mongoose.Schema(
     },
     gst: { type: String },
     billNo: { type: String },
+    billCompany: { type: String },
     paymentType: { type: Object, required: true },
     shipToDetails: { type: Object, required: true },
     serviceDetails: [Object],
