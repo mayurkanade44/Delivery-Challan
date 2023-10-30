@@ -1,5 +1,6 @@
 import Admin from "../models/adminModel.js";
 import User from "../models/userModel.js";
+import { sorting } from "../utils/helperFunctions.js";
 
 export const addAdminValue = async (req, res) => {
   try {
@@ -46,6 +47,10 @@ export const getAllValues = async (req, res) => {
             value: item.comment.value,
           }))
     );
+
+    sorting(services);
+    sorting(business);
+    sorting(sales);
 
     return res.json({
       sales,

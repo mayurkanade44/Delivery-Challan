@@ -70,3 +70,17 @@ export const sendEmail = async ({
     return false;
   }
 };
+
+export const sorting = (data) => {
+  data.sort((a, b) => {
+    const nameA = a.label.toUpperCase();
+    const nameB = b.label.toUpperCase();
+    if (nameA > nameB) {
+      return 1;
+    }
+    if (nameA < nameB) {
+      return -1;
+    }
+    return 0;
+  });
+};

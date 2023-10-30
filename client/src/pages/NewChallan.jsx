@@ -354,8 +354,7 @@ const NewChallan = () => {
                         required={false}
                       />
                     </div>
-
-                    <div className="flex items-end justify-center gap-x-2">
+                    <div className="flex items-end justify-center gap-x-2 mt-1">
                       <Button
                         label={
                           <div className="flex items-center">
@@ -379,7 +378,8 @@ const NewChallan = () => {
                 );
               })}
             </div>
-            <div className="col-span-4 lg:col-span-1 border-l-2">
+            <hr className="h-px mt-2 mb-2 border-0 dark:bg-gray-700 lg:hidden" />
+            <div className="col-span-4 mt-2 lg:col-span-1 lg:border-l-2 border-black">
               <h2 className="text-center text-xl text-blue-500 font-medium">
                 Payment Details
               </h2>
