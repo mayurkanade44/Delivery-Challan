@@ -227,14 +227,16 @@ const SingleChallan = () => {
                             status={data.verify.status}
                             invoiceStatus={data.verify.invoice}
                           />
-                          <CancelModal
-                            id={id}
-                            status={data.verify.status}
-                            jobStatus={
-                              data.update[data.update.length - 1].status ===
-                              "Not Completed"
-                            }
-                          />
+                          {user.role === "Admin" && (
+                            <CancelModal
+                              id={id}
+                              status={data.verify.status}
+                              jobStatus={
+                                data.update[data.update.length - 1].status ===
+                                "Not Completed"
+                              }
+                            />
+                          )}
                         </>
                       )}
                       {data.verify.status && (

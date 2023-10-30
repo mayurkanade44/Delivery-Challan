@@ -9,7 +9,7 @@ import { sendEmail, uploadFile } from "../utils/helperFunctions.js";
 export const createChallan = async (req, res) => {
   try {
     const date = moment().format("DD#MM#YY");
-    const admin = await Admin.findById("653256866b502b375e370966");
+    const admin = await Admin.findById("653f4b3413f805ca909ff232");
     req.body.number = `SSS - #${admin.challanCounter}#`;
     req.body.update = [
       { status: "Created", user: req.user.name, date: new Date() },
@@ -27,7 +27,7 @@ export const createChallan = async (req, res) => {
     const challan = await Challan.create(req.body);
 
     var id = challan._id;
-    const qrLink = `/update/${id}`;
+    const qrLink = `https://sss.sat9.in/update/${id}`;
     const qrCode = await QRCode.toDataURL(qrLink);
 
     const template = fs.readFileSync("./tmp/template.docx");
@@ -63,7 +63,6 @@ export const createChallan = async (req, res) => {
     const buffer = await createReport({
       cmdDelimiter: ["{", "}"],
       template,
-
       additionalJsContext,
     });
 

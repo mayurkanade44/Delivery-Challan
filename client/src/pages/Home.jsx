@@ -81,7 +81,7 @@ const Home = () => {
               {(user.role === "Admin" || user.role === "Sales") && (
                 <Link to="/create">
                   <Button
-                    label="Create New Challan"
+                    label="Create Service Slip"
                     height="h-9"
                     color="bg-green-600"
                   />
