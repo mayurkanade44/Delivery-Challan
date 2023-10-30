@@ -1,6 +1,7 @@
 import AdminTable from "./AdminTable";
 import AlertMessage from "./AlertMessage";
 import Button from "./Button";
+import CancelModal from "./CancelModal";
 import InputRow from "./InputRow";
 import InputSelect from "./InputSelect";
 import Loading from "./Loading";
@@ -20,4 +21,5 @@ export {
   Modal,
   MakeInvoiceModal,
   ProtectedRoute,
+  CancelModal,
 };

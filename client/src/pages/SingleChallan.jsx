@@ -4,7 +4,13 @@ import {
   useSingleChallanQuery,
   useVerifyAmountMutation,
 } from "../redux/challanSlice";
-import { AlertMessage, Button, Loading, MakeInvoiceModal } from "../components";
+import {
+  AlertMessage,
+  Button,
+  CancelModal,
+  Loading,
+  MakeInvoiceModal,
+} from "../components";
 import { dateFormat, dateTimeFormat } from "../utils/functionHelper";
 import { toast } from "react-toastify";
 import { useState } from "react";
@@ -221,12 +227,21 @@ const SingleChallan = () => {
                             status={data.verify.status}
                             invoiceStatus={data.verify.invoice}
                           />
+                          <CancelModal
+                            id={id}
+                            status={data.verify.status}
+                            jobStatus={
+                              data.update[data.update.length - 1].status ===
+                              "Not Completed"
+                            }
+                          />
                         </>
                       )}
                       {data.verify.status && (
                         <p className="text-green-600 font-medium text-lg">
                           Verification Done By {data.verify.user} on{" "}
-                          {dateFormat(data.verify.date)} || {data.verify.note}
+                          {dateFormat(data.verify.date)} || {data.billCompany}{" "}
+                          {data.verify.note}
                         </p>
                       )}
                     </div>

@@ -41,9 +41,11 @@ export const createChallan = async (req, res) => {
       workLocation: challan.workLocation,
       sales: challan.sales.label,
       userName: req.user.name,
-      amount: challan.amount.total
-        ? `Amount: Rs. ${challan.amount.total} /-`
-        : " ",
+      amount:
+        challan.paymentType.label === "Cash To Collect" ||
+        challan.paymentType.label === "UPI Payment"
+          ? `Amount: Rs. ${challan.amount.total} /-`
+          : " ",
       paymentType: challan.paymentType.label,
       name: `${challan.shipToDetails.prefix.label} ${challan.shipToDetails.name}`,
       shipToDetails: challan.shipToDetails,
@@ -200,11 +202,23 @@ export const verifyAmount = async (req, res) => {
 
     let forfeitedAmount = 0;
     if (challan.paymentType.label === "Bill After Job") {
-      challan.billNo = req.body.billNo;
-      challan.amount.received = Number(req.body.billAmount);
-      forfeitedAmount = challan.amount.total - Number(req.body.billAmount);
-    } else {
-      forfeitedAmount = challan.amount.total - challan.amount.received;
+      if (req.body.billCompany === "NTB") {
+        challan.paymentType = { label: "NTB", value: "NTB" };
+        forfeitedAmount = challan.amount.total;
+      } else {
+        challan.amount.received = Number(req.body.billAmount);
+        challan.amount.total = Number(req.body.billAmount);
+      }
+      challan.billNo = req.body.note;
+      challan.billCompany = req.body.billCompany;
+    } else if (
+      challan.paymentType.label === "Cash To Collect" ||
+      challan.paymentType.label === "UPI Payment"
+    ) {
+      forfeitedAmount =
+        Number(challan.amount.total) -
+        (Number(challan.amount.received) + Number(req.body.billAmount));
+      challan.amount.received += Number(req.body.billAmount);
     }
     if (forfeitedAmount > 0) challan.amount.forfeited = forfeitedAmount;
     else challan.amount.extra = forfeitedAmount * -1;
@@ -396,6 +410,36 @@ export const getOperatorComments = async (req, res) => {
     );
 
     return res.json(comment);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};
+
+export const cancelChallan = async (req, res) => {
+  try {
+    const challan = await Challan.findById(req.params.id);
+    if (!challan) return res.status(404).json({ msg: "Challan not found" });
+
+    challan.update.push({
+      status: "Cancelled",
+      user: req.user.name,
+      date: new Date(),
+    });
+
+    challan.amount.total = 0;
+    challan.amount.received = 0;
+
+    challan.verify = {
+      status: true,
+      invoice: true,
+      note: req.body.note,
+      user: req.user.name,
+      date: new Date(),
+    };
+
+    await challan.save();
+    return res.json({ msg: "Service slip has been cancelled" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });

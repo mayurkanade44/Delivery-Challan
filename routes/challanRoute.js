@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  cancelChallan,
   chartData,
   createChallan,
   getAllChallan,
@@ -30,6 +31,7 @@ router.get(
   getOperatorComments
 );
 router.put("/verify/:id", authorizeUser("Admin", "Back Office"), verifyAmount);
+router.put("/cancel/:id", authorizeUser("Admin", "Back Office"), cancelChallan);
 router.put(
   "/makeInvoice/:id",
   authorizeUser("Admin", "Back Office"),
