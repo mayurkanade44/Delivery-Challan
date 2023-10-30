@@ -14,6 +14,7 @@ const challanSchema = new mongoose.Schema(
       received: { type: Number, default: 0 },
       forfeited: { type: Number, default: 0 },
       extra: { type: Number, default: 0 },
+      cancelled: { type: Number, default: 0 },
     },
     gst: { type: String },
     billNo: { type: String },

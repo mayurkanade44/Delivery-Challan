@@ -8,7 +8,6 @@ import { sendEmail, uploadFile } from "../utils/helperFunctions.js";
 
 export const createChallan = async (req, res) => {
   try {
-    const date = moment().format("DD#MM#YY");
     const admin = await Admin.findById("653f4b3413f805ca909ff232");
     req.body.number = `SSS - #${admin.challanCounter}#`;
     req.body.update = [
@@ -244,10 +243,12 @@ export const chartData = async (req, res) => {
       cashReceived = 0,
       cashForfeited = 0,
       cashExtra = 0,
+      cashCancelled = 0,
       billTotal = 0,
       billReceived = 0,
       billForfeited = 0,
-      billExtra = 0;
+      billExtra = 0,
+      billCancelled = 0;
     for (let challan of challans) {
       if (
         challan.paymentType.label === "Cash To Collect" ||
@@ -257,11 +258,13 @@ export const chartData = async (req, res) => {
         cashReceived += challan.amount.received;
         cashForfeited += challan.amount.forfeited;
         cashExtra += challan.amount.extra;
+        cashCancelled += challan.amount.cancelled;
       } else if (challan.paymentType.label === "Bill After Job") {
         billTotal += challan.amount.total;
         billReceived += challan.amount.received;
         billForfeited += challan.amount.forfeited;
         billExtra += challan.amount.extra;
+        billCancelled += challan.amount.cancelled;
       }
 
       const len = challan.update.length - 1;
@@ -292,6 +295,7 @@ export const chartData = async (req, res) => {
       },
       { label: "Forfeited", value: cashForfeited },
       { label: "Extra", value: cashExtra },
+      { label: "Cancelled", value: cashCancelled },
     ];
 
     const billData = [
@@ -303,6 +307,7 @@ export const chartData = async (req, res) => {
       },
       { label: "Forfeited", value: billForfeited },
       { label: "Extra", value: billExtra },
+      { label: "Cancelled", value: billCancelled },
     ];
 
     return res.json({ slipData, cashData, billData });
@@ -319,7 +324,7 @@ export const makeInvoice = async (req, res) => {
     if (!challan) return res.status(404).json({ msg: "Challan not found" });
 
     challan.verify = {
-      status: false,
+      status: true,
       invoice: true,
       note: "Invoice Details Sent",
       user: req.user.name,
@@ -370,7 +375,7 @@ export const makeInvoice = async (req, res) => {
     );
 
     const mail = await sendEmail({
-      emailList: [{ email: "noreply.epcorn@gmail.com" }],
+      emailList: [{ email: process.env.YAHOO_EMAIL }],
       attachment,
       templateId: 5,
       dynamicData,
@@ -379,9 +384,8 @@ export const makeInvoice = async (req, res) => {
       return res.status(400).json({ msg: "Email error, try again later" });
 
     if (gst) challan.gst = req.body.gst;
-    challan.amount.received = billAmount;
-    challan.amount.received = Number(req.body.billAmount);
-    const forfeitedAmount = challan.amount.total - Number(req.body.billAmount);
+    const forfeitedAmount = challan.amount.total - Number(billAmount);
+    challan.amount.received = Number(billAmount);
     if (forfeitedAmount > 0) challan.amount.forfeited = forfeitedAmount;
     else challan.amount.extra = forfeitedAmount * -1;
 
@@ -426,6 +430,7 @@ export const cancelChallan = async (req, res) => {
       date: new Date(),
     });
 
+    challan.amount.cancelled = challan.amount.total;
     challan.amount.total = 0;
     challan.amount.received = 0;
 
