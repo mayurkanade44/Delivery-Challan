@@ -134,7 +134,11 @@ export const updateChallan = async (req, res) => {
     req.body.date = new Date();
     req.body.type = type;
     challan.update.push(req.body);
-    if (req.body.amount) challan.amount.received += Number(req.body.amount);
+    if (req.body.amount) {
+      challan.amount.received += Number(req.body.amount);
+      let total = challan.amount.total - challan.amount.received;
+      if (total < 0) challan.amount.extra = total * -1;
+    }
     await challan.save();
 
     return res.json({ msg: "Challan updated successfully" });

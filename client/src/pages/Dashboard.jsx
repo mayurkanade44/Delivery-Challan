@@ -1,5 +1,5 @@
 import { Chart as ChartJS, Title, defaults, scales } from "chart.js/auto";
-import { Bar, Pie } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { useChartDataQuery } from "../redux/challanSlice";
 import { AlertMessage, Loading } from "../components";
@@ -26,26 +26,57 @@ const Dashboard = () => {
         error && <AlertMessage>{error?.data?.msg || error.error}</AlertMessage>
       )}
       {data && (
-        <div className="mx-10 lg:py-2">
-          <div className="bg-white border border-black">
+        <div className="mx-10 lg:py-2 grid lg:grid-cols-2 gap-x-2">
+          <div className="bg-white border border-black ">
             <div className="p-1">
               <h2 className="text-center text-lg my-1 font-medium">
-                Amount Collection
+                Cash Collection
               </h2>
               <Bar
-                height={"100px"}
+                height={"200px"}
                 data={{
                   labels: data.cashData?.map((data) => data.label),
                   datasets: [
                     {
-                      label: "Cash Amount",
+                      label: "Amount",
                       data: data.cashData?.map((data) => data.value),
-                      backgroundColor: "rgba(60, 60, 60, 0.9)",
+                      backgroundColor: [
+                        "gray",
+                        "green",
+                        "red",
+                        "rgba(255, 99, 71, 1)",
+                        "rgba(43, 63, 229, 1)",
+                        "pink",
+                      ],
+                      borderRadius: 5,
                     },
+                  ],
+                }}
+              />
+            </div>
+          </div>
+          <div className="bg-white border border-black">
+            <div className="p-1">
+              <h2 className="text-center text-lg my-1 font-medium">
+                Bill Collection
+              </h2>
+              <Bar
+                height={"200px"}
+                data={{
+                  labels: data.cashData?.map((data) => data.label),
+                  datasets: [
                     {
-                      label: "Bill Amount",
+                      label: "Amount",
                       data: data.billData?.map((data) => data.value),
-                      backgroundColor: "rgba(43, 63, 229, 1)",
+                      backgroundColor: [
+                        "gray",
+                        "green",
+                        "red",
+                        "rgba(255, 99, 71, 1)",
+                        "rgba(43, 63, 229, 1)",
+                        "pink",
+                      ],
+                      borderRadius: 5,
                     },
                   ],
                 }}
@@ -55,15 +86,15 @@ const Dashboard = () => {
           <div className=" bg-white border border-black mt-5">
             <div className="p-1">
               <h2 className="text-center text-lg my-1 font-medium">
-                Delivery Challans
+                Single Service Slips
               </h2>
               <Bar
-                height={"100px"}
+                height={"200px"}
                 data={{
                   labels: data.slipData?.map((data) => data.label),
                   datasets: [
                     {
-                      label: "Challans",
+                      label: "Slips",
                       data: data.slipData?.map((data) => data.value),
                       backgroundColor: [
                         "rgba(60, 60, 60, 0.7)",
@@ -73,6 +104,7 @@ const Dashboard = () => {
                         "rgba(43, 63, 229, 1)",
                         "rgba(255, 99, 71, 1)",
                       ],
+                      borderRadius: 5,
                     },
                   ],
                 }}

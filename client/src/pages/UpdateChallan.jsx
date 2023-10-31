@@ -78,7 +78,7 @@ const UpdateChallan = () => {
   }
 
   return (
-    <div className="mx-10 mt-16 lg:mt-5 ">
+    <div className="mx-10 mt-20 lg:mt-5 ">
       {isLoading || updateLoading || commentLoading ? (
         <Loading />
       ) : (
@@ -167,9 +167,12 @@ const UpdateChallan = () => {
                     </div>
                     {watchCashStatus.label === "Yes" && (
                       <div>
-                        <p className="text-center mt-2 text-red-500">
-                          To collect {data.amount.total - data.amount.received}
-                        </p>
+                        {data.amount.total - data.amount.received > 0 && (
+                          <p className="text-center mt-2 text-red-500">
+                            To collect{" "}
+                            {data.amount.total - data.amount.received}
+                          </p>
+                        )}
                         <InputRow
                           label="Received/UPI Amount"
                           id="amount"

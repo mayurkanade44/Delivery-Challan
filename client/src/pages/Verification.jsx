@@ -6,8 +6,6 @@ import { dateFormat } from "../utils/functionHelper";
 const Verification = () => {
   const { data, isLoading, error } = useUnverifiedChallanQuery();
 
-  console.log(data);
-
   return (
     <div className="mx-10 my-20 lg:my-5">
       {isLoading ? (
