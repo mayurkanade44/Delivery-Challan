@@ -56,7 +56,6 @@ const Admin = () => {
   };
 
   const handleDelete = async (id) => {
-    console.log("ok");
     try {
       let res;
       if (showTable === "All Users") {
@@ -73,29 +72,27 @@ const Admin = () => {
 
   const submit = async (data) => {
     let res;
+    let form = {};
+    if (showTable === "All Sales Person") {
+      form.sales = { label: data.sales, value: data.sales };
+    } else if (showTable === "All Business") {
+      form.business = { label: data.business, value: data.business };
+    } else if (showTable === "All Services") {
+      form.services = { label: data.serviceName, value: data.description };
+    } else if (showTable === "All Service Comments") {
+      form.comment = { label: data.comment, value: data.comment };
+    }
     try {
+      console.log(form);
       if (showTable === "All Users") {
         data.role = data.role.label;
         res = await addUser(data).unwrap();
-      } else if (showTable === "All Sales Person") {
-        res = await addValue({
-          sales: { label: data.sales, value: data.sales },
-        }).unwrap();
-      } else if (showTable === "All Business") {
-        res = await addValue({
-          business: { label: data.business, value: data.business },
-        }).unwrap();
-      } else if (showTable === "All Services") {
-        res = await addValue({
-          services: { label: data.serviceName, value: data.description },
-        }).unwrap();
-      } else if (showTable === "All Service Comments") {
-        res = await addValue({
-          comment: { label: data.comment, value: data.comment },
-        }).unwrap();
+      } else {
+        res = await addValue(form).unwrap();
       }
       toast.success(res.msg);
       reset();
+      form = {};
     } catch (error) {
       console.log(error);
       toast.error(error?.data?.msg || error.error);
