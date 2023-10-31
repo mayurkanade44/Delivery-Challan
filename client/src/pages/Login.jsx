@@ -38,9 +38,9 @@ const Login = () => {
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-16 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img className="mx-auto h-32 w-auto" src={logo} alt="Your Company" />
+        <img className="mx-auto h-24 md:h-32 w-auto" src={logo} alt="Your Company" />
         <div className="flex justify-center">
-          <p className="text-white bg-black w-44 text-center text-lg">
+          <p className="text-white bg-black w-[133px] md:w-44 text-center md:text-lg">
             Single Service Slip
           </p>
         </div>

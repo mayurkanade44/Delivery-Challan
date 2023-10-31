@@ -135,10 +135,10 @@ const Navbar = () => {
           </nav>
           <nav>
             {user && (
-              <div className="py-2 px-10 w-full border flex lg:hidden justify-between items-center bg-white fixed top-0 z-40">
+              <div className="py-2 px-8 w-full border flex lg:hidden justify-between items-center bg-white fixed top-0 z-40">
                 <div className="flex items-center gap-x-3">
                   <img src={logo} className="w-10" />
-                  <span className=" text-lg font-medium">
+                  <span className="text font-medium">
                     Single Service Slip
                   </span>
                 </div>

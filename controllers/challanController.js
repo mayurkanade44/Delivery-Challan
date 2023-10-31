@@ -261,7 +261,8 @@ export const chartData = async (req, res) => {
     for (let challan of challans) {
       if (
         challan.paymentType.label === "Cash To Collect" ||
-        challan.paymentType.label === "UPI Payment"
+        challan.paymentType.label === "UPI Payment" ||
+        challan.paymentType.label === "Invoiced"
       ) {
         cashTotal += challan.amount.total;
         cashReceived += challan.amount.received;
@@ -343,7 +344,17 @@ export const makeInvoice = async (req, res) => {
       date: new Date(),
     });
 
-    challan.paymentType = { label: "Bill After Job", value: "Bill After Job" };
+    if (challan.amount.received > 0) {
+      challan.paymentType = {
+        label: "Invoiced",
+        value: "Invoiced",
+      };
+    } else {
+      challan.paymentType = {
+        label: "Bill After Job",
+        value: "Bill After Job",
+      };
+    }
 
     const attachment = [];
 
@@ -438,6 +449,7 @@ export const cancelChallan = async (req, res) => {
 
     challan.update.push({
       status: "Cancelled",
+      comment: req.body.note,
       user: req.user.name,
       date: new Date(),
     });

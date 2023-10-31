@@ -50,7 +50,7 @@ const Home = () => {
       <div className="mx-10 my-20 lg:my-5">
         <div className="px-2 mb-5">
           <div className="md:flex items-center justify-between">
-            <p className=" text-center  lg:text-2xl font-bold leading-normal text-gray-800">
+            <p className=" text-center lg:text-2xl font-bold leading-normal text-gray-800">
               All Service Slips
             </p>
             <form onSubmit={handleSearch} className="flex items-center">

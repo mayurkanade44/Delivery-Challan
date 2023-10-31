@@ -131,6 +131,9 @@ const SingleChallan = () => {
                         Job Done / Postponed Date
                       </th>
                       <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-2">
+                        Job Comment
+                      </th>
+                      <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-2">
                         Amount Received
                       </th>
                       <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-2">
@@ -159,6 +162,9 @@ const SingleChallan = () => {
                               challan.jobDate || challan.postponedDate
                             )) ||
                             "NA"}
+                        </td>
+                        <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
+                          {challan.comment || "NA"}
                         </td>
                         <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
                           {challan.amount || "NA"}
