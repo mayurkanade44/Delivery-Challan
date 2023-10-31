@@ -76,7 +76,6 @@ const Home = () => {
                 height="h-8"
               />
             </form>
-
             <div className="flex items-end justify-around mt-4 md:mt-0 md:ml-3 lg:ml-0">
               {(user.role === "Admin" || user.role === "Sales") && (
                 <Link to="/create">

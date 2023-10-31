@@ -6,6 +6,15 @@ import { dateFormat } from "../utils/functionHelper";
 const Verification = () => {
   const { data, isLoading, error } = useUnverifiedChallanQuery();
 
+  const progress = (status) => {
+    let text = "text-blue-600";
+    if (status === "Completed") text = "text-green-600";
+    else if (status === "Partially Completed") text = "text-pink-600";
+    else if (status === "Cancelled") text = "text-red-600";
+
+    return <p className={`${text} font-semibold`}>{status}</p>;
+  };
+
   return (
     <div className="mx-10 my-20 lg:my-5">
       {isLoading ? (
@@ -33,14 +42,15 @@ const Verification = () => {
                 <th className="font-bold text-left  dark:border-neutral-800 border-2 px-3">
                   Sales Representative
                 </th>
+
                 <th className="font-bold text-left  dark:border-neutral-800 border-2 px-3">
-                  Total Amount
+                  Payment Type
                 </th>
                 <th className="font-bold text-left  dark:border-neutral-800 border-2 px-3">
                   Amount Pending
                 </th>
                 <th className="font-bold text-left  dark:border-neutral-800 border-2 px-3">
-                  Payment Type
+                  Job Status
                 </th>
                 <th className="font-bold text-left  dark:border-neutral-800 border-2 px-3">
                   Action
@@ -66,13 +76,15 @@ const Verification = () => {
                     {challan.sales.label}
                   </td>
                   <td className="px-3 border-r font-normal dark:border-neutral-500">
-                    {challan.amount.total}
+                    {challan.paymentType.label}
                   </td>
                   <td className="px-3 border-r font-normal dark:border-neutral-500">
                     {challan.amount.total - challan.amount.received}
                   </td>
-                  <td className="px-3 border-r font-normal dark:border-neutral-500">
-                    {challan.paymentType.label}
+                  <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
+                    {progress(
+                      challan.update[challan.update.length - 1]?.status
+                    )}
                   </td>
                   <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
                     <Link to={`/challan/${challan._id}`}>

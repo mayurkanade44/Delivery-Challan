@@ -26,7 +26,7 @@ const Dashboard = () => {
         error && <AlertMessage>{error?.data?.msg || error.error}</AlertMessage>
       )}
       {data && (
-        <div className="mx-10 lg:py-2 grid lg:grid-cols-2 gap-x-2">
+        <div className="mx-2 md:mx-10 mb-2 lg:py-2 grid lg:grid-cols-2 gap-x-2 gap-y-5">
           <div className="bg-white border border-black ">
             <div className="p-1">
               <h2 className="text-center text-lg my-1 font-medium">
@@ -83,7 +83,7 @@ const Dashboard = () => {
               />
             </div>
           </div>
-          <div className=" bg-white border border-black mt-5">
+          <div className=" bg-white border border-black">
             <div className="p-1">
               <h2 className="text-center text-lg my-1 font-medium">
                 Single Service Slips

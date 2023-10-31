@@ -13,12 +13,10 @@ export const createChallan = async (req, res) => {
     req.body.update = [
       { status: "Created", user: req.user.name, date: new Date() },
     ];
-    if (req.body.paymentType.label !== "NTB") {
+    if (req.body.paymentType.label === "NTB") {
       req.body.verify = {
-        status: false,
-        invoice: false,
-        user: req.user.name,
-        date: new Date(),
+        status: true,
+        invoice: true,
       };
     }
     req.body.user = req.user._id;
@@ -197,11 +195,9 @@ export const verifyAmount = async (req, res) => {
     challan.verify = {
       status: true,
       invoice: false,
-      note: req.body.note,
-      user: req.user.name,
-      date: new Date(),
     };
 
+    let note = req.body.note;
     let forfeitedAmount = 0;
     if (challan.paymentType.label === "Bill After Job") {
       if (req.body.billCompany === "NTB") {
@@ -213,6 +209,7 @@ export const verifyAmount = async (req, res) => {
       }
       challan.billNo = req.body.note;
       challan.billCompany = req.body.billCompany;
+      note = `${req.body.billCompany}/${req.body.note}`;
     } else if (
       challan.paymentType.label === "Cash To Collect" ||
       challan.paymentType.label === "UPI Payment"
@@ -224,6 +221,14 @@ export const verifyAmount = async (req, res) => {
     }
     if (forfeitedAmount > 0) challan.amount.forfeited = forfeitedAmount;
     else challan.amount.extra = forfeitedAmount * -1;
+
+    challan.verificationNotes = [
+      {
+        note: note,
+        user: req.user.name,
+        date: new Date(),
+      },
+    ];
 
     await challan.save();
 
@@ -330,10 +335,13 @@ export const makeInvoice = async (req, res) => {
     challan.verify = {
       status: true,
       invoice: true,
+    };
+
+    challan.verificationNotes.push({
       note: "Invoice Details Sent",
       user: req.user.name,
       date: new Date(),
-    };
+    });
 
     challan.paymentType = { label: "Bill After Job", value: "Bill After Job" };
 
@@ -441,9 +449,6 @@ export const cancelChallan = async (req, res) => {
     challan.verify = {
       status: true,
       invoice: true,
-      note: req.body.note,
-      user: req.user.name,
-      date: new Date(),
     };
 
     await challan.save();

@@ -9,7 +9,7 @@ const VerifyModal = ({ type, amount, received, id, status }) => {
   const [open, setOpen] = useState(false);
   const [note, setNote] = useState("");
   const [billCompany, setBillCompany] = useState("EPPL/PC");
-  const [billAmount, setBillAmount] = useState(null);
+  const [billAmount, setBillAmount] = useState("");
 
   const [verify, { isLoading }] = useVerifyAmountMutation();
 
@@ -24,7 +24,7 @@ const VerifyModal = ({ type, amount, received, id, status }) => {
       setOpen(false);
       setNote("");
       setBillCompany("EPPL/PC");
-      setBillAmount(null);
+      setBillAmount("");
     } catch (error) {
       console.log(error);
       toast.error(error?.data?.msg || error.error);

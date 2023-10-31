@@ -1,9 +1,5 @@
 import { useParams } from "react-router-dom";
-import {
-  useMakeInvoiceMutation,
-  useSingleChallanQuery,
-  useVerifyAmountMutation,
-} from "../redux/challanSlice";
+import { useSingleChallanQuery } from "../redux/challanSlice";
 import {
   AlertMessage,
   Button,
@@ -11,9 +7,8 @@ import {
   Loading,
   MakeInvoiceModal,
 } from "../components";
-import { dateFormat, dateTimeFormat } from "../utils/functionHelper";
+import { dateFormat } from "../utils/functionHelper";
 import { toast } from "react-toastify";
-import { useState } from "react";
 import { saveAs } from "file-saver";
 import VerifyModal from "../components/VerifyModal";
 import { useSelector } from "react-redux";
@@ -22,7 +17,6 @@ const SingleChallan = () => {
   const { id } = useParams();
   const { user } = useSelector((store) => store.helper);
 
-  const [makeInvoice, { isLoading: invoiceLoading }] = useMakeInvoiceMutation();
   const { data, isLoading: challanLoading, error } = useSingleChallanQuery(id);
 
   const progress = (status) => {
@@ -38,19 +32,9 @@ const SingleChallan = () => {
     images.map((image, index) => saveAs(image, `image-${index + 1}`));
   };
 
-  const handleInvoice = async () => {
-    try {
-      const res = await makeInvoice(id).unwrap();
-      toast.success(res.msg);
-    } catch (error) {
-      console.log(error);
-      toast.error(error?.data?.msg || error.error);
-    }
-  };
-
   return (
     <div className="mx-10 my-20 lg:my-5">
-      {challanLoading || invoiceLoading ? (
+      {challanLoading ? (
         <Loading />
       ) : (
         error && <AlertMessage>{error?.data?.msg || error.error}</AlertMessage>
@@ -102,7 +86,7 @@ const SingleChallan = () => {
               <div className="overflow-y-auto my-2">
                 <table className="w-full border whitespace-nowrap  dark:border-neutral-500">
                   <thead>
-                    <tr className="h-10 w-full text-md leading-none text-gray-600">
+                    <tr className="h-8 w-full text-md leading-none text-gray-600">
                       <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-3">
                         Service Name
                       </th>
@@ -115,7 +99,7 @@ const SingleChallan = () => {
                     {data.serviceDetails?.map((service, index) => (
                       <tr
                         key={index}
-                        className="h-10 text-sm leading-none text-gray-700 border-b dark:border-neutral-500 bg-white hover:bg-gray-100 hover:cursor-pointer"
+                        className="h-8 text-sm leading-none text-gray-700 border-b dark:border-neutral-500 bg-white hover:bg-gray-100 hover:cursor-pointer"
                       >
                         <td className="px-3 border-r font-normal dark:border-neutral-500">
                           {service.serviceName.label}
@@ -199,53 +183,75 @@ const SingleChallan = () => {
             </div>
             {data.paymentType.label !== "NTB" && (
               <>
-                <div className="col-span-8">
-                  <div className="flex items-center flex-col lg:flex-row lg:gap-x-5">
-                    <p className="text-lg font-medium text-red-600">
+                <div className="col-span-4">
+                  <div className="flex items-center justify-center flex-col lg:flex-row lg:gap-x-3 mb-2">
+                    <p className="text-lg font-medium text-blue-700">
                       Total Amount - {data.amount.total} Rs
                     </p>
-                    <p className="text-lg font-medium text-red-600">
+                    <p className="text-lg font-medium text-green-700">
                       Total Received Amount - {data.amount.received} Rs
                     </p>
                   </div>
+                  <div className="flex items-center flex-col lg:flex-row lg:gap-x-3">
+                    {user.role !== "Sales" && data.update.length > 1 && (
+                      <>
+                        <VerifyModal
+                          id={id}
+                          amount={data.amount.total}
+                          received={data.amount.received}
+                          type={data.paymentType.label}
+                          status={data.verify.status}
+                        />
+                        <MakeInvoiceModal
+                          id={id}
+                          type={data.paymentType.label}
+                          status={data.verify.status}
+                          invoiceStatus={data.verify.invoice}
+                        />
+                        {user.role === "Admin" && (
+                          <CancelModal
+                            id={id}
+                            status={data.verify.status}
+                            jobStatus={
+                              data.update[data.update.length - 1].status ===
+                              "Not Completed"
+                            }
+                          />
+                        )}
+                      </>
+                    )}
+                  </div>
                 </div>
-                {user.role !== "Sales" && (
-                  <div className="col-span-8">
-                    <div className="flex items-center flex-col lg:flex-row lg:gap-x-5">
-                      {data.update.length > 1 && (
-                        <>
-                          <VerifyModal
-                            id={id}
-                            amount={data.amount.total}
-                            received={data.amount.received}
-                            type={data.paymentType.label}
-                            status={data.verify.status}
-                          />
-                          <MakeInvoiceModal
-                            id={id}
-                            type={data.paymentType.label}
-                            status={data.verify.status}
-                            invoiceStatus={data.verify.invoice}
-                          />
-                          {user.role === "Admin" && (
-                            <CancelModal
-                              id={id}
-                              status={data.verify.status}
-                              jobStatus={
-                                data.update[data.update.length - 1].status ===
-                                "Not Completed"
-                              }
-                            />
-                          )}
-                        </>
-                      )}
-                      {data.verify.status && (
-                        <p className="text-green-600 font-medium text-lg">
-                          Verification Done By {data.verify.user} on{" "}
-                          {dateFormat(data.verify.date)} || {data.billCompany}{" "}
-                          {data.verify.note}
-                        </p>
-                      )}
+                {data.verificationNotes.length > 0 && (
+                  <div className="col-span-4">
+                    <div className="overflow-y-auto">
+                      <table className="w-full border whitespace-nowrap  dark:border-neutral-500">
+                        <thead>
+                          <tr className="h-8 w-full text-md leading-none text-gray-600">
+                            <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-3">
+                              Notes / Bill Number
+                            </th>
+                            <th className="font-bold text-center  dark:border-neutral-800 border-2 w-10 px-3">
+                              Updated By
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="w-full">
+                          {data.verificationNotes?.map((verify) => (
+                            <tr
+                              key={verify._id}
+                              className="h-8 text-sm leading-none text-gray-700 border-b dark:border-neutral-500 bg-white hover:bg-gray-100 hover:cursor-pointer"
+                            >
+                              <td className="px-3 border-r font-normal dark:border-neutral-500">
+                                {verify.note}
+                              </td>
+                              <td className="px-3 border-r font-normal dark:border-neutral-500 w-10 text-center">
+                                {verify.user} | {dateFormat(verify.date)}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 )}

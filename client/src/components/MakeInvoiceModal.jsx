@@ -8,7 +8,7 @@ import { useMakeInvoiceMutation } from "../redux/challanSlice";
 const MakeInvoiceModal = ({ id, type, status, invoiceStatus }) => {
   const [open, setOpen] = useState(false);
   const [gst, setGST] = useState("");
-  const [billAmount, setBillAmount] = useState(null);
+  const [billAmount, setBillAmount] = useState("");
 
   const [invoice, { isLoading }] = useMakeInvoiceMutation();
 
