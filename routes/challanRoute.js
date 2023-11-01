@@ -12,6 +12,7 @@ import {
   verifyAmount,
 } from "../controllers/challanController.js";
 import { authorizeUser } from "../middleware/authMiddleware.js";
+import { getAllValues } from "../controllers/adminController.js";
 
 const router = express.Router();
 
@@ -30,6 +31,7 @@ router.get(
   authorizeUser("Admin", "Service Operator"),
   getOperatorComments
 );
+router.get("/adminValues", getAllValues);
 router.put("/verify/:id", authorizeUser("Admin", "Back Office"), verifyAmount);
 router.put("/cancel/:id", authorizeUser("Admin"), cancelChallan);
 router.put(

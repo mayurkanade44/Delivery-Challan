@@ -12,7 +12,7 @@ export const adminSlice = apiSlice.injectEndpoints({
     }),
     getAdminValues: builder.query({
       query: () => ({
-        url: "/api/admin/value",
+        url: "/api/challan/adminValues",
       }),
       providesTags: ["Admin"],
     }),

@@ -59,7 +59,7 @@ const SingleChallan = () => {
               </h1>
             </div>
             <div className="col-span-8">
-              <hr className="h-px border-0 dark:bg-gray-700" />
+              <hr className="h-px border-1 border-neutral-800" />
             </div>
             <div className="col-span-8 text-lg font-medium">
               Address -{data.shipToDetails.address}, {data.shipToDetails.road},{" "}
@@ -67,7 +67,7 @@ const SingleChallan = () => {
               {data.shipToDetails.city} - {data.shipToDetails.pincode}
             </div>
             <div className="col-span-8">
-              <hr className="h-px border-0 dark:bg-gray-700" />
+              <hr className="h-px border-1 border-neutral-800" />
             </div>
             <div className="col-span-4">
               <h1 className="text-lg font-medium">
@@ -84,13 +84,13 @@ const SingleChallan = () => {
             </div>
             <div className="col-span-4">
               <div className="overflow-y-auto my-2">
-                <table className="w-full border whitespace-nowrap  dark:border-neutral-500">
+                <table className="w-full border whitespace-nowrap border-neutral-500">
                   <thead>
                     <tr className="h-8 w-full text-md leading-none text-gray-600">
-                      <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-3">
+                      <th className="font-bold text-center border-neutral-800 border-2 w-20 px-3">
                         Service Name
                       </th>
-                      <th className="font-bold text-center  dark:border-neutral-800 border-2 w-28 px-3">
+                      <th className="font-bold text-center  border-neutral-800 border-2 w-28 px-3">
                         Notes
                       </th>
                     </tr>
@@ -99,12 +99,12 @@ const SingleChallan = () => {
                     {data.serviceDetails?.map((service, index) => (
                       <tr
                         key={index}
-                        className="h-8 text-sm leading-none text-gray-700 border-b dark:border-neutral-500 bg-white hover:bg-gray-100 hover:cursor-pointer"
+                        className="h-8 text-sm leading-none text-gray-700 border-b border-neutral-500 bg-white hover:bg-gray-100 hover:cursor-pointer"
                       >
-                        <td className="px-3 border-r font-normal dark:border-neutral-500">
+                        <td className="px-3 border-r font-normal border-neutral-500">
                           {service.serviceName.label}
                         </td>
-                        <td className="px-3 border-r font-normal dark:border-neutral-500">
+                        <td className="px-3 border-r font-normal border-neutral-500">
                           {service.notes}
                         </td>
                       </tr>
@@ -114,32 +114,32 @@ const SingleChallan = () => {
               </div>
             </div>
             <div className="col-span-8">
-              <hr className="h-px border-0 dark:bg-gray-700" />
+              <hr className="h-px border-1 border-neutral-800" />
             </div>
             <div className="col-span-8 mb-2">
               <div className="overflow-y-auto my-1">
-                <table className="w-full border whitespace-nowrap  dark:border-neutral-500">
+                <table className="w-full border whitespace-nowrap border-neutral-800">
                   <thead>
                     <tr className="h-8 w-full text-md leading-none text-gray-600">
-                      <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-2">
+                      <th className="font-bold text-center  border-neutral-800 border-2 w-20 px-2">
                         Status
                       </th>
-                      <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-2">
+                      <th className="font-bold text-center  border-neutral-800 border-2 w-20 px-2">
                         Job Type
                       </th>
-                      <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-2">
+                      <th className="font-bold text-center  border-neutral-800 border-2 w-20 px-2">
                         Job Done / Postponed Date
                       </th>
-                      <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-2">
+                      <th className="font-bold text-center  border-neutral-800 border-2 w-20 px-2">
                         Job Comment
                       </th>
-                      <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-2">
+                      <th className="font-bold text-center  border-neutral-800 border-2 w-20 px-2">
                         Amount Received
                       </th>
-                      <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-2">
+                      <th className="font-bold text-center  border-neutral-800 border-2 w-20 px-2">
                         Images
                       </th>
-                      <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-2">
+                      <th className="font-bold text-center  border-neutral-800 border-2 w-20 px-2">
                         Updated By
                       </th>
                     </tr>
@@ -148,28 +148,28 @@ const SingleChallan = () => {
                     {data.update.map((challan, index) => (
                       <tr
                         key={index}
-                        className="h-8 text-sm leading-none text-gray-700 border-b dark:border-neutral-500 bg-white hover:bg-gray-100 hover:cursor-pointer"
+                        className="h-8 text-sm leading-none text-gray-700 border-b border-neutral-500 bg-white hover:bg-gray-100 hover:cursor-pointer"
                       >
-                        <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
+                        <td className="px-3 border-r font-normal text-center border-neutral-500">
                           {progress(challan.status)}
                         </td>
-                        <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
+                        <td className="px-3 border-r font-normal text-center border-neutral-500">
                           {challan.type || "NA"}
                         </td>
-                        <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
+                        <td className="px-3 border-r font-normal text-center border-neutral-500">
                           {((challan.jobDate || challan.postponedDate) &&
                             dateFormat(
                               challan.jobDate || challan.postponedDate
                             )) ||
                             "NA"}
                         </td>
-                        <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
+                        <td className="px-3 border-r font-normal text-center border-neutral-500">
                           {challan.comment || "NA"}
                         </td>
-                        <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
+                        <td className="px-3 border-r font-normal text-center border-neutral-500">
                           {challan.amount || "NA"}
                         </td>
-                        <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
+                        <td className="px-3 border-r font-normal text-center border-neutral-500">
                           {challan.images && (
                             <Button
                               label="Download"
@@ -178,7 +178,7 @@ const SingleChallan = () => {
                             />
                           )}
                         </td>
-                        <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
+                        <td className="px-3 border-r font-normal text-center border-neutral-500">
                           {challan.user} | {dateFormat(challan.date)}
                         </td>
                       </tr>

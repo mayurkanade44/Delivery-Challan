@@ -11,7 +11,7 @@ import {
 } from "../controllers/userContoller.js";
 const router = express.Router();
 
-router.route("/value").post(addAdminValue).get(getAllValues);
+router.route("/value").post(addAdminValue);
 router.post("/user", registerUser);
 router.get("/allUser", getAllUsers);
 router.delete("/value/:id", deleteAdminValue);
