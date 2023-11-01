@@ -1,5 +1,5 @@
 import { useState } from "react";
-import logo from "../assets/logo.jpg";
+import logo from "../assets/logo.jpeg";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { RxDashboard } from "react-icons/rx";
@@ -138,9 +138,7 @@ const Navbar = () => {
               <div className="py-2 px-8 w-full border flex lg:hidden justify-between items-center bg-white fixed top-0 z-40">
                 <div className="flex items-center gap-x-3">
                   <img src={logo} className="w-10" />
-                  <span className="text font-medium">
-                    Single Service Slip
-                  </span>
+                  <span className="text font-medium">Single Service Slip</span>
                 </div>
                 <div className="flex items-center">
                   <div className="relative mr-2 text-blue-500 font-semibold">

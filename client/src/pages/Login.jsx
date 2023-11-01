@@ -4,7 +4,7 @@ import { setCredentials } from "../redux/helperSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import logo from "../assets/logo.jpg";
+import logo from "../assets/logo.jpeg";
 
 const Login = () => {
   const [data, setData] = useState({
@@ -38,17 +38,16 @@ const Login = () => {
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-16 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img className="mx-auto h-24 md:h-32 w-auto" src={logo} alt="Your Company" />
-        <div className="flex justify-center">
-          <p className="text-white bg-black w-[133px] md:w-44 text-center md:text-lg">
-            Single Service Slip
-          </p>
-        </div>
-        <h2 className="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Sign in to your account
-        </h2>
+        <img
+          className="mx-auto h-24 md:h-32 w-auto"
+          src={logo}
+          alt="Your Company"
+        />
+        <p className="text-center md:text-2xl font-medium text-yellow-500">
+          Single Service Slip
+        </p>
       </div>
-      <div className="mt-5 sm:mx-auto sm:w-[250px] sm:max-w-sm">
+      <div className="mt-8 sm:mx-auto sm:w-[250px] sm:max-w-sm">
         <form className="space-y-6" onSubmit={submit}>
           <div>
             <label
