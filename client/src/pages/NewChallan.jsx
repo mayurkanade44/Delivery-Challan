@@ -211,8 +211,11 @@ const NewChallan = () => {
                 id="shipToDetails.contactNo"
                 errors={errors}
                 register={register}
-                required={false}
               />
+              <p className="text-xs text-red-500 -bottom-4 pl-1">
+                {errors.shipToDetails?.contactNo &&
+                  "Contact person number is required"}
+              </p>
             </div>
             <div>
               <InputRow

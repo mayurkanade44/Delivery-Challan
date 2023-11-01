@@ -23,7 +23,7 @@ export const challanSlice = apiSlice.injectEndpoints({
         url: `/api/challan/${id}`,
       }),
       providesTags: ["Challan"],
-      keepUnusedDataFor: 60,
+      keepUnusedDataFor: 1,
     }),
     allChallan: builder.query({
       query: ({ search, page }) => ({
@@ -31,7 +31,7 @@ export const challanSlice = apiSlice.injectEndpoints({
         params: { search, page },
       }),
       providesTags: ["Challan"],
-      keepUnusedDataFor: 60,
+      keepUnusedDataFor: 1,
     }),
     verifyAmount: builder.mutation({
       query: ({ id, data }) => ({
@@ -46,14 +46,14 @@ export const challanSlice = apiSlice.injectEndpoints({
         url: "/api/challan/chartData",
       }),
       providesTags: ["Challan"],
-      keepUnusedDataFor: 60,
+      keepUnusedDataFor: 1,
     }),
     unverifiedChallan: builder.query({
       query: () => ({
         url: "/api/challan/unverified",
       }),
       providesTags: ["Challan"],
-      keepUnusedDataFor: 60,
+      keepUnusedDataFor: 1,
     }),
     makeInvoice: builder.mutation({
       query: ({ id, data }) => ({

@@ -132,7 +132,7 @@ const Home = () => {
                   <td className="px-3 border-r text-center font-normal border-neutral-500">
                     {challan.number}
                   </td>
-                  <td className="px-3 border-r font-normal  text-center border-neutral-500">
+                  <td className="px-3 border-r font-normal text-center border-neutral-500">
                     {dateFormat(challan.createdAt)}
                   </td>
                   <td className="px-3 border-r font-normal border-neutral-500">

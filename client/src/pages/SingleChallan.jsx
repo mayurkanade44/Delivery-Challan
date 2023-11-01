@@ -70,16 +70,27 @@ const SingleChallan = () => {
               <hr className="h-px border-1 border-neutral-800" />
             </div>
             <div className="col-span-4">
-              <h1 className="text-lg font-medium">
-                Service Date - {dateFormat(data.serviceDate)} | Time -{" "}
-                {data.serviceTime.label}
+              <h1 className="text ">
+                <span className="font-medium">Service Date - </span>
+                {dateFormat(data.serviceDate)} | Time - {data.serviceTime.label}
               </h1>
-              <h1 className="text-lg font-medium">
-                Work Location - {data.workLocation}
+              <h1 className="text ">
+                <span className="font-medium">Work Location - </span>
+                {data.workLocation}
               </h1>
-              <h1 className="text-lg font-medium">Approx Sqft - {data.area}</h1>
-              <h1 className="text-lg font-medium">
-                Job Finalised By - {data.sales.label}
+              <h1 className="text ">
+                <span className="font-medium">Approx Sqft - </span>
+                {data.area}
+              </h1>
+              <h1 className="text ">
+                <span className="font-medium">Contact Person - </span>{" "}
+                {data.shipToDetails.contactName} /{" "}
+                {data.shipToDetails.contactNo} /{" "}
+                {data.shipToDetails.contactEmail}
+              </h1>
+              <h1 className="text ">
+                <span className="font-medium">Job Finalised By - </span>
+                {data.sales.label}
               </h1>
             </div>
             <div className="col-span-4">
