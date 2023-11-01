@@ -192,19 +192,19 @@ const Admin = () => {
               />
             </form>
             <div className="flex justify-center">
-              <table className="border text-sm font-light dark:border-neutral-500">
-                <thead className="border-b font-medium dark:border-neutral-800 border-2">
+              <table className="border text-sm font-light border-neutral-500">
+                <thead className="border-b font-medium border-neutral-800 border-2">
                   <tr>
-                    <th className="border-r px-2 py-1 dark:border-neutral-800 border-2">
+                    <th className="border-r px-2 py-1 border-neutral-800 border-2">
                       Name
                     </th>
-                    <th className="border-r px-2 py-1 dark:border-neutral-800 border-2">
+                    <th className="border-r px-2 py-1 border-neutral-800 border-2">
                       Email
                     </th>
-                    <th className="border-r px-2 py-1 dark:border-neutral-800 border-2">
+                    <th className="border-r px-2 py-1 border-neutral-800 border-2">
                       Role
                     </th>
-                    <th className="border-r px-2 py-1 dark:border-neutral-800 border-2">
+                    <th className="border-r px-2 py-1 border-neutral-800 border-2">
                       Action
                     </th>
                   </tr>
@@ -212,19 +212,19 @@ const Admin = () => {
                 <tbody>
                   {allUser?.map((item) => (
                     <tr
-                      className="border-b  dark:border-neutral-500"
+                      className="border-b  border-neutral-500"
                       key={item._id}
                     >
-                      <td className="border-r px-2 py-1 font-normal dark:border-neutral-500">
+                      <td className="border-r px-2 py-1 font-normal border-neutral-500">
                         {item.name}
                       </td>
-                      <td className="border-r px-2 py-1 font-normal dark:border-neutral-500">
+                      <td className="border-r px-2 py-1 font-normal border-neutral-500">
                         {item.email}
                       </td>
-                      <td className="border-r px-2 py-1 font-normal dark:border-neutral-500">
+                      <td className="border-r px-2 py-1 font-normal border-neutral-500">
                         {item.role}
                       </td>
-                      <td className="border-r flex justify-center w-32 px-2 py-1 font-normal dark:border-neutral-500">
+                      <td className="border-r flex justify-center w-32 px-2 py-1 font-normal border-neutral-500">
                         <Button
                           label="Delete"
                           color="bg-red-600"

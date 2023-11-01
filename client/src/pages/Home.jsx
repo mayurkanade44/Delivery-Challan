@@ -95,29 +95,29 @@ const Home = () => {
           </h6>
         )}
         <div className="overflow-y-auto my-4">
-          <table className="w-full border whitespace-nowrap  dark:border-neutral-500">
+          <table className="w-full border whitespace-nowrap border-neutral-500">
             <thead>
               <tr className="h-12 w-full text-md leading-none text-gray-600">
-                <th className="font-bold text-left  dark:border-neutral-800 border-2 w-20 px-3">
+                <th className="font-bold text-left  border-neutral-800 border-2 w-20 px-3">
                   Slip Number
                 </th>
-                <th className="font-bold text-center  dark:border-neutral-800 border-2 w-28 px-3">
+                <th className="font-bold text-center  border-neutral-800 border-2 w-28 px-3">
                   Date
                 </th>
-                <th className="font-bold text-left  dark:border-neutral-800 border-2 px-3">
+                <th className="font-bold text-left  border-neutral-800 border-2 px-3">
                   Customer Name
                 </th>
-                <th className="font-bold text-left  dark:border-neutral-800 border-2 px-3">
+                <th className="font-bold text-left  border-neutral-800 border-2 px-3">
                   Sales Representative
                 </th>
-                <th className="font-bold text-center  dark:border-neutral-800 border-2 w-32 px-3">
+                <th className="font-bold text-center  border-neutral-800 border-2 w-32 px-3">
                   Service Date
                 </th>
-                <th className="font-bold text-center  dark:border-neutral-800 border-2 w-40 px-3">
+                <th className="font-bold text-center  border-neutral-800 border-2 w-40 px-3">
                   Progress
                 </th>
                 {user.role !== "Service Operator" && (
-                  <th className="font-bold text-center  dark:border-neutral-800 border-2 w-24 px-2">
+                  <th className="font-bold text-center  border-neutral-800 border-2 w-24 px-2">
                     Action
                   </th>
                 )}
@@ -127,30 +127,30 @@ const Home = () => {
               {data?.challans.map((challan) => (
                 <tr
                   key={challan._id}
-                  className="h-12 text-sm leading-none text-gray-700 border-b dark:border-neutral-500 bg-white hover:bg-gray-100"
+                  className="h-12 text-sm leading-none text-gray-700 border-b border-neutral-500 bg-white hover:bg-gray-100"
                 >
-                  <td className="px-3 border-r font-normal dark:border-neutral-500">
+                  <td className="px-3 border-r text-center font-normal border-neutral-500">
                     {challan.number}
                   </td>
-                  <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
+                  <td className="px-3 border-r font-normal  text-center border-neutral-500">
                     {dateFormat(challan.createdAt)}
                   </td>
-                  <td className="px-3 border-r font-normal dark:border-neutral-500">
+                  <td className="px-3 border-r font-normal border-neutral-500">
                     {challan.shipToDetails.name}
                   </td>
-                  <td className="px-3 border-r font-normal dark:border-neutral-500">
+                  <td className="px-3 border-r font-normal border-neutral-500">
                     {challan.sales.label}
                   </td>
-                  <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
+                  <td className="px-3 border-r font-normal text-center border-neutral-500">
                     {dateFormat(challan.serviceDate)}
                   </td>
-                  <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
+                  <td className="px-3 border-r font-normal text-center border-neutral-500">
                     {progress(
                       challan.update[challan.update.length - 1]?.status
                     )}
                   </td>
                   {user.role !== "Service Operator" && (
-                    <td className="px-3 border-r font-normal text-center dark:border-neutral-500">
+                    <td className="px-3 border-r font-normal text-center border-neutral-500">
                       <Link to={`/challan/${challan._id}`}>
                         <Button label="Details" height="h-7" small />
                       </Link>

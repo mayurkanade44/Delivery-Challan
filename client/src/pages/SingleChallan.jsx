@@ -231,13 +231,13 @@ const SingleChallan = () => {
                 {data.verificationNotes.length > 0 && (
                   <div className="col-span-4">
                     <div className="overflow-y-auto">
-                      <table className="w-full border whitespace-nowrap  dark:border-neutral-500">
+                      <table className="w-full border whitespace-nowrap  border-neutral-500">
                         <thead>
                           <tr className="h-8 w-full text-md leading-none text-gray-600">
-                            <th className="font-bold text-center  dark:border-neutral-800 border-2 w-20 px-3">
+                            <th className="font-bold text-center  border-neutral-800 border-2 w-20 px-3">
                               Notes / Bill Number
                             </th>
-                            <th className="font-bold text-center  dark:border-neutral-800 border-2 w-10 px-3">
+                            <th className="font-bold text-center  border-neutral-800 border-2 w-10 px-3">
                               Updated By
                             </th>
                           </tr>
@@ -246,12 +246,12 @@ const SingleChallan = () => {
                           {data.verificationNotes?.map((verify) => (
                             <tr
                               key={verify._id}
-                              className="h-8 text-sm leading-none text-gray-700 border-b dark:border-neutral-500 bg-white hover:bg-gray-100 hover:cursor-pointer"
+                              className="h-8 text-sm leading-none text-gray-700 border-b border-neutral-500 bg-white hover:bg-gray-100 hover:cursor-pointer"
                             >
-                              <td className="px-3 border-r font-normal dark:border-neutral-500">
+                              <td className="px-3 border-r font-normal border-neutral-500">
                                 {verify.note}
                               </td>
-                              <td className="px-3 border-r font-normal dark:border-neutral-500 w-10 text-center">
+                              <td className="px-3 border-r font-normal border-neutral-500 w-10 text-center">
                                 {verify.user} | {dateFormat(verify.date)}
                               </td>
                             </tr>

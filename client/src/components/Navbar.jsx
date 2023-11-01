@@ -78,7 +78,7 @@ const Navbar = () => {
                 } `}
               >
                 <div className="flex w-full sm:w-auto items-center sm:items-stretch justify-end sm:justify-center">
-                  <div className="flex items-center">
+                  <div className="flex items-center lg:pl-10 xl:pl-0">
                     <img src={logo} className="w-12" />
                     <h2 className="hidden sm:block text-xl text-gray-700 font-bold leading-normal pl-3">
                       Single Service Slip

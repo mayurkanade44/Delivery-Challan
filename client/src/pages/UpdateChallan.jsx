@@ -86,8 +86,8 @@ const UpdateChallan = () => {
       )}
       {data && (
         <>
-          <h1 className="text-2xl font-semibold text-center">
-            Challan Number: {data?.number}
+          <h1 className="text-lg md:text-2xl font-semibold text-center">
+            Slip Number: {data?.number}
           </h1>
           <form onSubmit={handleSubmit(submit)} className="flex justify-center">
             <div className="w-full md:w-2/4 lg:w-1/4 mt-5">

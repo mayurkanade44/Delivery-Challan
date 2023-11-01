@@ -225,7 +225,7 @@ const NewChallan = () => {
               />
             </div>
           </div>
-          <hr className="h-px mt-4 mb-2 border-0 dark:bg-gray-700" />
+          <hr className="h-px mt-4 mb-2 border-0 bg-gray-700" />
           <div className="md:grid md:grid-cols-2 lg:grid-cols-4 gap-x-4">
             <div className="md:col-span-3">
               <h2 className="text-center text-xl text-blue-500 font-medium">
