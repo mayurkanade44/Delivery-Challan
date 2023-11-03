@@ -1,6 +1,7 @@
 import Challan from "../models/challanModel.js";
 import exceljs from "exceljs";
 import moment from "moment";
+import { sendEmail, uploadFile } from "../utils/helperFunctions.js";
 
 export const dailyReport = async (req, res) => {
   try {
@@ -14,7 +15,7 @@ export const dailyReport = async (req, res) => {
     const cashReport = todaysJob.filter(
       (item) =>
         item.paymentType.label === "Cash To Collect" ||
-        item.paymentType.label === "Cash To Collect"
+        item.paymentType.label === "UPI Payment"
     );
 
     const billAfterJobReport = todaysJob.filter(
@@ -75,7 +76,7 @@ export const dailyReport = async (req, res) => {
       { header: "Update By", key: "user" },
     ];
 
-    for (let challan of cashReport) {
+    for (let challan of billAfterJobReport) {
       const update = challan.update[challan.update.length - 1];
 
       worksheet1.addRow({
@@ -84,18 +85,18 @@ export const dailyReport = async (req, res) => {
         paymentType: challan.paymentType.label,
         amount: challan.amount.total,
         gst: challan.gst,
-        name: `${challan.shipToDetails.prefix}, ${challan.shipToDetails.name}`,
+        name: `${challan.shipToDetails.prefix.label}, ${challan.shipToDetails.name}`,
         address: `${challan.shipToDetails.address}, ${challan.shipToDetails.road}, ${challan.shipToDetails.location}, ${challan.shipToDetails.city}, ${challan.shipToDetails.pincode}`,
         contact: `${challan.shipToDetails.contactName} / ${challan.shipToDetails.contactNo} / ${challan.shipToDetails.contactEmail}`,
         service: challan.serviceDetails.map((item) => item.serviceName.label),
         status: update.status,
-        image: update.images[0],
+        image: { text: "Download", hyperlink: update.images[0] } || "No Image",
         user: update.user,
       });
     }
 
     const filePath1 = "./tmp/Bill_After_Job.xlsx";
-    await workbook.xlsx.writeFile(filePath1);
+    await workbook1.xlsx.writeFile(filePath1);
 
     return res.json({ msg: "File Generated" });
   } catch (error) {
@@ -104,10 +105,195 @@ export const dailyReport = async (req, res) => {
   }
 };
 
-export const billAfterJobReport = async (req, res) => {
+export const dailyJobDoneReport = async (req, res) => {
+  const serviceDate = new Date().setUTCHours(0, 0, 0, 0);
+  const attachment = [];
+
   try {
+    const jobs = await Challan.aggregate([
+      {
+        $match: {
+          "paymentType.label": "Bill After Job",
+        },
+      },
+      {
+        $addFields: {
+          lastObject: {
+            $arrayElemAt: ["$update", -1],
+          },
+        },
+      },
+      {
+        $match: {
+          "lastObject.status": "Completed",
+          "lastObject.type": "Regular",
+          "lastObject.date": {
+            $gte: new Date(serviceDate),
+            $lte: new Date(),
+          },
+        },
+      },
+    ]);
+
+    if (jobs.length > 0) {
+      const workbook = new exceljs.Workbook();
+      let worksheet = workbook.addWorksheet("Sheet1");
+
+      worksheet.columns = [
+        { header: "Slip Number", key: "number" },
+        { header: "Schedule Job Date", key: "date" },
+        { header: "Job Done Date", key: "doneDate" },
+        { header: "Payment Type", key: "payment" },
+        { header: "Total Amount", key: "amount" },
+        { header: "GST Number", key: "gst" },
+        { header: "Client Name", key: "name" },
+        { header: "Job Finalized By", key: "sale" },
+        { header: "Client Address", key: "address" },
+        { header: "Contact Person Details", key: "contact" },
+        { header: "Service Name", key: "service" },
+        { header: "Service Status", key: "status" },
+        { header: "Image", key: "image" },
+        { header: "Update By", key: "user" },
+      ];
+
+      for (let challan of jobs) {
+        const update = challan.update[challan.update.length - 1];
+
+        worksheet.addRow({
+          number: challan.number,
+          date: moment(challan.serviceDate).format("DD/MM/YY"),
+          doneDate: update.jobDate,
+          payment: challan.paymentType.label,
+          amount: challan.amount.total,
+          gst: challan.gst,
+          name: `${challan.shipToDetails.prefix.label}. ${challan.shipToDetails.name}`,
+          sale: challan.sales.label,
+          address: `${challan.shipToDetails.address}, ${challan.shipToDetails.road}, ${challan.shipToDetails.location}, ${challan.shipToDetails.city}, ${challan.shipToDetails.pincode}`,
+          contact: `${challan.shipToDetails.contactName} / ${challan.shipToDetails.contactNo} / ${challan.shipToDetails.contactEmail}`,
+          service: challan.serviceDetails
+            .map((item) => item.serviceName.label)
+            .join(","),
+          status: update.status,
+          image: { text: "Download", hyperlink: update.images[0] },
+          user: update.user,
+        });
+      }
+
+      const filePath = "./tmp/Bill_After_Job_Done.xlsx";
+      await workbook.xlsx.writeFile(filePath);
+
+      const url = await uploadFile({ filePath, folder: "challan" });
+      if (url)
+        attachment.push({
+          url,
+          name: `Bill After Jobs ${moment(serviceDate).format(
+            "DD-MM-YY"
+          )}.xlsx`,
+        });
+      else console.log("Bill job upload error");
+    }
+
+    const cashJobs = await Challan.aggregate([
+      {
+        $match: {
+          "paymentType.label": "Cash To Collect" || "UPI Payment",
+        },
+      },
+      {
+        $addFields: {
+          lastObject: {
+            $arrayElemAt: ["$update", -1],
+          },
+        },
+      },
+      {
+        $match: {
+          "lastObject.status": "Completed",
+          "lastObject.type": "Regular",
+          "lastObject.date": {
+            $gte: new Date(serviceDate),
+            $lte: new Date(),
+          },
+          "lastObject.type": "Regular",
+        },
+      },
+    ]);
+
+    if (cashJobs.length > 0) {
+      const workbook1 = new exceljs.Workbook();
+      let worksheet1 = workbook1.addWorksheet("Sheet1");
+
+      worksheet1.columns = [
+        { header: "Slip Number", key: "number" },
+        { header: "Schedule Job Date", key: "date" },
+        { header: "Job Done Date", key: "doneDate" },
+        { header: "Payment Type", key: "payment" },
+        { header: "Total Amount", key: "amount" },
+        { header: "Received Amount", key: "received" },
+        { header: "Client Name", key: "name" },
+        { header: "Job Finalized By", key: "sale" },
+        { header: "Client Address", key: "address" },
+        { header: "Contact Person Details", key: "contact" },
+        { header: "Service Name", key: "service" },
+        { header: "Service Status", key: "status" },
+        { header: "Job Comment", key: "comment" },
+        { header: "Image", key: "image" },
+        { header: "Update By", key: "user" },
+      ];
+
+      for (let challan of cashJobs) {
+        const update = challan.update[challan.update.length - 1];
+
+        worksheet1.addRow({
+          number: challan.number,
+          date: moment(challan.serviceDate).format("DD/MM/YY"),
+          doneDate: update.jobDate,
+          payment: challan.paymentType.label,
+          amount: challan.amount.total,
+          received: challan.amount.received,
+          name: `${challan.shipToDetails.prefix.label}. ${challan.shipToDetails.name}`,
+          sale: challan.sales.label,
+          address: `${challan.shipToDetails.address}, ${challan.shipToDetails.road}, ${challan.shipToDetails.location}, ${challan.shipToDetails.city}, ${challan.shipToDetails.pincode}`,
+          contact: `${challan.shipToDetails.contactName} / ${challan.shipToDetails.contactNo} / ${challan.shipToDetails.contactEmail}`,
+          service: challan.serviceDetails
+            .map((item) => item.serviceName.label)
+            .join(","),
+          status: update.status,
+          comment: update.comment,
+          image: { text: "Download", hyperlink: update.images[0] },
+          user: update.user,
+        });
+      }
+
+      const filePath1 = "./tmp/Cash_Job_Done.xlsx";
+      await workbook1.xlsx.writeFile(filePath1);
+
+      const url1 = await uploadFile({ filePath: filePath1, folder: "challan" });
+      if (url1)
+        attachment.push({
+          url: url1,
+          name: `Cash To Collect ${moment(serviceDate).format(
+            "DD-MM-YY"
+          )}.xlsx`,
+        });
+      else console.log("Cash report upload error");
+    }
+
+    const mail = await sendEmail({
+      attachment,
+      emailList: [
+        { email: process.env.YAHOO_EMAIL },
+        { email: process.env.SHWETA },
+        { email: process.env.STQ },
+      ],
+      templateId: 6,
+      dynamicData: { date: moment(serviceDate).format("DD/MM/YY") },
+    });
+    if (!mail) return res.status(400).json({ msg: "Email Error" });
+
+    return res.json({ msg: "Email Sent" });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ msg: "Server error, try again later" });
+    console.log("Bill After Error", error);
+    return false;
   }
 };

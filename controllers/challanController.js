@@ -381,14 +381,15 @@ export const makeInvoice = async (req, res) => {
     const dynamicData = {
       number: challan.number,
       name: `${prefix.label}. ${name}`,
-      address: `${address}, ${road}, ${location}, ${landmark}, ${city}, ${pincode}`,
+      address: `${address}, ${road}, ${location}, ${landmark}, ${city} - ${pincode}`,
+      contact: `${contactName} / ${contactNo} / ${contactEmail}`,
       serviceName: services.join(", "),
       serviceStatus: update.status,
       serviceDate: update.jobDate || "Contact service team",
       area: challan.area,
       workLocation: challan.workLocation,
       amount: req.body.billAmount,
-      gst: req.body.gst || "",
+      gst: req.body.gst,
       sales: challan.sales.label,
       user: req.user.name,
     };
