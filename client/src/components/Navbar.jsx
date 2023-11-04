@@ -103,11 +103,11 @@ const Navbar = () => {
                         </div>
                       ))}
                     </div>
-                    <div className="text-white items-center gap-y-3 lg:text-dark-soft flex flex-col lg:flex-row gap-x-1 font-semibold">
+                    <div className="text-white items-center gap-y-1 lg:text-dark-soft flex flex-col lg:flex-row gap-x-1 font-semibold">
                       <div className="relative group">
                         <div className="flex flex-col items-center">
                           <button
-                            className="flex gap-x-1 items-center lg:mt-0 px-5 py-1 rounded-full text-dark font-semibold"
+                            className="flex gap-x-1 items-center lg:mt-0 pr-1 py-1 rounded-full text-dark font-semibold"
                             onClick={() => setProfileDropdown(!profileDropdown)}
                           >
                             <span className="text-blue-500 text-lg">
@@ -117,7 +117,7 @@ const Navbar = () => {
                           <div
                             className={`${
                               profileDropdown ? "block" : "hidden"
-                            } lg:hidden transition-all duration-500 lg:absolute lg:bottom-0 lg:right-0 lg:transform lg:translate-y-full lg:group-hover:block w-[100px]`}
+                            } lg:hidden transition-all duration-500 lg:absolute lg:bottom-0 lg:transform lg:translate-y-full lg:group-hover:block w-[95px]`}
                           >
                             <ul className="bg-dark-soft lg:bg-white text-center flex flex-col border-2  shadow-lg rounded-lg overflow-hidden">
                               <button

@@ -7,6 +7,7 @@ import {
   getChallan,
   getOperatorComments,
   makeInvoice,
+  salesAmountData,
   unverifiedChallans,
   updateChallan,
   verifyAmount,
@@ -21,6 +22,7 @@ router
   .get(getAllChallan)
   .post(authorizeUser("Admin", "Sales"), createChallan);
 router.get("/chartData", chartData);
+router.get("/salesChartData", salesAmountData);
 router.get(
   "/unverified",
   authorizeUser("Admin", "Back Office"),
