@@ -44,7 +44,7 @@ export const createChallan = async (req, res) => {
           ? `Amount: Rs. ${challan.amount.total} /-`
           : " ",
       paymentType: challan.paymentType.label,
-      name: `${challan.shipToDetails.prefix.label} ${challan.shipToDetails.name}`,
+      name: `${challan.shipToDetails.prefix.label}. ${challan.shipToDetails.name}`,
       shipToDetails: challan.shipToDetails,
       services: challan.serviceDetails,
       contactName: challan.contactName,
@@ -466,6 +466,34 @@ export const cancelChallan = async (req, res) => {
 
     await challan.save();
     return res.json({ msg: "Service slip has been cancelled" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};
+
+export const salesAmountData = async (req, res) => {
+  try {
+    const sales = await Admin.find().select("sales");
+    const salesNames = [];
+    const salesAmount = [];
+    sales.map(
+      (item) =>
+        item.sales &&
+        salesNames.push(item.sales.label) &&
+        salesAmount.push({
+          name: item.sales.label,
+          total: 0,
+          received: 0,
+          forfeited: 0,
+        })
+    );
+
+    const slips = await Challan.find();
+
+    for (let slip of slips) {
+    }
+    console.log(salesNames, salesAmount);
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });
