@@ -23,6 +23,7 @@ export const timeFrame = [
   { label: "5 pm to 7 pm", value: "5 pm to 7 pm" },
   { label: "Night", value: "Night" },
   { label: "Anytime", value: "Anytime" },
+  { label: "Other", value: "Other" },
 ];
 
 export const adminNavbar = [

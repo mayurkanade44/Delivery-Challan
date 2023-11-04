@@ -83,7 +83,6 @@ const Admin = () => {
       form.comment = { label: data.comment, value: data.comment };
     }
     try {
-      console.log(form);
       if (showTable === "All Users") {
         data.role = data.role.label;
         res = await addUser(data).unwrap();
@@ -211,10 +210,7 @@ const Admin = () => {
                 </thead>
                 <tbody>
                   {allUser?.map((item) => (
-                    <tr
-                      className="border-b  border-neutral-500"
-                      key={item._id}
-                    >
+                    <tr className="border-b  border-neutral-500" key={item._id}>
                       <td className="border-r px-2 py-1 font-normal border-neutral-500">
                         {item.name}
                       </td>

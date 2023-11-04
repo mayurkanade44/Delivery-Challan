@@ -10,7 +10,8 @@ const Verification = () => {
     let text = "text-blue-600";
     if (status === "Completed") text = "text-green-600";
     else if (status === "Partially Completed") text = "text-pink-600";
-    else if (status === "Cancelled") text = "text-red-600";
+    else if (status === "Cancelled" || status === "Not Completed")
+      text = "text-red-600";
 
     return <p className={`${text} font-semibold`}>{status}</p>;
   };

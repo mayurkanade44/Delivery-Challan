@@ -39,6 +39,7 @@ const NewChallan = () => {
       },
       serviceDate: "",
       serviceTime: "",
+      otherTime: "",
       area: "",
       workLocation: "",
       business: "",
@@ -56,6 +57,7 @@ const NewChallan = () => {
   });
 
   const watchPayment = watch("paymentType");
+  const time = watch("serviceTime");
 
   const { fields, append, remove } = useFieldArray({
     name: "serviceDetails",
@@ -64,9 +66,12 @@ const NewChallan = () => {
 
   const cancel = () => {
     reset();
+    navigate("/home");
   };
 
   const submit = async (data) => {
+    if (time.label === "Other")
+      data.serviceTime = { label: data.otherTime, value: data.otherTime };
     try {
       const res = await create(data).unwrap();
       toast.success(res.msg);
@@ -248,19 +253,28 @@ const NewChallan = () => {
                   </p>
                 </div>
                 <div>
-                  <Controller
-                    name="serviceTime"
-                    control={control}
-                    rules={{ required: "Select job timing" }}
-                    render={({ field: { onChange, value, ref } }) => (
-                      <InputSelect
-                        options={timeFrame}
-                        onChange={onChange}
-                        value={value}
-                        label="Job Time Frame"
-                      />
-                    )}
-                  />
+                  {time.label === "Other" ? (
+                    <InputRow
+                      label="Job Time"
+                      id="otherTime"
+                      errors={errors}
+                      register={register}
+                    />
+                  ) : (
+                    <Controller
+                      name="serviceTime"
+                      control={control}
+                      rules={{ required: "Select job timing" }}
+                      render={({ field: { onChange, value, ref } }) => (
+                        <InputSelect
+                          options={timeFrame}
+                          onChange={onChange}
+                          value={value}
+                          label="Job Time Frame"
+                        />
+                      )}
+                    />
+                  )}
                   <p className="text-xs text-red-500 -bottom-4 pl-1">
                     {errors.serviceTime?.message}
                   </p>

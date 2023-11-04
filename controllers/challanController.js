@@ -11,7 +11,7 @@ export const createChallan = async (req, res) => {
     const admin = await Admin.findById("653f4b3413f805ca909ff232");
     req.body.number = `SSS - #${admin.challanCounter}#`;
     req.body.update = [
-      { status: "Created", user: req.user.name, date: new Date() },
+      { status: "Open", user: req.user.name, date: new Date() },
     ];
     if (req.body.paymentType.label === "NTB") {
       req.body.verify = {
@@ -248,6 +248,7 @@ export const chartData = async (req, res) => {
       completed = 0,
       partially = 0,
       cancelled = 0,
+      notCompleted = 0,
       cashTotal = 0,
       cashReceived = 0,
       cashForfeited = 0,
@@ -284,7 +285,8 @@ export const chartData = async (req, res) => {
       else if (status === "Partially Completed") partially += 1;
       else if (status === "Postponed") postponed += 1;
       else if (status === "Cancelled") cancelled += 1;
-      else if (status === "Created") open += 1;
+      else if (status === "Not Completed") notCompleted += 1;
+      else if (status === "Open") open += 1;
     }
 
     const slipData = [
@@ -292,6 +294,7 @@ export const chartData = async (req, res) => {
       { label: "Open", value: open },
       { label: "Completed", value: completed },
       { label: "Partially Completed", value: partially },
+      { label: "Not Completed", value: notCompleted },
       { label: "Postponed", value: postponed },
       { label: "Cancelled", value: cancelled },
     ];

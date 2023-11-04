@@ -83,13 +83,13 @@ const Dashboard = () => {
               />
             </div>
           </div>
-          <div className=" bg-white border border-black">
+          <div className="col-span-2 bg-white border border-black">
             <div className="p-1">
               <h2 className="text-center text-lg my-1 font-medium">
                 Single Service Slips
               </h2>
               <Bar
-                height={"200px"}
+                height={"130px"}
                 data={{
                   labels: data.slipData?.map((data) => data.label),
                   datasets: [
@@ -101,6 +101,7 @@ const Dashboard = () => {
                         "rgba(43, 63, 229, 1)",
                         "rgba(60, 179, 113, 1)",
                         "rgba(255, 165, 0, 1)",
+                        "rgba(255, 99, 71, 1)",
                         "rgba(43, 63, 229, 1)",
                         "rgba(255, 99, 71, 1)",
                       ],
