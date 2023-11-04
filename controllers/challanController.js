@@ -175,10 +175,19 @@ export const getAllChallan = async (req, res) => {
 };
 
 export const unverifiedChallans = async (req, res) => {
+  const { search } = req.query;
+  let query = { "verify.status": false };
+  if (search) {
+    query = {
+      $or: [
+        { number: { $regex: search, $options: "i" } },
+        { "shipToDetails.name": { $regex: search, $options: "i" } },
+      ],
+      "verify.status": false,
+    };
+  }
   try {
-    const challans = await Challan.find({ "verify.status": false }).sort(
-      "serviceDate"
-    );
+    const challans = await Challan.find(query).sort("serviceDate");
 
     return res.json(challans);
   } catch (error) {

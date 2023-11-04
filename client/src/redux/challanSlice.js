@@ -49,8 +49,9 @@ export const challanSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 1,
     }),
     unverifiedChallan: builder.query({
-      query: () => ({
+      query: ({ search }) => ({
         url: "/api/challan/unverified",
+        params: { search },
       }),
       providesTags: ["Challan"],
       keepUnusedDataFor: 1,

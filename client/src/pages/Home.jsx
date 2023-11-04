@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { AiOutlineClose, AiOutlineSearch } from "react-icons/ai";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AlertMessage, Button, Loading } from "../components";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useAllChallanQuery } from "../redux/challanSlice";
 import { dateFormat } from "../utils/functionHelper";
 
@@ -10,8 +10,6 @@ const Home = () => {
   const [search, setSearch] = useState("");
   const [tempSearch, setTempSearch] = useState("");
   const [page, setPage] = useState(1);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { user } = useSelector((store) => store.helper);
 
   const { data, isLoading, isFetching, error } = useAllChallanQuery({
