@@ -50,7 +50,7 @@ const SingleChallan = () => {
             </div>
             <div className="col-span-4">
               <h1 className="text-lg font-medium text-center">
-                Client Name - {data.shipToDetails.prefix.label}.{" "}
+                Client Name - {data.shipToDetails.prefix.value}.{" "}
                 {data.shipToDetails.name}
               </h1>
             </div>

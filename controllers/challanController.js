@@ -44,7 +44,7 @@ export const createChallan = async (req, res) => {
           ? `Amount: Rs. ${challan.amount.total} /-`
           : " ",
       paymentType: challan.paymentType.label,
-      name: `${challan.shipToDetails.prefix.label}. ${challan.shipToDetails.name}`,
+      name: `${challan.shipToDetails.prefix.value}. ${challan.shipToDetails.name}`,
       shipToDetails: challan.shipToDetails,
       services: challan.serviceDetails,
       contactName: challan.contactName,
@@ -392,7 +392,7 @@ export const makeInvoice = async (req, res) => {
 
     const dynamicData = {
       number: challan.number,
-      name: `${prefix.label}. ${name}`,
+      name: `${prefix.value}. ${name}`,
       address: `${address}, ${road}, ${location}, ${landmark}, ${city} - ${pincode}`,
       contact: `${contactName} / ${contactNo} / ${contactEmail}`,
       serviceName: services.join(", "),
