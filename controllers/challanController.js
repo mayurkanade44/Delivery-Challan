@@ -24,7 +24,7 @@ export const createChallan = async (req, res) => {
     const challan = await Challan.create(req.body);
 
     var id = challan._id;
-    const qrLink = `https://sss.sat9.in/update/${id}`;
+    const qrLink = `https://sss.sat9.in/clientAd/${id}`;
     const qrCode = await QRCode.toDataURL(qrLink);
 
     const template = fs.readFileSync("./tmp/template.docx");
@@ -218,7 +218,7 @@ export const verifyAmount = async (req, res) => {
             label: "Cash To Collect",
             value: "Cash To Collect",
           };
-        }
+        } 
         challan.amount.received = Number(req.body.billAmount);
         challan.amount.total = Number(req.body.billAmount);
       }
@@ -234,7 +234,7 @@ export const verifyAmount = async (req, res) => {
         (Number(challan.amount.received) + Number(req.body.billAmount));
       challan.amount.received += Number(req.body.billAmount);
     }
-
+    
     if (forfeitedAmount > 0) challan.amount.forfeited = forfeitedAmount;
     else challan.amount.extra = forfeitedAmount * -1;
 
@@ -518,3 +518,5 @@ export const salesAmountData = async (req, res) => {
     res.status(500).json({ msg: "Server error, try again later" });
   }
 };
+
+
