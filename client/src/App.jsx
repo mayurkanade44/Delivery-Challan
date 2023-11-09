@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import {
   Admin,
+  ClientAd,
   Dashboard,
   Home,
   Login,
@@ -36,6 +37,7 @@ function App() {
     createRoutesFromElements(
       <Route path="/" element={<Layout />}>
         <Route index={true} path="/" element={<Login />} />
+        <Route path="/clientAd/:id" element={<ClientAd />} />
 
         <Route path="" element={<ProtectedRoute />}>
           <Route path="/home" element={<Home />} />
