@@ -45,8 +45,6 @@ const navData = [
 
 const Navbar = () => {
   const [show, setShow] = useState(false);
-  const [profile, setProfile] = useState(false);
-  const [profileDropdown, setProfileDropdown] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -106,18 +104,13 @@ const Navbar = () => {
                     <div className="text-white items-center gap-y-1 lg:text-dark-soft flex flex-col lg:flex-row gap-x-1 font-semibold">
                       <div className="relative group">
                         <div className="flex flex-col items-center">
-                          <button
-                            className="flex gap-x-1 items-center lg:mt-0 pr-1 py-1 rounded-full text-dark font-semibold"
-                            onClick={() => setProfileDropdown(!profileDropdown)}
-                          >
+                          <button className="flex gap-x-1 items-center lg:mt-0 pr-1 py-1 rounded-full text-dark font-semibold">
                             <span className="text-blue-500 text-lg">
                               {user.name.split(" ")[0]}
                             </span>
                           </button>
                           <div
-                            className={`${
-                              profileDropdown ? "block" : "hidden"
-                            } lg:hidden transition-all duration-500 lg:absolute lg:bottom-0 lg:transform lg:translate-y-full lg:group-hover:block w-[95px]`}
+                            className={` lg:hidden transition-all duration-500 lg:absolute lg:bottom-0 lg:transform lg:translate-y-full lg:group-hover:block w-[95px]`}
                           >
                             <ul className="bg-dark-soft lg:bg-white text-center flex flex-col border-2  shadow-lg rounded-lg overflow-hidden">
                               <button

@@ -213,12 +213,18 @@ export const verifyAmount = async (req, res) => {
         challan.paymentType = { label: "NTB", value: "NTB" };
         forfeitedAmount = challan.amount.total;
       } else {
+        if (req.body.billCompany === "Cash") {
+          challan.paymentType = {
+            label: "Cash To Collect",
+            value: "Cash To Collect",
+          };
+        }
         challan.amount.received = Number(req.body.billAmount);
         challan.amount.total = Number(req.body.billAmount);
       }
       challan.billNo = req.body.note;
       challan.billCompany = req.body.billCompany;
-      note = `${req.body.billCompany}/${req.body.note}`;
+      note = `${req.body.billCompany} / ${req.body.note}`;
     } else if (
       challan.paymentType.label === "Cash To Collect" ||
       challan.paymentType.label === "UPI Payment"
@@ -228,6 +234,7 @@ export const verifyAmount = async (req, res) => {
         (Number(challan.amount.received) + Number(req.body.billAmount));
       challan.amount.received += Number(req.body.billAmount);
     }
+
     if (forfeitedAmount > 0) challan.amount.forfeited = forfeitedAmount;
     else challan.amount.extra = forfeitedAmount * -1;
 

@@ -99,6 +99,7 @@ const VerifyModal = ({ type, amount, received, id, status }) => {
                       <option value="EXPC/LC">EXPC/LC</option>
                       <option value="PMO">PMO</option>
                       <option value="NTB">NTB</option>
+                      <option value="Cash">Cash</option>
                     </select>
                   )}
                   <input
@@ -115,7 +116,9 @@ const VerifyModal = ({ type, amount, received, id, status }) => {
                       htmlFor="note"
                       className="block w-72 text-md font-medium text-gray-900 mr-1"
                     >
-                      {type === "Bill After Job"
+                      {billCompany === "Cash"
+                        ? "Amount"
+                        : type === "Bill After Job"
                         ? "Bill Amount"
                         : "Balance Amt Collected"}
                       <span className="text-red-500 required-dot ml-0.5">
