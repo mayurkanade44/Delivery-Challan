@@ -49,9 +49,9 @@ export const challanSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 1,
     }),
     unverifiedChallan: builder.query({
-      query: ({ search }) => ({
+      query: ({ search, status }) => ({
         url: "/api/challan/unverified",
-        params: { search },
+        params: { search, status },
       }),
       providesTags: ["Challan"],
       keepUnusedDataFor: 1,
@@ -78,6 +78,7 @@ export const challanSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Challan"],
     }),
+    
   }),
 });
 
@@ -92,4 +93,5 @@ export const {
   useMakeInvoiceMutation,
   useOperatorCommentsQuery,
   useCancelChallanMutation,
+  
 } = challanSlice;

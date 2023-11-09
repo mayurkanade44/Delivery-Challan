@@ -4,13 +4,16 @@ import { useUnverifiedChallanQuery } from "../redux/challanSlice";
 import { dateFormat } from "../utils/functionHelper";
 import { useState } from "react";
 import { AiOutlineClose, AiOutlineSearch } from "react-icons/ai";
+import { jobStatus } from "../utils/constData";
 
 const Verification = () => {
   const [search, setSearch] = useState("");
   const [tempSearch, setTempSearch] = useState("");
+  const [status, setStatus] = useState("All");
 
   const { data, isLoading, error, isFetching } = useUnverifiedChallanQuery({
     search,
+    status,
   });
 
   const handleSearch = (e) => {
@@ -21,6 +24,7 @@ const Verification = () => {
   const clearSearch = () => {
     setTempSearch("");
     setSearch("");
+    setStatus("All")
   };
 
   const progress = (status) => {
@@ -61,6 +65,19 @@ const Verification = () => {
                 </button>
               )}
             </div>
+            <select
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className="border-2 rounded-md mr-2 py-1 w-44"
+            >
+              {["All", "Open", ...jobStatus.map((item) => item.label)].map(
+                (item, index) => (
+                  <option key={index} value={item}>
+                    {item}
+                  </option>
+                )
+              )}
+            </select>
             <Button
               type="submit"
               label="Search"

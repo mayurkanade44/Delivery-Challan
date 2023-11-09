@@ -15,7 +15,7 @@ const ClientAd = () => {
 
   return (
     <div className="flex justify-center">
-      <img src={Ad} className="h-screen p-16" alt="ad" />
+      <img src={Ad} className="object-cover h-screen p-5" alt="ad" />
     </div>
   );
 };
