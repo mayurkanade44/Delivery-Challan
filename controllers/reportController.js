@@ -1,7 +1,11 @@
 import Challan from "../models/challanModel.js";
 import exceljs from "exceljs";
 import moment from "moment";
-import { sendEmail, uploadFile } from "../utils/helperFunctions.js";
+import {
+  createReport,
+  sendEmail,
+  uploadFile,
+} from "../utils/helperFunctions.js";
 
 export const dailyReport = async (req, res) => {
   try {
@@ -220,53 +224,17 @@ export const dailyJobDoneReport = async (req, res) => {
     ]);
 
     if (cashJobs.length > 0) {
-      const workbook1 = new exceljs.Workbook();
-      let worksheet1 = workbook1.addWorksheet("Sheet1");
-
-      worksheet1.columns = [
-        { header: "Slip Number", key: "number" },
-        { header: "Schedule Job Date", key: "date" },
-        { header: "Job Done Date", key: "doneDate" },
-        { header: "Payment Type", key: "payment" },
-        { header: "Total Amount", key: "amount" },
-        { header: "Received Amount", key: "received" },
-        { header: "Client Name", key: "name" },
-        { header: "Job Finalized By", key: "sale" },
-        { header: "Client Address", key: "address" },
-        { header: "Contact Person Details", key: "contact" },
-        { header: "Service Name", key: "service" },
-        { header: "Service Status", key: "status" },
-        { header: "Job Comment", key: "comment" },
-        { header: "Image", key: "image" },
-        { header: "Update By", key: "user" },
-      ];
-
-      for (let challan of cashJobs) {
-        const update = challan.update[challan.update.length - 1];
-
-        worksheet1.addRow({
-          number: challan.number,
-          date: moment(challan.serviceDate).format("DD/MM/YY"),
-          doneDate: update.jobDate,
-          payment: challan.paymentType.label,
-          amount: challan.amount.total,
-          received: challan.amount.received,
-          name: `${challan.shipToDetails.prefix.value}. ${challan.shipToDetails.name}`,
-          sale: challan.sales.label,
-          address: `${challan.shipToDetails.address}, ${challan.shipToDetails.road}, ${challan.shipToDetails.location}, ${challan.shipToDetails.city}, ${challan.shipToDetails.pincode}`,
-          contact: `${challan.shipToDetails.contactName} / ${challan.shipToDetails.contactNo} / ${challan.shipToDetails.contactEmail}`,
-          service: challan.serviceDetails
-            .map((item) => item.serviceName.label)
-            .join(","),
-          status: update.status,
-          comment: update.comment,
-          image: { text: "Download", hyperlink: update.images[0] },
-          user: update.user,
-        });
-      }
-
       const filePath1 = "./tmp/Cash_Job_Done.xlsx";
-      await workbook1.xlsx.writeFile(filePath1);
+
+      const reportFile = await createReport({
+        filePath: filePath1,
+        data: cashJobs,
+      });
+
+      if (!reportFile) {
+        console.log("cash report error");
+        return;
+      }
 
       const url1 = await uploadFile({ filePath: filePath1, folder: "challan" });
       if (url1)
@@ -279,6 +247,10 @@ export const dailyJobDoneReport = async (req, res) => {
       else console.log("Cash report upload error");
     }
 
+    if (attachment.length < 1)
+      return res.status(404).json({ msg: "No Report Generated" });
+
+    const date = moment(serviceDate).format("DD/MM/YY");
     const mail = await sendEmail({
       attachment,
       emailList: [
@@ -287,7 +259,10 @@ export const dailyJobDoneReport = async (req, res) => {
         { email: process.env.STQ },
       ],
       templateId: 6,
-      dynamicData: { date: moment(serviceDate).format("DD/MM/YY") },
+      dynamicData: {
+        subject: `Job Done Report - ${date}`,
+        description: `Completed Single Service Slip jobs report of ${date}`,
+      },
     });
     if (!mail) return res.status(400).json({ msg: "Email Error" });
 
@@ -297,3 +272,4 @@ export const dailyJobDoneReport = async (req, res) => {
     return false;
   }
 };
+

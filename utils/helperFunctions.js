@@ -2,6 +2,8 @@ import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 import jwt from "jsonwebtoken";
 import SibApiV3Sdk from "@getbrevo/brevo";
+import exceljs from "exceljs";
+import moment from "moment";
 
 export const uploadFile = async ({ filePath, folder }) => {
   try {
@@ -83,4 +85,65 @@ export const sorting = (data) => {
     }
     return 0;
   });
+};
+
+export const createReport = async ({ data, filePath }) => {
+  try {
+    const workbook = new exceljs.Workbook();
+    let worksheet = workbook.addWorksheet("Sheet1");
+
+    worksheet.columns = [
+      { header: "Slip Number", key: "number" },
+      { header: "Schedule Job Date", key: "date" },
+      { header: "Job Done Date", key: "doneDate" },
+      { header: "Payment Type", key: "payment" },
+      { header: "Total Amount", key: "amount" },
+      { header: "Received Amount", key: "received" },
+      { header: "Client Name", key: "name" },
+      { header: "Job Finalized By", key: "sale" },
+      { header: "Client Address", key: "address" },
+      { header: "Contact Person Details", key: "contact" },
+      { header: "Service Name", key: "service" },
+      { header: "Service Status", key: "status" },
+      { header: "Job Comment", key: "comment" },
+      { header: "Image", key: "image" },
+      { header: "Update By", key: "user" },
+    ];
+
+    for (let challan of data) {
+      const update = challan.update[challan.update.length - 1];
+
+      worksheet.addRow({
+        number: challan.number,
+        date: moment(challan.serviceDate).format("DD/MM/YY"),
+        doneDate: update.jobDate,
+        payment: challan.paymentType.label,
+        amount: challan.amount.total,
+        received: challan.amount.received,
+        name: `${challan.shipToDetails.prefix.value}. ${challan.shipToDetails.name}`,
+        sale: challan.sales.label,
+        address: `${challan.shipToDetails.address}, ${challan.shipToDetails.road}, ${challan.shipToDetails.location}, ${challan.shipToDetails.city}, ${challan.shipToDetails.pincode}`,
+        contact: `${challan.shipToDetails.contactName} / ${challan.shipToDetails.contactNo} / ${challan.shipToDetails.contactEmail}`,
+        service: challan.serviceDetails
+          .map((item) => item.serviceName.label)
+          .join(","),
+        status: update.status,
+        comment: update.comment,
+        image:
+          (update.images && {
+            text: "Download",
+            hyperlink: update.images[0],
+          }) ||
+          "NA",
+        user: update.user,
+      });
+    }
+
+    await workbook.xlsx.writeFile(filePath);
+
+    return true;
+  } catch (error) {
+    console.log("Report Error", error);
+    return false;
+  }
 };
