@@ -116,7 +116,7 @@ export const createReport = async ({ data, filePath }) => {
       worksheet.addRow({
         number: challan.number,
         date: moment(challan.serviceDate).format("DD/MM/YY"),
-        doneDate: update.jobDate,
+        doneDate: moment(update.jobDate).format("DD/MM/YY"),
         payment: challan.paymentType.label,
         amount: challan.amount.total,
         received: challan.amount.received,

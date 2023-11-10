@@ -6,6 +6,7 @@ import {
   sendEmail,
   uploadFile,
 } from "../utils/helperFunctions.js";
+import Admin from "../models/adminModel.js";
 
 export const dailyReport = async (req, res) => {
   try {
@@ -273,3 +274,101 @@ export const dailyJobDoneReport = async (req, res) => {
   }
 };
 
+export const dailyUnverifiedJobReport = async (req, res) => {
+  try {
+    const date = new Date();
+    const serviceDate = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate() - 2
+    ).setUTCHours(0, 0, 0, 0);
+
+    const slips = await Challan.find({
+      serviceDate: {
+        $lte: serviceDate,
+      },
+      "verify.status": false,
+    }).sort("serviceDate");
+
+    if (slips.length < 1) {
+      return res.status(404).json({ msg: "No Slips Found" });
+    }
+
+    const openSlips = [];
+    const unverifiedSlips = [];
+
+    slips.map((item) =>
+      item.update[item.update.length - 1]?.status === "Open"
+        ? openSlips.push(item)
+        : unverifiedSlips.push(item)
+    );
+
+    let openSlipsUrl = null;
+    let unverifiedSlipsUrl = null;
+
+    if (openSlips.length > 0) {
+      const filePath = "./tmp/Open Slips.xlsx";
+      const openSlipsFile = await createReport({
+        data: openSlips,
+        filePath,
+      });
+      if (!openSlipsFile)
+        return res.status(400).json({ msg: "Report Generation Error" });
+
+      openSlipsUrl = await uploadFile({
+        filePath,
+        folder: "challan",
+      });
+      if (!openSlipsUrl)
+        return res.status(400).json({ msg: "Report Upload Error" });
+    }
+
+    if (unverifiedSlips.length > 0) {
+      const filePath = "./tmp/Unverified Slips.xlsx";
+      const unverifiedSlipsFile = await createReport({
+        data: unverifiedSlips,
+        filePath,
+      });
+      if (!unverifiedSlipsFile)
+        return res.status(400).json({ msg: "Report Generation Error" });
+
+      unverifiedSlipsUrl = await uploadFile({
+        filePath,
+        folder: "challan",
+      });
+      if (!unverifiedSlipsUrl)
+        return res.status(400).json({ msg: "Report Upload Error" });
+    }
+
+    const attachment = [];
+    if (openSlipsUrl)
+      attachment.push({ url: openSlipsUrl, name: `Open Slips.xlsx` });
+    if (unverifiedSlipsUrl)
+      attachment.push({
+        url: unverifiedSlipsUrl,
+        name: `Unverified Slips.xlsx`,
+      });
+
+    const emailDate = moment(serviceDate).format("DD/MM/YY");
+    const mail = await sendEmail({
+      attachment,
+      emailList: [
+        { email: process.env.YAHOO_EMAIL },
+        { email: process.env.SHWETA },
+        { email: process.env.STQ },
+      ],
+      templateId: 6,
+      dynamicData: {
+        subject: `Open/Unverified Jobs Report`,
+        description: `Open/Unverified Single Service Slip report till ${emailDate}`,
+      },
+    });
+
+    if (!mail) return res.status(400).json({ msg: "Email Error" });
+
+    return res.json({ msg: "Email Sent" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ msg: "Server Error" });
+  }
+};
