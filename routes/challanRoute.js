@@ -7,7 +7,7 @@ import {
   getChallan,
   getOperatorComments,
   makeInvoice,
-  salesAmountData,
+  searchClients,
   unverifiedChallans,
   updateChallan,
   verifyAmount,
@@ -22,7 +22,7 @@ router
   .get(getAllChallan)
   .post(authorizeUser("Admin", "Sales"), createChallan);
 router.get("/chartData", chartData);
-router.get("/salesChartData", salesAmountData);
+
 router.get(
   "/unverified",
   authorizeUser("Admin", "Back Office"),
@@ -33,6 +33,7 @@ router.get(
   authorizeUser("Admin", "Service Operator"),
   getOperatorComments
 );
+router.get("/clientName", searchClients);
 router.get("/adminValues", getAllValues);
 router.put("/verify/:id", authorizeUser("Admin", "Back Office"), verifyAmount);
 router.put("/cancel/:id", authorizeUser("Admin"), cancelChallan);

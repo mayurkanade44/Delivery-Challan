@@ -498,32 +498,23 @@ export const cancelChallan = async (req, res) => {
   }
 };
 
-export const salesAmountData = async (req, res) => {
+export const searchClients = async (req, res) => {
+  const { search } = req.query;
+
   try {
-    const sales = await Admin.find().select("sales");
-    const salesNames = [];
-    const salesAmount = [];
-    sales.map(
-      (item) =>
-        item.sales &&
-        salesNames.push(item.sales.label) &&
-        salesAmount.push({
-          name: item.sales.label,
-          total: 0,
-          received: 0,
-          forfeited: 0,
-        })
-    );
+    const clients = await Challan.find({
+      "shipToDetails.name": { $regex: search, $options: "i" },
+    }).select("shipToDetails");
 
-    const slips = await Challan.find();
+    if (clients.length < 1)
+      clients.push({
+        _id: 1,
+        shipToDetails: { name: "Not Found!!" },
+      });
 
-    for (let slip of slips) {
-    }
-    console.log(salesNames, salesAmount);
+    return res.json(clients);
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });
   }
 };
-
-

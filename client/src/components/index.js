@@ -9,6 +9,7 @@ import MakeInvoiceModal from "./MakeInvoiceModal";
 import Navbar from "./Navbar";
 import ProtectedRoute from "./ProtectedRoute";
 import Modal from "./VerifyModal";
+import SearchClient from "./SearchClient";
 
 export {
   InputRow,
@@ -22,4 +23,5 @@ export {
   MakeInvoiceModal,
   ProtectedRoute,
   CancelModal,
+  SearchClient,
 };

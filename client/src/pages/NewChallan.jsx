@@ -1,6 +1,11 @@
-import { BsTruck } from "react-icons/bs";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
-import { Button, InputRow, InputSelect, Loading } from "../components";
+import {
+  Button,
+  InputRow,
+  InputSelect,
+  Loading,
+  SearchClient,
+} from "../components";
 import { paymentType, prefix, timeFrame } from "../utils/constData";
 import { useCreateChallanMutation } from "../redux/challanSlice";
 import { toast } from "react-toastify";
@@ -21,6 +26,7 @@ const NewChallan = () => {
     handleSubmit,
     reset,
     control,
+    setValue,
     watch,
   } = useForm({
     defaultValues: {
@@ -84,13 +90,20 @@ const NewChallan = () => {
     }
   };
 
+  const setShipToDetails = (data) => {
+    setValue("shipToDetails", data);
+    setValue("shipToDetails.prefix", data.prefix);
+  };
   return (
     <>
       {(isLoading || valuesLoading) && <Loading />}
       <div className="mx-10 my-20 lg:my-3">
-        <div className="flex justify-center items-center gap-x-4">
+        <div className="flex justify-center">
           <h1 className="text-3xl font-medium">New Single Service Slip</h1>
         </div>
+
+        <SearchClient setShipToDetails={setShipToDetails} />
+
         <form onSubmit={handleSubmit(submit)} className="mt-5">
           <h2 className="text-center my-2 text-xl text-blue-500 font-medium">
             Ship To Details

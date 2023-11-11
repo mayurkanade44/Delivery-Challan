@@ -78,7 +78,14 @@ export const challanSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Challan"],
     }),
-    
+    searchClient: builder.query({
+      query: ({ search }) => ({
+        url: "/api/challan/clientName",
+        params: { search },
+      }),
+      providesTags: ["Challan"],
+      keepUnusedDataFor: 1,
+    }),
   }),
 });
 
@@ -93,5 +100,5 @@ export const {
   useMakeInvoiceMutation,
   useOperatorCommentsQuery,
   useCancelChallanMutation,
-  
+  useSearchClientQuery,
 } = challanSlice;
