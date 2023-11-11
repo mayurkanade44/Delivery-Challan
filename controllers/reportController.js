@@ -167,7 +167,7 @@ export const dailyJobDoneReport = async (req, res) => {
         worksheet.addRow({
           number: challan.number,
           date: moment(challan.serviceDate).format("DD/MM/YY"),
-          doneDate: update.jobDate,
+          doneDate: moment(update.jobDate).format("DD/MM/YY"),
           payment: challan.paymentType.label,
           amount: challan.amount.total,
           gst: challan.gst,
@@ -280,7 +280,7 @@ export const dailyUnverifiedJobReport = async (req, res) => {
     const serviceDate = new Date(
       date.getFullYear(),
       date.getMonth(),
-      date.getDate() - 2
+      date.getDate() - 3
     ).setUTCHours(0, 0, 0, 0);
 
     const slips = await Challan.find({
@@ -372,3 +372,4 @@ export const dailyUnverifiedJobReport = async (req, res) => {
     return res.status(500).json({ msg: "Server Error" });
   }
 };
+
