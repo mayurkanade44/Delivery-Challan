@@ -53,3 +53,5 @@ export const userRoles = [
   { value: "Service Operator", label: "Service Operator" },
   { value: "Admin", label: "Admin" },
 ];
+
+export const billCompanies = ["EPPL", "EXPC", "PMO", "NTB", "Contract", "Cash"];

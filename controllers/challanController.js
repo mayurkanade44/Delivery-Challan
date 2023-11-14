@@ -225,6 +225,11 @@ export const verifyAmount = async (req, res) => {
             label: "Cash To Collect",
             value: "Cash To Collect",
           };
+        } else if (req.body.billCompany === "Contract") {
+          challan.paymentType = {
+            label: "Contract",
+            value: "Contract",
+          };
         }
         challan.amount.received = Number(req.body.billAmount);
         challan.amount.total = Number(req.body.billAmount);

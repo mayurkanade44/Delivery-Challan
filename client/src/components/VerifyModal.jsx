@@ -4,6 +4,7 @@ import Button from "./Button";
 import { useVerifyAmountMutation } from "../redux/challanSlice";
 import { toast } from "react-toastify";
 import Loading from "./Loading";
+import { billCompanies } from "../utils/constData";
 
 const VerifyModal = ({ type, amount, received, id, status }) => {
   const [open, setOpen] = useState(false);
@@ -93,13 +94,11 @@ const VerifyModal = ({ type, amount, received, id, status }) => {
                       onChange={(e) => setBillCompany(e.target.value)}
                       className="border-2 rounded-md mr-1"
                     >
-                      <option value="EPPL/PC">EPPL/PC</option>
-                      <option value="EPPL/LC">EPPL/LC</option>
-                      <option value="EXPC/PC">EXPC/PC</option>
-                      <option value="EXPC/LC">EXPC/LC</option>
-                      <option value="PMO">PMO</option>
-                      <option value="NTB">NTB</option>
-                      <option value="Cash">Cash</option>
+                      {billCompanies.map((item) => (
+                        <option key={item} value={item}>
+                          {item}
+                        </option>
+                      ))}
                     </select>
                   )}
                   <input
