@@ -30,7 +30,7 @@ const CancelModal = ({ id, status, jobStatus }) => {
     <>
       {isLoading && <Loading />}
       <div>
-        {!status && jobStatus && (
+        {!status && (
           <Button
             label="Cancel"
             color="bg-red-600"

@@ -28,13 +28,20 @@ const Home = () => {
   };
 
   const progress = (status) => {
-    let text = "text-blue-600";
-    if (status === "Completed") text = "text-green-600";
-    else if (status === "Partially Completed") text = "text-pink-600";
+    let text = "text-blue-700 bg-blue-100";
+    if (status === "Completed") text = "text-green-700 bg-green-100";
+    else if (status === "Partially Completed")
+      text = "text-pink-700 bg-ping-100";
     else if (status === "Cancelled" || status === "Not Completed")
-      text = "text-red-600";
+      text = "text-red-700 bg-red-100";
 
-    return <p className={`${text} font-semibold`}>{status}</p>;
+    return (
+      <p
+        className={`inline-flex items-center rounded-md px-2 py-1 font-medium ${text} ring-1 ring-gray-300`}
+      >
+        {status}
+      </p>
+    );
   };
 
   const pages = Array.from({ length: data?.pages }, (_, index) => index + 1);
@@ -112,7 +119,7 @@ const Home = () => {
                 <th className="font-bold text-center  border-neutral-800 border-2 w-32 px-3">
                   Service Date
                 </th>
-                <th className="font-bold text-center  border-neutral-800 border-2 w-40 px-3">
+                <th className="font-bold max-w-[100px] text-center  border-neutral-800 border-2 w-40 px-3">
                   Progress
                 </th>
                 {user.role !== "Service Operator" && (

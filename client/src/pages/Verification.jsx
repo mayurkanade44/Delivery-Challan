@@ -24,17 +24,23 @@ const Verification = () => {
   const clearSearch = () => {
     setTempSearch("");
     setSearch("");
-    setStatus("All")
+    setStatus("All");
   };
 
   const progress = (status) => {
-    let text = "text-blue-600";
-    if (status === "Completed") text = "text-green-600";
-    else if (status === "Partially Completed") text = "text-pink-600";
+    let text = "text-blue-700 bg-indigo-50";
+    if (status === "Completed") text = "text-green-700 bg-green-100";
+    else if (status === "Partially Completed") text = "text-pink-700 bg-ping-100";
     else if (status === "Cancelled" || status === "Not Completed")
-      text = "text-red-600";
+      text = "text-red-700 bg-red-100";
 
-    return <p className={`${text} font-semibold`}>{status}</p>;
+    return (
+      <p
+        className={`inline-flex items-center rounded-md px-2 py-1 font-medium ${text} ring-1 ring-gray-300`}
+      >
+        {status}
+      </p>
+    );
   };
 
   return (
@@ -45,7 +51,7 @@ const Verification = () => {
         error && <AlertMessage>{error?.data?.msg || error.error}</AlertMessage>
       )}
       {data && (
-        <div className="overflow-y-auto my-4">
+        <div className="my-4">
           <form
             onSubmit={handleSearch}
             className="flex items-center justify-center mb-2"
@@ -88,74 +94,76 @@ const Verification = () => {
           <h1 className="mb-4 text-red-600 text-2xl font-semibold text-center">
             {data.length} Slips Verification Pending
           </h1>
-          <table className="w-full border whitespace-nowrap  border-neutral-500">
-            <thead>
-              <tr className="h-12 w-full text-md leading-none text-gray-600">
-                <th className="font-bold text-left border-neutral-800 border-2 w-20 px-3">
-                  Slip Number
-                </th>
-                <th className="font-bold text-center border-neutral-800 border-2 w-28 px-3">
-                  Service Date
-                </th>
-                <th className="font-bold text-left border-neutral-800 border-2 px-3">
-                  Client Name
-                </th>
-                <th className="font-bold text-left border-neutral-800 border-2 px-3">
-                  Sales Representative
-                </th>
+          <div className="overflow-x-auto">
+            <table className="w-full border border-neutral-500">
+              <thead>
+                <tr className="h-12 w-full text-md leading-none text-gray-600">
+                  <th className="font-bold text-left whitespace-nowrap border-neutral-800 border-2 w-20 px-3">
+                    Slip Number
+                  </th>
+                  <th className="font-bold text-center whitespace-nowrap border-neutral-800 border-2 w-28 px-3">
+                    Service Date
+                  </th>
+                  <th className="font-bold text-left  border-neutral-800 border-2 px-3">
+                    Client Name
+                  </th>
+                  <th className="font-bold text-left whitespace-nowrap border-neutral-800 border-2 px-3">
+                    Sales Representative
+                  </th>
 
-                <th className="font-bold text-left border-neutral-800 border-2 px-3">
-                  Payment Type
-                </th>
-                <th className="font-bold text-left border-neutral-800 border-2 px-3">
-                  Amount Pending
-                </th>
-                <th className="font-bold text-center border-neutral-800 border-2 px-3">
-                  Job Status
-                </th>
-                <th className="font-bold text-center border-neutral-800 border-2 px-3">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody className="w-full">
-              {data.map((challan) => (
-                <tr
-                  key={challan._id}
-                  className="h-12 text-sm leading-none text-gray-700 border-b border-neutral-500 bg-white hover:bg-gray-100"
-                >
-                  <td className="px-3 border-r text-center font-normal border-neutral-500">
-                    {challan.number}
-                  </td>
-                  <td className="px-3 border-r text-center font-normal border-neutral-500">
-                    {dateFormat(challan.serviceDate)}
-                  </td>
-                  <td className="px-3 border-r font-normal border-neutral-500">
-                    {challan.shipToDetails.name}
-                  </td>
-                  <td className="px-3 border-r font-normal border-neutral-500">
-                    {challan.sales.label}
-                  </td>
-                  <td className="px-3 border-r font-normal border-neutral-500">
-                    {challan.paymentType.label}
-                  </td>
-                  <td className="px-3 border-r text-center font-normal border-neutral-500">
-                    ₹ {challan.amount.total - challan.amount.received}
-                  </td>
-                  <td className="px-3 border-r font-normal text-center border-neutral-500">
-                    {progress(
-                      challan.update[challan.update.length - 1]?.status
-                    )}
-                  </td>
-                  <td className="px-3 border-r font-normal text-center border-neutral-500">
-                    <Link to={`/challan/${challan._id}`}>
-                      <Button label="Details" height="h-8" />
-                    </Link>
-                  </td>
+                  <th className="font-bold text-left whitespace-nowrap border-neutral-800 border-2 px-3">
+                    Payment Type
+                  </th>
+                  <th className="font-bold text-left whitespace-nowrap border-neutral-800 border-2 px-3">
+                    Amount Pending
+                  </th>
+                  <th className="font-bold text-center whitespace-nowrap border-neutral-800 border-2 px-3">
+                    Job Status
+                  </th>
+                  <th className="font-bold text-center border-neutral-800 border-2 px-3">
+                    Action
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="w-full">
+                {data.map((challan) => (
+                  <tr
+                    key={challan._id}
+                    className="h-12 text-sm leading-none text-gray-700 border-b border-neutral-500 bg-white hover:bg-gray-100"
+                  >
+                    <td className="px-3 border-r text-center font-normal border-neutral-500">
+                      {challan.number}
+                    </td>
+                    <td className="px-3 border-r text-center font-normal border-neutral-500">
+                      {dateFormat(challan.serviceDate)}
+                    </td>
+                    <td className="px-2 border-r font-normal overflow-y-auto max-w-[200px] lg:max-w-full whitespace-nowrap lg:whitespace-normal border-neutral-500">
+                      {challan.shipToDetails.name}
+                    </td>
+                    <td className="px-3 border-r font-normal border-neutral-500">
+                      {challan.sales.label}
+                    </td>
+                    <td className="px-3 border-r font-normal border-neutral-500">
+                      {challan.paymentType.label}
+                    </td>
+                    <td className="px-3 border-r text-center font-normal border-neutral-500">
+                      ₹ {challan.amount.total - challan.amount.received}
+                    </td>
+                    <td className="px-3 border-r text-center border-neutral-500">
+                      {progress(
+                        challan.update[challan.update.length - 1]?.status
+                      )}
+                    </td>
+                    <td className="px-3 border-r font-normal text-center border-neutral-500">
+                      <Link to={`/challan/${challan._id}`}>
+                        <Button label="Details" height="h-8" />
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>
