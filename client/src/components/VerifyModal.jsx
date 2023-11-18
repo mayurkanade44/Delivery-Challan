@@ -9,7 +9,7 @@ import { billCompanies } from "../utils/constData";
 const VerifyModal = ({ type, amount, received, id, status }) => {
   const [open, setOpen] = useState(false);
   const [note, setNote] = useState("");
-  const [billCompany, setBillCompany] = useState("EPPL/PC");
+  const [billCompany, setBillCompany] = useState("EPPL");
   const [billAmount, setBillAmount] = useState("");
 
   const [verify, { isLoading }] = useVerifyAmountMutation();
@@ -24,7 +24,7 @@ const VerifyModal = ({ type, amount, received, id, status }) => {
       toast.success(res.msg);
       setOpen(false);
       setNote("");
-      setBillCompany("EPPL/PC");
+      setBillCompany("EPPL");
       setBillAmount("");
     } catch (error) {
       console.log(error);
