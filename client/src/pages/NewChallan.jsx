@@ -87,9 +87,9 @@ const NewChallan = () => {
     if (time.label === "Other")
       data.serviceTime = { label: data.otherTime, value: data.otherTime };
     try {
-      // const res = await create(data).unwrap();
-      // toast.success(res.msg);
-      // saveAs(res.link, res.name);
+      const res = await create(data).unwrap();
+      toast.success(res.msg);
+      saveAs(res.link, res.name);
       reset();
       navigate("/home");
     } catch (error) {
