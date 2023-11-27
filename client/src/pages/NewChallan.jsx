@@ -76,16 +76,20 @@ const NewChallan = () => {
   };
 
   const submit = async (data) => {
-    if (data.gst.toLowerCase() !== "na" && data.gst.length < 15) {
+    if (
+      data.paymentType.label === "Bill After Job" &&
+      data.gst.toLowerCase() !== "na" &&
+      data.gst.length < 15
+    ) {
       return toast.error("Please provide valid GST");
     }
 
     if (time.label === "Other")
       data.serviceTime = { label: data.otherTime, value: data.otherTime };
     try {
-      const res = await create(data).unwrap();
-      toast.success(res.msg);
-      saveAs(res.link, res.name);
+      // const res = await create(data).unwrap();
+      // toast.success(res.msg);
+      // saveAs(res.link, res.name);
       reset();
       navigate("/home");
     } catch (error) {
