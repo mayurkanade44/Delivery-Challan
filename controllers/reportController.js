@@ -373,3 +373,123 @@ export const dailyUnverifiedJobReport = async (req, res) => {
   }
 };
 
+export const salesCollectionReport = async (req, res) => {
+  try {
+    const salesCashCollection = {};
+    const salesBillCollection = {};
+    const sales = await Admin.find().select("sales");
+
+    for (let item of sales) {
+      if (item.sales) {
+        salesCashCollection[item.sales.label] = { total: 0, received: 0 };
+        salesBillCollection[item.sales.label] = { total: 0, received: 0 };
+      }
+    }
+
+    const slips = await Challan.find().select(
+      "amount paymentType sales update"
+    );
+
+    for (let slip of slips) {
+      if (slip.update[slip.update.length - 1]?.status === "Completed") {
+        if (
+          slip.paymentType.label === "Cash To Collect" ||
+          slip.paymentType.label === "UPI Payment"
+        ) {
+          let amount = salesCashCollection[slip.sales.label];
+          amount.total += slip.amount.total;
+          amount.received += slip.amount.received;
+          salesCashCollection[slip.sales.label] = amount;
+        } else if (slip.paymentType.label === "Bill After Job") {
+          let amount = salesBillCollection[slip.sales.label];
+          amount.total += slip.amount.total;
+          amount.received += slip.amount.received;
+          salesBillCollection[slip.sales.label] = amount;
+        }
+      }
+    }
+
+    return res.json({ salesCashCollection, salesBillCollection });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ msg: "Server Error" });
+  }
+};
+
+export const monthlySales = async (req, res) => {
+  try {
+    const firstDate = moment().startOf("month");
+    const endDate = moment().endOf("month");
+
+    const slips = await Challan.find({
+      serviceDate: { $gte: firstDate, $lte: endDate },
+    }).select("amount paymentType update");
+
+    const cash = {
+      total: 0,
+      received: 0,
+      cancelled: 0,
+    };
+    const bill = {
+      total: 0,
+      received: 0,
+      cancelled: 0,
+    };
+    const slipType = {
+      cash: 0,
+      bill: 0,
+      ntb: 0,
+    };
+    const slipStatus = {
+      total: slips.length,
+      open: 0,
+      completed: 0,
+      notCompleted: 0,
+      cancelled: 0,
+    };
+
+    for (let slip of slips) {
+      if (
+        slip.paymentType.label === "Cash To Collect" ||
+        slip.paymentType.label === "UPI Payment"
+      ) {
+        cash.total += slip.amount.total;
+        cash.received += slip.amount.received;
+        cash.cancelled += slip.amount.cancelled;
+        slipType.cash += 1;
+      } else if (slip.paymentType.label === "Bill After Job") {
+        bill.total += slip.amount.total;
+        bill.received += slip.amount.received;
+        bill.cancelled += slip.amount.cancelled;
+        slipType.bill += 1;
+      } else slipType.ntb += 1;
+
+      let status = slip.update[slip.update.length - 1].status;
+      if (status === "Completed") slipStatus.completed += 1;
+      else if (status === "Cancelled") slipStatus.cancelled += 1;
+      else if (status === "Not Completed") slipStatus.notCompleted += 1;
+      else if (status === "Open") slipStatus.open += 1;
+    }
+
+    const mail = await sendEmail({
+      attachment,
+      emailList: [
+        { email: process.env.SHWETA },
+        { email: process.env.STQ },
+      ],
+      templateId: 6,
+      dynamicData: {
+        subject: `Open/Unverified Jobs Report`,
+        description: `Open/Unverified Single Service Slip report till ${emailDate}`,
+      },
+    });
+
+    if (!mail) return res.status(400).json({ msg: "Email Error" });
+
+
+    return res.json({ cash, bill, slipType, slipStatus });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ msg: "Server Error" });
+  }
+};
