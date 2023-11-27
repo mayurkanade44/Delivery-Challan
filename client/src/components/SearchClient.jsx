@@ -90,7 +90,8 @@ const SearchClient = ({ setShipToDetails }) => {
                       {person.shipToDetails.address} {person.shipToDetails.road}{" "}
                       {person.shipToDetails.location}{" "}
                       {person.shipToDetails.landmark}{" "}
-                      {person.shipToDetails.city}
+                      {person.shipToDetails.city} / GST - {person.gst}
+
                     </h6>
                   </div>
                 </div>

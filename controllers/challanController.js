@@ -42,6 +42,8 @@ export const createChallan = async (req, res) => {
         challan.paymentType.label === "Cash To Collect" ||
         challan.paymentType.label === "UPI Payment"
           ? `Amount: Rs. ${challan.amount.total} /-`
+          : challan.paymentType.label === "Bill After Job"
+          ? `Client GST: ${challan.gst}`
           : " ",
       paymentType: challan.paymentType.label,
       name: `${challan.shipToDetails.prefix.value}. ${challan.shipToDetails.name}`,
@@ -509,7 +511,7 @@ export const searchClients = async (req, res) => {
   try {
     const clients = await Challan.find({
       "shipToDetails.name": { $regex: search, $options: "i" },
-    }).select("shipToDetails");
+    }).select("shipToDetails gst");
 
     if (clients.length < 1)
       clients.push({

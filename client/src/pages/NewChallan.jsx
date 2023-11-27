@@ -76,6 +76,10 @@ const NewChallan = () => {
   };
 
   const submit = async (data) => {
+    if (data.gst.toLowerCase() !== "na" && data.gst.length < 15) {
+      return toast.error("Please provide valid GST");
+    }
+
     if (time.label === "Other")
       data.serviceTime = { label: data.otherTime, value: data.otherTime };
     try {
@@ -93,6 +97,7 @@ const NewChallan = () => {
   const setShipToDetails = (data) => {
     setValue("shipToDetails", data);
     setValue("shipToDetails.prefix", data.prefix);
+    setValue("gst", data.gst);
   };
   return (
     <>
@@ -434,29 +439,35 @@ const NewChallan = () => {
                 </div>
               </div>
               {watchPayment.label !== "NTB" && (
-                <div className="flex justify-center">
-                  <InputRow
-                    label="Total Amount"
-                    id="amount.total"
-                    errors={errors}
-                    register={register}
-                    type="number"
-                  />
-                  <p className="text-xs text-red-500 -bottom-4 pl-1">
+                <>
+                  <div className="flex justify-center">
+                    <InputRow
+                      label="Total Amount"
+                      id="amount.total"
+                      errors={errors}
+                      register={register}
+                      type="number"
+                    />
+                  </div>
+                  <p className="text-xs text-center text-red-500 -bottom-4 pl-1">
                     {errors.amount && "Amount is required"}
                   </p>
-                </div>
+                </>
               )}
               {watchPayment.label === "Bill After Job" && (
-                <div className="flex justify-center">
-                  <InputRow
-                    label="GST"
-                    id="gst"
-                    errors={errors}
-                    register={register}
-                    required={false}
-                  />
-                </div>
+                <>
+                  <div className="flex justify-center">
+                    <InputRow
+                      label="GST"
+                      id="gst"
+                      errors={errors}
+                      register={register}
+                    />
+                  </div>
+                  <p className="text-xs text-red-500 -bottom-4 pl-1 text-center">
+                    {errors.gst && "GST is required"}
+                  </p>
+                </>
               )}
             </div>
           </div>
