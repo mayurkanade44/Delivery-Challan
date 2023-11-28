@@ -418,12 +418,12 @@ export const salesCollectionReport = async (req, res) => {
 
 export const monthlySales = async (req, res) => {
   try {
-    const firstDate = moment().startOf("month");
-    const endDate = moment().endOf("month");
+    const firstDate = moment().subtract(1, "month").startOf("month");
+    const endDate = moment().subtract(1, "month").endOf("month");
 
     const slips = await Challan.find({
       serviceDate: { $gte: firstDate, $lte: endDate },
-    }).select("amount paymentType update");
+    }).select("amount paymentType update verify");
 
     const cash = {
       total: 0,
@@ -444,6 +444,7 @@ export const monthlySales = async (req, res) => {
       total: slips.length,
       open: 0,
       completed: 0,
+      verified: 0,
       notCompleted: 0,
       cancelled: 0,
     };
@@ -464,6 +465,8 @@ export const monthlySales = async (req, res) => {
         slipType.bill += 1;
       } else slipType.ntb += 1;
 
+      if (slip.verify.status) slipStatus.verified += 1;
+
       let status = slip.update[slip.update.length - 1].status;
       if (status === "Completed") slipStatus.completed += 1;
       else if (status === "Cancelled") slipStatus.cancelled += 1;
@@ -472,22 +475,21 @@ export const monthlySales = async (req, res) => {
     }
 
     const mail = await sendEmail({
-      attachment,
-      emailList: [
-        { email: process.env.SHWETA },
-        { email: process.env.STQ },
-      ],
-      templateId: 6,
+      attachment: [],
+      emailList: [{ email: process.env.STQ }, { email: process.env.SHWETA }],
+      templateId: 8,
       dynamicData: {
-        subject: `Open/Unverified Jobs Report`,
-        description: `Open/Unverified Single Service Slip report till ${emailDate}`,
+        month: moment(firstDate).format("MMM YY"),
+        slipStatus,
+        slipType,
+        cash,
+        bill,
       },
     });
 
     if (!mail) return res.status(400).json({ msg: "Email Error" });
 
-
-    return res.json({ cash, bill, slipType, slipStatus });
+    return res.json({ msg: "Email Sent" });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ msg: "Server Error" });

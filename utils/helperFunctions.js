@@ -64,7 +64,7 @@ export const sendEmail = async ({
     sendSmtpEmail.to = emailList;
     sendSmtpEmail.params = dynamicData;
     sendSmtpEmail.templateId = templateId;
-    if (attachment) sendSmtpEmail.attachment = attachment;
+    if (attachment.length > 0) sendSmtpEmail.attachment = attachment;
     await apiInstance.sendTransacEmail(sendSmtpEmail);
     return true;
   } catch (error) {
