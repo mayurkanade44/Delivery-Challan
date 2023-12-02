@@ -1,4 +1,8 @@
-import { useForm, Controller, useFieldArray } from "react-hook-form";
+import { saveAs } from "file-saver";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
+import { AiOutlinePlus } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
   Button,
   InputRow,
@@ -6,13 +10,9 @@ import {
   Loading,
   SearchClient,
 } from "../components";
-import { paymentType, prefix, timeFrame } from "../utils/constData";
-import { useCreateChallanMutation } from "../redux/challanSlice";
-import { toast } from "react-toastify";
 import { useGetAdminValuesQuery } from "../redux/adminSlice";
-import { useNavigate } from "react-router-dom";
-import { AiOutlinePlus } from "react-icons/ai";
-import { saveAs } from "file-saver";
+import { useCreateChallanMutation } from "../redux/challanSlice";
+import { paymentType, prefix, timeFrame } from "../utils/constData";
 
 const NewChallan = () => {
   const [create, { isLoading }] = useCreateChallanMutation();
@@ -99,8 +99,8 @@ const NewChallan = () => {
   };
 
   const setShipToDetails = (data) => {
-    setValue("shipToDetails", data);
-    setValue("shipToDetails.prefix", data.prefix);
+    setValue("shipToDetails", data.shipToDetails);
+    setValue("shipToDetails.prefix", data.shipToDetails.prefix);
     setValue("gst", data.gst);
   };
   return (

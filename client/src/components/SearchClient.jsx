@@ -81,7 +81,7 @@ const SearchClient = ({ setShipToDetails }) => {
               <div
                 key={person._id}
                 className="relative group py-1 pl-3 pr-9 text-black hover:cursor-pointer hover:bg-blue-300"
-                onClick={() => setShipToDetails(person.shipToDetails)}
+                onClick={() => setShipToDetails(person)}
               >
                 <div className="flex">
                   <p className="">{person.shipToDetails.name}</p>
