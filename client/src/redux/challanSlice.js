@@ -26,9 +26,9 @@ export const challanSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 1,
     }),
     allChallan: builder.query({
-      query: ({ search, page }) => ({
+      query: ({ search, page, status }) => ({
         url: "/api/challan",
-        params: { search, page },
+        params: { search, page, status },
       }),
       providesTags: ["Challan"],
       keepUnusedDataFor: 1,

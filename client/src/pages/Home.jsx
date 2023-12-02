@@ -5,9 +5,11 @@ import { AlertMessage, Button, Loading } from "../components";
 import { useSelector } from "react-redux";
 import { useAllChallanQuery } from "../redux/challanSlice";
 import { dateFormat } from "../utils/functionHelper";
+import { jobStatus } from "../utils/constData";
 
 const Home = () => {
   const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("All");
   const [tempSearch, setTempSearch] = useState("");
   const [page, setPage] = useState(1);
   const { user } = useSelector((store) => store.helper);
@@ -15,6 +17,7 @@ const Home = () => {
   const { data, isLoading, isFetching, error } = useAllChallanQuery({
     search,
     page,
+    status,
   });
 
   const handleSearch = (e) => {
@@ -25,6 +28,7 @@ const Home = () => {
   const clearSearch = () => {
     setTempSearch("");
     setSearch("");
+    setStatus("All");
   };
 
   const progress = (status) => {
@@ -75,6 +79,19 @@ const Home = () => {
                   </button>
                 )}
               </div>
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                className="border-2 rounded-md mr-2 py-1 w-44"
+              >
+                {["All", "Open", ...jobStatus.map((item) => item.label), "Cancelled"].map(
+                  (item, index) => (
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
+                  )
+                )}
+              </select>
               <Button
                 type="submit"
                 label="Search"

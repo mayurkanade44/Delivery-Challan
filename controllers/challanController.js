@@ -149,22 +149,39 @@ export const updateChallan = async (req, res) => {
 };
 
 export const getAllChallan = async (req, res) => {
-  const { search, page } = req.query;
-  let query = {};
-  if (search) {
-    query = {
-      $or: [
-        { number: { $regex: search, $options: "i" } },
-        { "shipToDetails.name": { $regex: search, $options: "i" } },
-      ],
-    };
+  const { search, page, status } = req.query;
+  let query = [
+    {
+      $match: {
+        $or: [
+          { number: { $regex: search, $options: "i" } },
+          { "shipToDetails.name": { $regex: search, $options: "i" } },
+        ],
+      },
+    },
+  ];
+  if (status !== "All") {
+    query.push(
+      {
+        $addFields: {
+          lastObject: {
+            $arrayElemAt: ["$update", -1],
+          },
+        },
+      },
+      {
+        $match: {
+          "lastObject.status": status,
+        },
+      }
+    );
   }
   try {
     let pageNumber = page || 1;
 
-    const count = await Challan.countDocuments({ ...query });
+    const count = (await Challan.aggregate(query)).length;
 
-    const challans = await Challan.find(query)
+    const challans = await Challan.aggregate(query)
       .sort("-createdAt")
       .skip(10 * (pageNumber - 1))
       .limit(10);
