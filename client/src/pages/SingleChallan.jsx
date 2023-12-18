@@ -198,7 +198,9 @@ const SingleChallan = () => {
                 </table>
               </div>
             </div>
-            {data.paymentType.label !== "NTB" && (
+            {(data.payment.label === "Cash To Collect" ||
+              data.payment.label === "UPI Payment" ||
+              data.payment.label === "Bill After Job") && (
               <>
                 <div className="col-span-4">
                   <div className="flex items-center justify-center flex-col lg:flex-row lg:gap-x-3 mb-2">

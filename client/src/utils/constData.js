@@ -10,6 +10,7 @@ export const paymentType = [
   { label: "Cash To Collect", value: "Cash To Collect" },
   { label: "UPI Payment", value: "UPI Payment" },
   { label: "Bill After Job", value: "Bill After Job" },
+  { label: "In Guarantee", value: "In Guarantee" },
   { label: "NTB", value: "NTB" },
 ];
 

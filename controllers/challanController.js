@@ -13,7 +13,10 @@ export const createChallan = async (req, res) => {
     req.body.update = [
       { status: "Open", user: req.user.name, date: new Date() },
     ];
-    if (req.body.paymentType.label === "NTB") {
+    if (
+      req.body.paymentType.label === "NTB" ||
+      req.body.paymentType.label === "In Guarantee"
+    ) {
       req.body.verify = {
         status: true,
         invoice: true,

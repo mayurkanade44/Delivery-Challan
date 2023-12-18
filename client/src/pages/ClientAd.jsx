@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import Ad from "../assets/ad.jpeg";
+import Ad from "../assets/ad.png";
 
 const ClientAd = () => {
   const { id } = useParams();
