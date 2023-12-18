@@ -21,11 +21,6 @@ const helperSlice = createSlice({
   },
 });
 
-export const {
-  setCredentials,
-  removeCredentials,
-  setContractDetails,
-  removeContractDetails,
-} = helperSlice.actions;
+export const { setCredentials, removeCredentials } = helperSlice.actions;
 
 export default helperSlice.reducer;

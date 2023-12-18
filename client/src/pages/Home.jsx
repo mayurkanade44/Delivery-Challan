@@ -84,13 +84,16 @@ const Home = () => {
                 onChange={(e) => setStatus(e.target.value)}
                 className="border-2 rounded-md mr-2 py-1 w-44"
               >
-                {["All", "Open", ...jobStatus.map((item) => item.label), "Cancelled"].map(
-                  (item, index) => (
-                    <option key={index} value={item}>
-                      {item}
-                    </option>
-                  )
-                )}
+                {[
+                  "All",
+                  "Open",
+                  ...jobStatus.map((item) => item.label),
+                  "Cancelled",
+                ].map((item, index) => (
+                  <option key={index} value={item}>
+                    {item}
+                  </option>
+                ))}
               </select>
               <Button
                 type="submit"
